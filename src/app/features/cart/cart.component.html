@@ -1,0 +1,31 @@
+<div class="page-container">
+  <mat-card>
+    <mat-card-content>
+      <h1>Shopping Cart</h1>
+      <p>Your cart service and cart items can be added here.</p>
+      <p><strong>Total: ₹{{ cartTotal | number }}</strong></p>
+      <a mat-flat-button color="primary" routerLink="/products">Continue Shopping</a>
+      <button
+        mat-button
+        type="button"
+        [disabled]="healthLoading"
+        (click)="checkBackend()">
+        {{ healthLoading ? 'Checking backend...' : 'Check Backend' }}
+      </button>
+      <button
+        mat-flat-button
+        color="accent"
+        type="button"
+        [disabled]="checkoutLoading"
+        (click)="checkout()">
+        {{ checkoutLoading ? 'Opening payment...' : 'Proceed to Checkout' }}
+      </button>
+      @if (checkoutMessage) {
+        <p role="status">{{ checkoutMessage }}</p>
+      }
+      @if (healthMessage) {
+        <p role="status">{{ healthMessage }}</p>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

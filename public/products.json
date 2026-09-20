@@ -1,0 +1,302 @@
+[
+    {
+        "id": "saree-001",
+        "name": "Lavender Peacock Zari Kanjivaram",
+        "price": 35995,
+        "category": "Kanjivaram",
+        "fabric": "Pure silk",
+        "color": "Lavender",
+        "description": "Lavender silk with peacock zari motifs and a rich traditional border.",
+        "tone": "lavender",
+        "mainImageUrl": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85"
+        ]
+    },
+    {
+        "id": "saree-002",
+        "name": "Classic Orange Kanjivaram Silk",
+        "price": 32495,
+        "category": "Kanjivaram",
+        "fabric": "Pure silk",
+        "color": "Orange",
+        "description": "A vivid orange Kanjivaram weave finished with a classic zari border.",
+        "tone": "orange",
+        "mainImageUrl": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85"
+        ]
+    },
+    {
+        "id": "saree-003",
+        "name": "Sunshine Yellow Kanjivaram",
+        "price": 9795,
+        "category": "Kanjivaram",
+        "fabric": "Silk cotton",
+        "color": "Yellow",
+        "description": "A bright, lightweight festive drape with a soft silk finish.",
+        "tone": "yellow",
+        "mainImageUrl": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85"
+        ]
+    },
+    {
+        "id": "saree-004",
+        "name": "Navy Blue Kanjivaram Silk",
+        "price": 9795,
+        "category": "Kanjivaram",
+        "fabric": "Pure silk",
+        "color": "Navy blue",
+        "description": "Deep navy silk with temple-inspired details and a polished fall.",
+        "tone": "navy",
+        "mainImageUrl": "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85"
+        ]
+    },
+    {
+        "id": "saree-005",
+        "name": "Mango Yellow Silk Cotton",
+        "price": 5795,
+        "category": "Silk cotton",
+        "fabric": "Silk cotton",
+        "color": "Mango",
+        "description": "A warm mango yellow weave designed for effortless festive dressing.",
+        "tone": "mango",
+        "mainImageUrl": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=85"
+        ]
+    },
+    {
+        "id": "saree-006",
+        "name": "Teal Green Silk Cotton",
+        "price": 5795,
+        "category": "Silk cotton",
+        "fabric": "Silk cotton",
+        "color": "Teal",
+        "description": "A rich teal drape with a soft texture and elegant everyday fall.",
+        "tone": "teal",
+        "mainImageUrl": "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85"
+        ]
+    },
+    {
+        "id": "saree-007",
+        "name": "Maroon Silk Cotton",
+        "price": 5795,
+        "category": "Silk cotton",
+        "fabric": "Silk cotton",
+        "color": "Maroon",
+        "description": "A classic maroon silk cotton saree with understated festive character.",
+        "tone": "maroon",
+        "mainImageUrl": "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85"
+        ]
+    },
+    {
+        "id": "saree-008",
+        "name": "Emerald Green Silk Cotton",
+        "price": 5895,
+        "category": "Silk cotton",
+        "fabric": "Silk cotton",
+        "color": "Emerald",
+        "description": "A jewel-toned emerald weave made for memorable occasions.",
+        "tone": "emerald",
+        "mainImageUrl": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85"
+        ]
+    },
+    {
+        "id": "saree-009",
+        "name": "Rose Pink Banarasi Silk",
+        "price": 18995,
+        "category": "Banarasi",
+        "fabric": "Banarasi silk",
+        "color": "Rose pink",
+        "description": "Rose pink silk with delicate floral brocade woven across the body.",
+        "tone": "rose",
+        "mainImageUrl": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85"
+        ]
+    },
+    {
+        "id": "saree-010",
+        "name": "Midnight Blue Banarasi",
+        "price": 21995,
+        "category": "Banarasi",
+        "fabric": "Banarasi silk",
+        "color": "Midnight blue",
+        "description": "A midnight blue Banarasi with antique gold brocade detailing.",
+        "tone": "midnight",
+        "mainImageUrl": "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=85"
+        ]
+    },
+    {
+        "id": "saree-011",
+        "name": "Ivory Gold Tissue Silk",
+        "price": 14995,
+        "category": "Designer",
+        "fabric": "Tissue silk",
+        "color": "Ivory",
+        "description": "An ivory tissue silk drape with a luminous gold edge.",
+        "tone": "ivory",
+        "mainImageUrl": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85"
+        ]
+    },
+    {
+        "id": "saree-012",
+        "name": "Rust Copper Handloom Silk",
+        "price": 8495,
+        "category": "Handloom",
+        "fabric": "Handloom silk",
+        "color": "Rust",
+        "description": "Textured handloom silk in rust copper with a confident modern finish.",
+        "tone": "rust",
+        "mainImageUrl": "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=85"
+        ]
+    },
+    {
+        "id": "saree-013",
+        "name": "Peacock Blue Gadwal Silk",
+        "price": 16995,
+        "category": "Gadwal",
+        "fabric": "Gadwal silk",
+        "color": "Peacock blue",
+        "description": "Peacock blue silk with a contrasting border and lightweight drape.",
+        "tone": "peacock",
+        "mainImageUrl": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85"
+        ]
+    },
+    {
+        "id": "saree-014",
+        "name": "Blush Pink Organza Saree",
+        "price": 6995,
+        "category": "Designer",
+        "fabric": "Organza silk",
+        "color": "Blush pink",
+        "description": "Airy blush organza with subtle woven florals for evening occasions.",
+        "tone": "blush",
+        "mainImageUrl": "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=85"
+        ]
+    },
+    {
+        "id": "saree-015",
+        "name": "Bottle Green Bridal Silk",
+        "price": 28995,
+        "category": "Bridal",
+        "fabric": "Pure silk",
+        "color": "Bottle green",
+        "description": "A deep green bridal silk with an ornate zari pallu.",
+        "tone": "bottle",
+        "mainImageUrl": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85"
+        ]
+    },
+    {
+        "id": "saree-016",
+        "name": "Coral Pink Soft Silk",
+        "price": 7495,
+        "category": "Soft silk",
+        "fabric": "Soft silk",
+        "color": "Coral pink",
+        "description": "Easy-to-drape coral pink soft silk for celebrations and family gatherings.",
+        "tone": "coral",
+        "mainImageUrl": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=85"
+        ]
+    },
+    {
+        "id": "saree-017",
+        "name": "Charcoal Grey Linen Saree",
+        "price": 3995,
+        "category": "Cotton",
+        "fabric": "Linen cotton",
+        "color": "Charcoal",
+        "description": "A breathable charcoal linen weave with a clean contemporary border.",
+        "tone": "charcoal",
+        "mainImageUrl": "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85"
+        ]
+    },
+    {
+        "id": "saree-018",
+        "name": "Turmeric Yellow Cotton Saree",
+        "price": 2995,
+        "category": "Cotton",
+        "fabric": "Pure cotton",
+        "color": "Turmeric yellow",
+        "description": "A cheerful turmeric cotton saree made for comfortable daily elegance.",
+        "tone": "turmeric",
+        "mainImageUrl": "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=85"
+        ]
+    },
+    {
+        "id": "saree-019",
+        "name": "Plum Purple Designer Silk",
+        "price": 11995,
+        "category": "Designer",
+        "fabric": "Art silk",
+        "color": "Plum",
+        "description": "A dramatic plum designer silk with a sculpted contemporary border.",
+        "tone": "plum",
+        "mainImageUrl": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85"
+        ]
+    },
+    {
+        "id": "saree-020",
+        "name": "Aqua Blue Printed Silk",
+        "price": 6495,
+        "category": "Designer",
+        "fabric": "Printed silk",
+        "color": "Aqua blue",
+        "description": "A fresh aqua silk with an artistic print and fluid drape.",
+        "tone": "aqua",
+        "mainImageUrl": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=85",
+        "extraImageUrls": [
+            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85",
+            "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=85"
+        ]
+    }
+]

@@ -1,0 +1,81 @@
+<div class="page-container">
+  <div class="page-heading">
+    <div class="filter-toolbar">
+      <button class="filter-trigger" type="button" aria-label="Open filters and sort" [attr.aria-expanded]="filterOpen" (click)="toggleFilters()">
+        <mat-icon aria-hidden="true">tune</mat-icon>
+        <span>FILTERS</span>
+        @if (activeFilterCount) { <b>{{ activeFilterCount }}</b> }
+      </button>
+      <span class="product-count" aria-live="polite">{{ productCount }} products</span>
+    </div>
+    <div>
+      <h1>Products</h1>
+      <p>Explore our collection of handpicked sarees.</p>
+    </div>
+  </div>
+
+  @if (errorMessage) {
+    <p class="products-status" role="alert">{{ errorMessage }}</p>
+  } @else {
+    @if (displayedProducts.length) {
+      <div class="product-grid">
+        @for (product of displayedProducts; track product.id) {
+          <mat-card class="product-card">
+            <div class="product-image-wrap">
+              <a class="product-image-link" [routerLink]="['/products', product.id]" [attr.aria-label]="'View details for ' + product.name">
+                <div class="product-image" [class]="product.tone">
+                <img [src]="product.mainImageUrl" [alt]="product.name" loading="lazy" />
+                <span class="product-category">{{ product.category }}</span>
+                </div>
+              </a>
+              <button
+                class="favorite-button"
+                type="button"
+                [class.is-favorite]="isFavorite(product)"
+                [attr.aria-label]="isFavorite(product) ? 'Remove ' + product.name + ' from favorites' : 'Add ' + product.name + ' to favorites'"
+                (click)="toggleFavorite(product, $event)">
+                <mat-icon>{{ isFavorite(product) ? 'favorite' : 'favorite_border' }}</mat-icon>
+              </button>
+            </div>
+            <mat-card-content>
+              <p class="product-fabric">{{ product.fabric }} · {{ product.color }}</p>
+              <h2>{{ product.name }}</h2>
+              <p class="product-description">{{ product.description }}</p>
+              <p class="product-price">₹{{ product.price | number:'1.0-0' }}</p>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    } @else if (loading) {
+      <p class="products-status" role="status">Loading products...</p>
+    }
+    @if (loadingMore) {
+      <p class="products-status" role="status">Loading more sarees...</p>
+    } @else if (!hasMoreProducts) {
+      <p class="products-status">You have reached the end of the collection.</p>
+    }
+  }
+</div>
+
+@if (filterOpen) {
+  <button class="filter-backdrop" type="button" aria-label="Close filters" (click)="closeFilters()"></button>
+  <aside class="filter-drawer" aria-labelledby="filter-title">
+    <div class="filter-heading">
+      <div><span class="filter-kicker">REFINE THE COLLECTION</span><h2 id="filter-title">Filters &amp; Sort</h2></div>
+      <button type="button" aria-label="Close filters" (click)="closeFilters()">&#10005;</button>
+    </div>
+    <fieldset class="filter-group">
+      <legend>Product type</legend>
+      @for (category of categoryOptions; track category) {
+        <label><input type="checkbox" [checked]="selectedCategories.includes(category)" (change)="toggleCategory(category)" /> {{ category }}</label>
+      }
+    </fieldset>
+    <fieldset class="filter-group">
+      <legend>Sort by</legend>
+      <label><input type="radio" name="sort" value="price-low" [(ngModel)]="sortOption" (ngModelChange)="previewFilters()" /> Price: low to high</label>
+      <label><input type="radio" name="sort" value="price-high" [(ngModel)]="sortOption" (ngModelChange)="previewFilters()" /> Price: high to low</label>
+      <label><input type="radio" name="sort" value="name" [(ngModel)]="sortOption" (ngModelChange)="previewFilters()" /> Name A to Z</label>
+    </fieldset>
+    <div class="filter-actions"><button type="button" (click)="resetFilters()">RESET</button><button type="button" (click)="applyFilters()">APPLY FILTERS</button></div>
+  </aside>
+}

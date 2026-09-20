@@ -1,0 +1,112 @@
+<main class="home-page">
+  <section [class]="'hero-banner ' + heroSlides[activeSlide].tone" aria-label="Featured collections">
+    <div class="hero-pattern" aria-hidden="true"></div>
+    <div class="hero-content" aria-live="polite">
+      <p class="eyebrow">{{ heroSlides[activeSlide].eyebrow }}</p>
+      <h1>{{ heroSlides[activeSlide].title }}</h1>
+      <p>{{ heroSlides[activeSlide].description }}</p>
+      <a mat-flat-button class="hero-button" routerLink="/products">SHOP COLLECTION</a>
+    </div>
+    <div class="hero-controls">
+      <button type="button" class="hero-arrow" aria-label="Previous slide" (click)="previousSlide()">&#8592;</button>
+      <div class="hero-dots" aria-label="Choose a slide">
+        @for (slide of heroSlides; track slide.tone; let index = $index) {
+          <button
+            type="button"
+            class="hero-dot"
+            [class.is-active]="index === activeSlide"
+            [attr.aria-label]="'Show slide ' + (index + 1)"
+            [attr.aria-current]="index === activeSlide ? 'true' : null"
+            (click)="selectSlide(index)"></button>
+        }
+      </div>
+      <button type="button" class="hero-arrow" aria-label="Next slide" (click)="nextSlide()">&#8594;</button>
+    </div>
+  </section>
+
+  <section class="price-section section-shell">
+    <p class="eyebrow">SHOP YOUR BUDGET</p>
+    <h2>Shop by Price</h2>
+    <div class="price-grid">
+      @for (range of priceRanges; track range) {
+        <a routerLink="/products">{{ range }}</a>
+      }
+    </div>
+  </section>
+
+  <section class="product-section section-shell">
+    <div class="section-heading">
+      <div><p class="eyebrow">JUST LANDED</p><h2>New Arrivals</h2></div>
+      <a class="view-all-link" routerLink="/products">VIEW ALL <span aria-hidden="true">&#8594;</span></a>
+    </div>
+    <div class="product-grid">
+      @for (product of newArrivals; track product.name) {
+        <article class="product-card">
+          <a class="product-image-link" [routerLink]="['/products', product.id]" [attr.aria-label]="'View details for ' + product.name">
+          <div class="product-image" [class]="product.tone">
+            <img [src]="product.mainImageUrl" [alt]="product.name" loading="lazy" />
+            @if (product.tag) { <span class="tag">{{ product.tag }}</span> }
+           
+          </div>
+          </a>
+          <div class="product-info">
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.price }}</p>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="editorial-banner section-shell">
+    <div>
+      <p class="eyebrow">CURATED FOR YOU</p>
+      <h2>Celebrate every occasion in silk.</h2>
+      <p>From traditional Kanjivaram weaves to contemporary festive styles.</p>
+      <a mat-stroked-button routerLink="/products">EXPLORE COLLECTION</a>
+    </div>
+  </section>
+
+  <section class="product-section section-shell soft-section">
+    <div class="section-heading">
+      <div><p class="eyebrow">OUR EDIT</p><h2>Featured Sarees</h2></div>
+      <a class="view-all-link" routerLink="/products">VIEW ALL <span aria-hidden="true">&#8594;</span></a>
+    </div>
+    <div class="product-grid">
+      @for (product of featured; track product.name) {
+        <article class="product-card">
+          <a class="product-image-link" [routerLink]="['/products', product.id]" [attr.aria-label]="'View details for ' + product.name">
+          <div class="product-image" [class]="product.tone">
+            <img [src]="product.mainImageUrl" [alt]="product.name" loading="lazy" />
+            
+          </div>
+          </a>
+          <div class="product-info"><h3>{{ product.name }}</h3><p>{{ product.price }}</p></div>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="story-section section-shell">
+    <div class="story-image"><span>OUR STORY</span></div>
+    <div class="story-copy">
+      <p class="eyebrow">CRAFTED WITH HERITAGE</p>
+      <h2>Wrap yourself in timeless elegance.</h2>
+      <p>Our collection brings together traditional weaving, rich colours and contemporary styling to create sarees that feel special today and remain memorable for years.</p>
+      <a mat-button routerLink="/products">Discover our collection →</a>
+    </div>
+  </section>
+
+  <section class="review-section">
+    <div class="section-shell">
+      <p class="eyebrow">CUSTOMER LOVE</p>
+      <h2>What our customers say</h2>
+      <div class="reviews">
+        <blockquote>“Beautiful saree with rich hues and a smooth drape. Perfect for functions.”<cite>— Aishwarya</cite></blockquote>
+        <blockquote>“The quality and finish were wonderful. The saree looked even better in person.”<cite>— Priya</cite></blockquote>
+        <blockquote>“Excellent collection and a very easy shopping experience.”<cite>— Meena</cite></blockquote>
+      </div>
+    </div>
+  </section>
+</main>
+

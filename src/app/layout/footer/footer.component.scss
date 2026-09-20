@@ -1,0 +1,8 @@
+.site-footer { background: var(--header-text); color: var(--header-menudroptexttitle); padding: 70px 7% 25px; }
+.footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 45px; max-width: 1240px; margin: 0 auto 55px; }
+.footer-grid h3, .footer-grid h4 { font-family: Georgia, serif; font-weight: 400; margin-top: 0; }
+.footer-grid p { color: rgba(255,255,255,.78); line-height: 1.7; }
+.footer-grid a { display: block; color: var(--header-linkcolor); text-decoration: none; margin: 10px 0; font-size: 13px; }
+.footer-grid a:hover { color: var(--header-linkhover); }
+.footer-bottom { max-width: 1240px; margin: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.15); color: rgba(255,255,255,.68); font-size: 12px; }
+@media (max-width: 800px) { .footer-grid { grid-template-columns: 1fr 1fr; } }

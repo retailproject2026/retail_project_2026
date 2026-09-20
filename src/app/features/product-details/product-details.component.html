@@ -1,0 +1,108 @@
+<div class="page-container">
+  @if (loading) {
+    <p class="details-status" role="status">Loading product details...</p>
+  } @else if (errorMessage) {
+    <p class="details-status" role="alert">{{ errorMessage }}</p>
+    <a mat-button routerLink="/products">Back to Products</a>
+  } @else if (product; as item) {
+    <section class="product-detail-layout">
+      <div class="product-detail-media">
+        <div class="product-carousel">
+          <img class="product-main-image" [src]="galleryImages[activeImageIndex]" [alt]="item.name + ' image ' + (activeImageIndex + 1)" />
+          <button class="carousel-arrow carousel-previous" type="button" aria-label="Previous product image" (click)="previousImage()">&#8592;</button>
+          <button class="carousel-arrow carousel-next" type="button" aria-label="Next product image" (click)="nextImage()">&#8594;</button>
+        </div>
+        <div class="product-gallery" aria-label="Product images">
+          @for (imageUrl of galleryImages; track imageUrl; let index = $index) {
+            <button type="button" [class.is-active]="index === activeImageIndex" [attr.aria-label]="'Show product image ' + (index + 1)" (click)="selectImage(index)">
+              <img [src]="imageUrl" [alt]="item.name + ' thumbnail ' + (index + 1)" loading="lazy" />
+            </button>
+          }
+        </div>
+      </div>
+      <div class="product-detail-copy">
+        <span class="detail-category">{{ item.category }}</span>
+        <h1>{{ item.name }}</h1>
+        <p class="detail-price">₹{{ item.price | number:'1.0-0' }}</p>
+        <p class="detail-description">{{ item.description }}</p>
+        <div class="purchase-controls">
+          <label for="product-quantity">Quantity</label>
+          <select id="product-quantity" [(ngModel)]="quantity">
+            @for (amount of [1, 2, 3, 4, 5]; track amount) {
+              <option [ngValue]="amount">{{ amount }}</option>
+            }
+          </select>
+          <button class="wishlist-toggle" type="button" [class.is-favorite]="isFavorite" [attr.aria-label]="isFavorite ? 'Remove from wishlist' : 'Add to wishlist'" (click)="toggleWishlist()">
+            <mat-icon>{{ isFavorite ? 'favorite' : 'favorite_border' }}</mat-icon>
+          </button>
+        </div>
+        <div class="purchase-actions">
+          <button mat-flat-button class="add-cart-button" type="button" (click)="addToCart()">ADD TO CART</button>
+          <button mat-flat-button class="buy-now-button" type="button" (click)="buyNow()">BUY IT NOW</button>
+        </div>
+        @if (actionMessage) { <p class="action-message" role="status">{{ actionMessage }}</p> }
+        <dl>
+          <div><dt>Fabric</dt><dd>{{ item.fabric }}</dd></div>
+          <div><dt>Colour</dt><dd>{{ item.color }}</dd></div>
+          <div><dt>Delivery</dt><dd>Free shipping across India</dd></div>
+        </dl>
+      </div>
+    </section>
+    <section class="detail-accordions" aria-label="Product information">
+      <div class="detail-accordion">
+        <button type="button" [attr.aria-expanded]="shippingOpen" (click)="toggleShipping()">
+          <span>Shipping information</span><span aria-hidden="true">{{ shippingOpen ? '−' : '+' }}</span>
+        </button>
+        @if (shippingOpen) {
+          <div class="accordion-content">
+            <p>Free shipping across India on orders above ₹5,000. Orders are dispatched within 2–4 business days.</p>
+            <p>Once dispatched, you will receive tracking details by SMS and email.</p>
+          </div>
+        }
+      </div>
+      <div class="detail-accordion">
+        <button type="button" [attr.aria-expanded]="helpOpen" (click)="toggleHelp()">
+          <span>Need help?</span><span aria-hidden="true">{{ helpOpen ? '−' : '+' }}</span>
+        </button>
+        @if (helpOpen) {
+          <div class="accordion-content">
+            <p>Need help choosing your saree or finding the right drape? Our team is happy to assist.</p>
+            <p>Call us at <strong>+91 98765 43210</strong> or email <strong>care@sareesilks.in</strong>.</p>
+          </div>
+        }
+      </div>
+    </section>
+    @if (relatedProducts.length) {
+      <section class="related-products" aria-labelledby="related-title">
+        <p class="detail-category">YOU MAY ALSO LIKE</p>
+        <h2 id="related-title">More from this collection</h2>
+        <div class="related-scroll" aria-label="More products">
+          <div class="related-track">
+            @for (related of relatedProducts; track related.id) {
+            <a class="related-card" [routerLink]="['/products', related.id]">
+              <img [src]="related.mainImageUrl" [alt]="related.name" loading="lazy" />
+              <strong>{{ related.name }}</strong>
+              <span>₹{{ related.price | number:'1.0-0' }}</span>
+            </a>
+            }
+          </div>
+        </div>
+      </section>
+    }
+  }
+</div>
+
+@if (addressOpen) {
+  <button class="address-backdrop" type="button" aria-label="Close delivery address" (click)="closeAddress()"></button>
+  <section class="address-modal" aria-labelledby="delivery-title">
+    <div class="address-modal-heading"><div><span class="detail-category">DELIVERY DETAILS</span><h2 id="delivery-title">Where should we deliver?</h2></div><button type="button" aria-label="Close delivery address" (click)="closeAddress()">&#10005;</button></div>
+    <form class="address-form" (submit)="$event.preventDefault(); confirmBuyNow()">
+      <label for="detail-delivery-address">Address</label>
+      <textarea id="detail-delivery-address" name="address" rows="3" [(ngModel)]="deliveryAddress.address" required></textarea>
+      <div class="address-row"><label>City<input name="city" [(ngModel)]="deliveryAddress.city" required /></label><label>State<input name="state" [(ngModel)]="deliveryAddress.state" required /></label></div>
+      <label for="detail-delivery-postal">PIN code</label>
+      <input id="detail-delivery-postal" name="postalCode" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" [(ngModel)]="deliveryAddress.postalCode" required />
+      <button mat-flat-button class="address-submit" type="submit" [disabled]="checkoutLoading">CONTINUE TO PAYMENT</button>
+    </form>
+  </section>
+}
