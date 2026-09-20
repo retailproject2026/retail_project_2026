@@ -51,7 +51,7 @@ declare global {
 
 @Injectable({ providedIn: 'root' })
 export class RazorpayService {
-  private readonly apiUrl = '/api';
+  private readonly apiUrl = 'https://retail-project-backend.onrender.com/api';
   private readonly scriptUrl = 'https://checkout.razorpay.com/v1/checkout.js';
   private readonly keyId = 'rzp_test_Te8ZLRQeOlYAZD';
   private scriptPromise?: Promise<void>;
@@ -64,7 +64,7 @@ export class RazorpayService {
   async checkHealth(): Promise<HealthResponse> {
     try {
       return await firstValueFrom(
-        this.http.post<HealthResponse>('/api/health', {})
+        this.http.post<HealthResponse>(`${this.apiUrl}/test-db`,{})
       );
     } catch (error) {
       throw this.toApiError(error, 'Checking backend health');
@@ -78,8 +78,7 @@ export class RazorpayService {
       order = await firstValueFrom(
         this.http.post<CreateOrderResponse>(
           `${this.apiUrl}/create-order`,
-          { amount: amountInRupees },
-          { withCredentials: true }
+          { amount: amountInRupees }
         )
       );
     } catch (error) {
@@ -115,8 +114,7 @@ export class RazorpayService {
                   razorpay_order_id: response.razorpay_order_id ?? orderId,
                   razorpay_payment_id: response.razorpay_payment_id,
                   razorpay_signature: response.razorpay_signature
-                },
-                { withCredentials: true }
+                }
               )
             );
             resolve(response);
