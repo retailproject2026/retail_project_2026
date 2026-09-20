@@ -34,7 +34,7 @@ export class ProductsComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly wishlist = inject(WishlistService);
   private readonly changeDetector = inject(ChangeDetectorRef);
-  private readonly productSource = '/products.json';
+  private readonly productSource = 'products.json';
   private readonly batchSize = 10;
   private allProducts: Product[] = [];
 

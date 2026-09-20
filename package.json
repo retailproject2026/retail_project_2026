@@ -1,5 +1,5 @@
 {
-  "name": "retail-store-seed",
+  "name": "retail_project_2026",
   "version": "0.0.1",
   "scripts": {
     "ng": "ng",
@@ -29,6 +29,7 @@
     "@angular/cli": "^22.1.7",
     "@angular/compiler-cli": "^22.1.7",
     "@types/jasmine": "~5.1.0",
+    "angular-cli-ghpages": "^3.1.0",
     "jasmine-core": "~5.9.0",
     "karma": "~6.4.4",
     "karma-chrome-launcher": "~3.2.0",
