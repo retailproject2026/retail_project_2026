@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://retail-project-backend.onrender.com/",
+    "target": "https://retail-project-backend.onrender.com",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"

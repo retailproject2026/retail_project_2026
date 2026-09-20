@@ -55,7 +55,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.http.get<Product[]>('/products.json').subscribe({
+    this.http.get<Product[]>('products.json').subscribe({
       next: products => {
         this.product = products.find(item => item.id === this.id) ?? null;
         this.relatedProducts = this.product
