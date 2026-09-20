@@ -2,7 +2,7 @@
     {
         "id": "saree-001",
         "name": "Lavender Peacock Zari Kanjivaram",
-        "price": 35995,
+        "price": 100,
         "category": "Kanjivaram",
         "fabric": "Pure silk",
         "color": "Lavender",
@@ -17,7 +17,7 @@
     {
         "id": "saree-002",
         "name": "Classic Orange Kanjivaram Silk",
-        "price": 32495,
+        "price": 100,
         "category": "Kanjivaram",
         "fabric": "Pure silk",
         "color": "Orange",
@@ -32,7 +32,7 @@
     {
         "id": "saree-003",
         "name": "Sunshine Yellow Kanjivaram",
-        "price": 9795,
+        "price": 100,
         "category": "Kanjivaram",
         "fabric": "Silk cotton",
         "color": "Yellow",
@@ -47,7 +47,7 @@
     {
         "id": "saree-004",
         "name": "Navy Blue Kanjivaram Silk",
-        "price": 9795,
+        "price": 100,
         "category": "Kanjivaram",
         "fabric": "Pure silk",
         "color": "Navy blue",
@@ -62,7 +62,7 @@
     {
         "id": "saree-005",
         "name": "Mango Yellow Silk Cotton",
-        "price": 5795,
+        "price": 100,
         "category": "Silk cotton",
         "fabric": "Silk cotton",
         "color": "Mango",
@@ -77,7 +77,7 @@
     {
         "id": "saree-006",
         "name": "Teal Green Silk Cotton",
-        "price": 5795,
+        "price": 100,
         "category": "Silk cotton",
         "fabric": "Silk cotton",
         "color": "Teal",
@@ -92,7 +92,7 @@
     {
         "id": "saree-007",
         "name": "Maroon Silk Cotton",
-        "price": 5795,
+        "price": 100,
         "category": "Silk cotton",
         "fabric": "Silk cotton",
         "color": "Maroon",
@@ -107,7 +107,7 @@
     {
         "id": "saree-008",
         "name": "Emerald Green Silk Cotton",
-        "price": 5895,
+        "price": 100,
         "category": "Silk cotton",
         "fabric": "Silk cotton",
         "color": "Emerald",
@@ -122,7 +122,7 @@
     {
         "id": "saree-009",
         "name": "Rose Pink Banarasi Silk",
-        "price": 18995,
+        "price": 100,
         "category": "Banarasi",
         "fabric": "Banarasi silk",
         "color": "Rose pink",
@@ -137,7 +137,7 @@
     {
         "id": "saree-010",
         "name": "Midnight Blue Banarasi",
-        "price": 21995,
+        "price": 100,
         "category": "Banarasi",
         "fabric": "Banarasi silk",
         "color": "Midnight blue",
@@ -152,7 +152,7 @@
     {
         "id": "saree-011",
         "name": "Ivory Gold Tissue Silk",
-        "price": 14995,
+        "price": 100,
         "category": "Designer",
         "fabric": "Tissue silk",
         "color": "Ivory",
@@ -167,7 +167,7 @@
     {
         "id": "saree-012",
         "name": "Rust Copper Handloom Silk",
-        "price": 8495,
+        "price": 100,
         "category": "Handloom",
         "fabric": "Handloom silk",
         "color": "Rust",
@@ -182,7 +182,7 @@
     {
         "id": "saree-013",
         "name": "Peacock Blue Gadwal Silk",
-        "price": 16995,
+        "price": 100,
         "category": "Gadwal",
         "fabric": "Gadwal silk",
         "color": "Peacock blue",
@@ -197,7 +197,7 @@
     {
         "id": "saree-014",
         "name": "Blush Pink Organza Saree",
-        "price": 6995,
+        "price": 100,
         "category": "Designer",
         "fabric": "Organza silk",
         "color": "Blush pink",
@@ -212,7 +212,7 @@
     {
         "id": "saree-015",
         "name": "Bottle Green Bridal Silk",
-        "price": 28995,
+        "price": 100,
         "category": "Bridal",
         "fabric": "Pure silk",
         "color": "Bottle green",
@@ -227,7 +227,7 @@
     {
         "id": "saree-016",
         "name": "Coral Pink Soft Silk",
-        "price": 7495,
+        "price": 100,
         "category": "Soft silk",
         "fabric": "Soft silk",
         "color": "Coral pink",
@@ -242,7 +242,7 @@
     {
         "id": "saree-017",
         "name": "Charcoal Grey Linen Saree",
-        "price": 3995,
+        "price": 100,
         "category": "Cotton",
         "fabric": "Linen cotton",
         "color": "Charcoal",
@@ -257,7 +257,7 @@
     {
         "id": "saree-018",
         "name": "Turmeric Yellow Cotton Saree",
-        "price": 2995,
+        "price": 100,
         "category": "Cotton",
         "fabric": "Pure cotton",
         "color": "Turmeric yellow",
@@ -272,7 +272,7 @@
     {
         "id": "saree-019",
         "name": "Plum Purple Designer Silk",
-        "price": 11995,
+        "price": 100,
         "category": "Designer",
         "fabric": "Art silk",
         "color": "Plum",
@@ -287,7 +287,7 @@
     {
         "id": "saree-020",
         "name": "Aqua Blue Printed Silk",
-        "price": 6495,
+        "price": 100,
         "category": "Designer",
         "fabric": "Printed silk",
         "color": "Aqua blue",
