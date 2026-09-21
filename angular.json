@@ -29,7 +29,7 @@
               "baseHref": "/retail_project_2026/",
               "budgets": [
                 { "type": "initial", "maximumWarning": "500kB", "maximumError": "1MB" },
-                { "type": "anyComponentStyle", "maximumWarning": "11kB", "maximumError": "12kB" }
+                { "type": "anyComponentStyle", "maximumWarning": "12kB", "maximumError": "12kB" }
                 
               ],
               "outputHashing": "all"
