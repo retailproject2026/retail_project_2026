@@ -37,6 +37,7 @@ export class HeaderComponent {
   notifyNewArrivals = false;
   loggedIn = false;
   menuOpen = false;
+  clothesOpen = false;
   checkoutLoading = false;
   checkoutMessage = '';
   addressOpen = false;
@@ -106,6 +107,11 @@ export class HeaderComponent {
 
   closeMenu(): void {
     this.menuOpen = false;
+    this.clothesOpen = false;
+  }
+
+  toggleClothes(): void {
+    this.clothesOpen = !this.clothesOpen;
   }
 
   get filteredProducts(): Array<{ name: string; price: string }> {

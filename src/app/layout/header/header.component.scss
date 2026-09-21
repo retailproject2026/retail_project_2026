@@ -45,9 +45,10 @@
 .brand-name { font-family: Georgia, 'Times New Roman', serif; font-size: 31px; letter-spacing: .08em; }
 .brand-subtitle { margin-top: 7px; font-size: 10px; letter-spacing: .3em; color: var(--header-text); }
 
-.header-right { display: flex; justify-content: flex-end; align-items: center; gap: 5px; margin-left: auto; }
+.header-right { display: flex; justify-content: flex-end; align-items: center; gap: 5px; min-width: 0; margin-left: auto; }
 .header-right button { color: var(--header-menucolor) !important; }
 .search-button { margin-left: 4px; }
+.search-button { flex: 0 0 auto; }
 .badge-button { position: relative; }
 .badge {
   position: absolute; right: -2px; top: -2px; min-width: 22px; height: 22px; padding: 0 5px;
@@ -144,6 +145,9 @@
 }
 .category-nav a { color: var(--header-menucolor); text-decoration: none; font-family: var(--menu_font_family); font-size: var(--menu_font_size); font-weight: var(--menu_font_weight); letter-spacing: var(--menu_spacing); text-transform: var(--menu_type_text); }
 .category-nav a:hover { color: var(--header-menuhover); }
+.nav-group-trigger { display: inline-flex; align-items: center; gap: 3px; border: 0; padding: 0; background: transparent; color: var(--header-text); font: inherit; font-size: var(--menu_font_size); font-weight: 700; letter-spacing: var(--menu_spacing); text-transform: var(--menu_type_text); cursor: pointer; }
+.nav-group-trigger mat-icon { width: 18px; height: 18px; font-size: 18px; }
+.clothes-nav-links { display: contents; }
 .menu-close-button { display: none; }
 
 .wishlist-backdrop, .cart-backdrop, .menu-backdrop {
@@ -152,14 +156,14 @@
   width: 100%;
   border: 0;
 }
-.wishlist-backdrop { top: 214px; z-index: 10; background: rgba(25, 10, 24, .32); }
+.wishlist-backdrop { top: 0; z-index: 120; background: rgba(25, 10, 24, .32); }
 
 .wishlist-drawer {
   position: fixed;
-  top: 214px;
+  top: 0;
   bottom: 0;
   right: 0;
-  z-index: 11;
+  z-index: 121;
   display: flex;
   flex-direction: column;
   width: min(430px, 92vw);
@@ -196,8 +200,8 @@
 }
 .wishlist-secondary-action { margin-top: 10px; background: #f1e4d9 !important; color: var(--header-text) !important; }
 
-.cart-backdrop { top: 214px; z-index: 14; background: rgba(25, 10, 24, .32); }
-.cart-drawer { position: fixed; top: 214px; right: 0; bottom: 0; z-index: 15; display: flex; flex-direction: column; width: min(430px, 92vw); height: auto; padding: 34px 28px 28px; background: var(--header-background); box-shadow: -12px 0 35px rgba(64, 18, 59, .16); }
+.cart-backdrop { top: 0; z-index: 124; background: rgba(25, 10, 24, .32); }
+.cart-drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 125; display: flex; flex-direction: column; width: min(430px, 92vw); height: auto; padding: 34px 28px 28px; background: var(--header-background); box-shadow: -12px 0 35px rgba(64, 18, 59, .16); }
 .cart-heading { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(var(--header-border-color), 1); padding-bottom: 22px; }
 .cart-kicker { color: var(--g-label-new); font-size: 10px; font-weight: 700; letter-spacing: .18em; }
 .cart-heading h2 { margin: 8px 0 0; color: var(--header-text); font-family: Georgia, 'Times New Roman', serif; font-size: 29px; font-weight: 400; }
@@ -223,6 +227,7 @@
   .header-right {
     gap: 2px;
     min-width: 0;
+    flex-shrink: 0;
   }
   .header-right button {
     width: 38px;
@@ -230,14 +235,14 @@
     min-width: 38px;
   }
   .menu-button { display: inline-flex; }
-  .brand { gap: 8px; }
+  .brand { min-width: 0; gap: 8px; overflow: hidden; }
   .brand-mark { width: 42px; height: 42px; font-size: 14px; }
-  .brand-name { font-size: 18px; letter-spacing: .04em; }
+  .brand-name { overflow: hidden; font-size: 18px; letter-spacing: .04em; text-overflow: ellipsis; white-space: nowrap; }
   .brand-subtitle { font-size: 7px; letter-spacing: .18em; }
   .search-button span { display: none; }
   .category-nav {
     position: fixed;
-    top: 122px;
+    top: 0;
     bottom: 0;
     left: 0;
     z-index: 20;
@@ -263,11 +268,13 @@
     cursor: pointer;
   }
   .category-nav a { padding: 17px 4px; border-bottom: 1px solid var(--header-menudropborder); }
+  .nav-group-trigger { justify-content: space-between; width: 100%; padding: 17px 4px 7px; border-bottom: 1px solid var(--header-menudropborder); }
+  .clothes-nav-links { display: flex; flex-direction: column; padding-left: 16px; }
   .category-nav a:last-child { border-bottom: 0; }
   .account-popup { top: 88px; right: 16px; }
   .address-popup { top: 50%; right: auto; left: 50%; transform: translate(-50%, -50%); }
-  .menu-backdrop { top: 122px; z-index: 19; display: block; background: rgba(25, 10, 24, .32); }
-  .wishlist-backdrop, .cart-backdrop { top: 122px; }
-  .wishlist-drawer, .cart-drawer { top: 122px; }
+  .menu-backdrop { top: 0; z-index: 19; display: block; background: rgba(25, 10, 24, .32); }
+  .wishlist-backdrop, .cart-backdrop { top: 0; }
+  .wishlist-drawer, .cart-drawer { top: 0; }
 }
 

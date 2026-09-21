@@ -21,7 +21,8 @@ interface ProductCard {
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  readonly categories = ['Women', 'Men', 'Kids', 'Accessories', 'Occasionwear'];
+  readonly clothingCategories = ['Women', 'Men', 'Kids'];
+  readonly otherCategories = ['Accessories', 'Occasionwear'];
   activeSlide = 0;
   private slideTimer?: ReturnType<typeof setInterval>;
 

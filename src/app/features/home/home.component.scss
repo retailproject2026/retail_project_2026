@@ -21,6 +21,10 @@ h2 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size
 .category-options button.is-active, .category-options button:hover { border-color: #6e1722; background: #6e1722; color: #fff; }
 
 .product-section { padding: 25px 0 85px; }
+.clothes-section { padding-top: 45px; }
+.clothes-heading { margin-bottom: 4px; }
+.clothes-heading h2 { margin-bottom: 0; }
+.clothes-subsections .product-section { padding-top: 25px; }
 .section-heading { display: flex; justify-content: space-between; align-items: end; }
 .section-heading h2 { margin-bottom: 0; }
 .section-heading > a.view-all-link { display: inline-flex; align-items: center; gap: 7px; padding: 9px 12px; border: 1px solid #6e1722; color: #6e1722; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-decoration: none; }.view-all-link span { font-size: 17px; }

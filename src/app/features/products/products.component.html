@@ -8,10 +8,6 @@
       </button>
       <span class="product-count" aria-live="polite">{{ productCount }} products</span>
     </div>
-    <div>
-      <h1>Products</h1>
-      <p>Explore clothing for every style, season and occasion.</p>
-    </div>
   </div>
 
   @if (errorMessage) {
@@ -25,7 +21,7 @@
               <a class="product-image-link" [routerLink]="['/products', product.id]" [attr.aria-label]="'View details for ' + product.name">
                 <div class="product-image" [class]="product.tone">
                 <img [src]="product.mainImageUrl" [alt]="product.name" loading="lazy" />
-                <span class="product-category">{{ product.category }}</span>
+                <span class="product-category">{{ product.productType }} · {{ product.category }}</span>
                 </div>
               </a>
               <button
@@ -64,18 +60,81 @@
       <div><span class="filter-kicker">REFINE THE COLLECTION</span><h2 id="filter-title">Filters &amp; Sort</h2></div>
       <button type="button" aria-label="Close filters" (click)="closeFilters()">&#10005;</button>
     </div>
-    <fieldset class="filter-group">
-      <legend>Product type</legend>
-      @for (category of categoryOptions; track category) {
+    <details class="filter-group" [open]="openFilterSection === 'type'">
+      <summary (click)="toggleFilterSection('type', $event)">Product type @if (selectedCountFor('type')) { <span class="filter-section-count">{{ selectedCountFor('type') }}</span> }</summary>
+      @for (productType of visibleProductTypes; track productType) {
+        <label><input type="checkbox" [checked]="selectedProductTypes.includes(productType)" (change)="toggleProductType(productType)" /> {{ productType }}</label>
+      }
+    </details>
+    @if (showCategoryGroup('Clothes')) {
+      <details class="filter-group" [open]="openFilterSection === 'clothes'">
+      <summary (click)="toggleFilterSection('clothes', $event)">Clothes @if (selectedCountFor('clothes')) { <span class="filter-section-count">{{ selectedCountFor('clothes') }}</span> }</summary>
+      @for (category of clothingCategories; track category) {
         <label><input type="checkbox" [checked]="selectedCategories.includes(category)" (change)="toggleCategory(category)" /> {{ category }}</label>
       }
-    </fieldset>
-    <fieldset class="filter-group">
-      <legend>Sort by</legend>
+      </details>
+    }
+    @if (showCategoryGroup('Food')) {
+      <details class="filter-group" [open]="openFilterSection === 'food'">
+        <summary (click)="toggleFilterSection('food', $event)">Food @if (selectedCountFor('food')) { <span class="filter-section-count">{{ selectedCountFor('food') }}</span> }</summary>
+        @for (category of foodCategories; track category) {
+          <label><input type="checkbox" [checked]="selectedCategories.includes(category)" (change)="toggleCategory(category)" /> {{ category }}</label>
+        }
+      </details>
+    }
+    @if (showCategoryGroup('Accessories')) {
+      <details class="filter-group" [open]="openFilterSection === 'accessories'">
+        <summary (click)="toggleFilterSection('accessories', $event)">Accessories @if (selectedCountFor('accessories')) { <span class="filter-section-count">{{ selectedCountFor('accessories') }}</span> }</summary>
+        @for (category of accessoryCategories; track category) {
+        <label><input type="checkbox" [checked]="selectedCategories.includes(category)" (change)="toggleCategory(category)" /> {{ category }}</label>
+        }
+      </details>
+    }
+    <details class="filter-group" [open]="openFilterSection === 'sort'">
+      <summary (click)="toggleFilterSection('sort', $event)">Sort by @if (selectedCountFor('sort')) { <span class="filter-section-count">{{ selectedCountFor('sort') }}</span> }</summary>
       <label><input type="radio" name="sort" value="price-low" [(ngModel)]="sortOption" (ngModelChange)="previewFilters()" /> Price: low to high</label>
       <label><input type="radio" name="sort" value="price-high" [(ngModel)]="sortOption" (ngModelChange)="previewFilters()" /> Price: high to low</label>
       <label><input type="radio" name="sort" value="name" [(ngModel)]="sortOption" (ngModelChange)="previewFilters()" /> Name A to Z</label>
-    </fieldset>
+    </details>
+    <details class="filter-group price-filter-group" [open]="openFilterSection === 'price'">
+      <summary (click)="toggleFilterSection('price', $event)">Price range @if (selectedCountFor('price')) { <span class="filter-section-count">{{ selectedCountFor('price') }}</span> }</summary>
+      <div class="price-range-values" aria-live="polite">
+        <span>₹{{ (minPrice ?? priceFloor).toLocaleString('en-IN') }}</span>
+        <span>{{ maxPrice === null ? 'No limit' : '₹' + maxPrice.toLocaleString('en-IN') }}</span>
+      </div>
+      <div class="price-range-slider" aria-label="Price range slider">
+        <input
+          type="range"
+          aria-label="Minimum price"
+          [min]="priceFloor"
+          [max]="priceCeiling"
+          [step]="priceStep"
+          [value]="minPrice ?? priceFloor"
+          (input)="setPriceFromSlider('min', $event)" />
+        <input
+          type="range"
+          aria-label="Maximum price"
+          [min]="priceFloor"
+          [max]="priceCeiling"
+          [step]="priceStep"
+          [value]="maxPrice ?? priceCeiling"
+          (input)="setPriceFromSlider('max', $event)" />
+      </div>
+      <div class="price-inputs">
+        <label>
+          Minimum
+          <span class="price-stepper">
+            <input type="number" min="0" [max]="maxPrice ?? priceCeiling" [step]="priceStep" placeholder="₹0" [(ngModel)]="minPrice" (ngModelChange)="updatePriceRange()" />
+          </span>
+        </label>
+        <label>
+          Maximum
+          <span class="price-stepper">
+            <input type="number" min="0" [min]="minPrice ?? priceFloor" [max]="priceCeiling" [step]="priceStep" placeholder="No limit" [(ngModel)]="maxPrice" (ngModelChange)="updatePriceRange()" />
+          </span>
+        </label>
+      </div>
+    </details>
     <div class="filter-actions"><button type="button" (click)="resetFilters()">RESET</button><button type="button" (click)="applyFilters()">APPLY FILTERS</button></div>
   </aside>
 }

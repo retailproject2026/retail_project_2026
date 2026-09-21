@@ -1,5 +1,5 @@
 <div class="announcement-bar">
-  <div>Welcome to our store ✨ Free shipping across India on orders above ₹5,000 ✨</div>
+  <div>Welcome to our store. Buy your favourite items online and get free shipping on orders above ₹2,000.</div>
 </div>
 
 <header class="store-header">
@@ -18,7 +18,7 @@
   <a class="brand" routerLink="/" aria-label="Home">
     <div class="brand-mark">AP</div>
     <div class="brand-copy">
-      <span class="brand-name">ALL PRODUCTS</span>
+      <span class="brand-name">CLOTHES</span>
       <span class="brand-subtitle">SHOP EVERYTHING</span>
     </div>
   </a>
@@ -71,12 +71,23 @@
     <mat-icon>close</mat-icon>
   </button>
   <a routerLink="/products" (click)="closeMenu()">NEW ARRIVALS</a>
-  <a routerLink="/products" [queryParams]="{ category: 'Women' }" (click)="closeMenu()">WOMEN</a>
-  <a routerLink="/products" [queryParams]="{ category: 'Men' }" (click)="closeMenu()">MEN</a>
-  <a routerLink="/products" [queryParams]="{ category: 'Kids' }" (click)="closeMenu()">KIDS</a>
+  <button
+    class="nav-group-trigger"
+    type="button"
+    [attr.aria-expanded]="clothesOpen"
+    (click)="toggleClothes()">
+    <span>CLOTHES</span>
+    <mat-icon aria-hidden="true">{{ clothesOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
+  </button>
+  @if (clothesOpen) {
+    <div class="clothes-nav-links">
+      <a routerLink="/products" [queryParams]="{ category: 'Women' }" (click)="closeMenu()">WOMEN</a>
+      <a routerLink="/products" [queryParams]="{ category: 'Men' }" (click)="closeMenu()">MEN</a>
+      <a routerLink="/products" [queryParams]="{ category: 'Kids' }" (click)="closeMenu()">KIDS</a>
+    </div>
+  }
+  <a routerLink="/products" [queryParams]="{ type: 'Food' }" (click)="closeMenu()">FOOD</a>
   <a routerLink="/products" [queryParams]="{ category: 'Accessories' }" (click)="closeMenu()">ACCESSORIES</a>
-  <a routerLink="/products" [queryParams]="{ category: 'Occasionwear' }" (click)="closeMenu()">OCCASIONWEAR</a>
-  <a routerLink="/products" (click)="closeMenu()">SALE</a>
 </nav>
 
 @if (menuOpen) {
@@ -167,9 +178,6 @@
       <button mat-flat-button color="primary" class="wishlist-action" type="button" [disabled]="!wishlistItems.length" (click)="checkoutWishlist()">
         CHECKOUT
       </button>
-      <a mat-flat-button class="wishlist-secondary-action" routerLink="/products" (click)="closeWishlist()">
-        Explore More Styles
-      </a>
     </div>
   </aside>
 }

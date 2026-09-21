@@ -18,7 +18,64 @@
     </div>
   </section>
 
-  @for (category of categories; track category) {
+  <section class="product-section section-shell" aria-labelledby="new-arrivals-title">
+    <div class="section-heading">
+      <h2 id="new-arrivals-title">New Arrivals</h2>
+      <a class="view-all-link" routerLink="/products">VIEW ALL <span aria-hidden="true">&#8594;</span></a>
+    </div>
+    <div class="product-grid">
+      @for (product of newArrivals; track product.id) {
+        <article class="product-card">
+          <a class="product-image-link" [routerLink]="['/products', product.id]" [attr.aria-label]="'View details for ' + product.name">
+            <div class="product-image" [class]="product.tone">
+              <img [src]="product.mainImageUrl" [alt]="product.name" loading="lazy" />
+              @if (product.tag) { <span class="tag">{{ product.tag }}</span> }
+            </div>
+          </a>
+          <div class="product-info">
+            <p class="product-category">{{ product.category }}</p>
+            <h3>{{ product.name }}</h3>
+            <p class="product-price">{{ product.price }}</p>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="clothes-section section-shell" aria-labelledby="clothes-title">
+    <div class="section-heading clothes-heading">
+      <h2 id="clothes-title">Clothes</h2>
+    </div>
+    <div class="clothes-subsections">
+      @for (category of clothingCategories; track category) {
+        <section class="product-section">
+      <div class="section-heading">
+        <h2>{{ category }}</h2>
+        <a class="view-all-link" routerLink="/products" [queryParams]="{ category: category }">VIEW ALL <span aria-hidden="true">&#8594;</span></a>
+      </div>
+      <div class="product-grid">
+        @for (product of productsFor(category); track product.id) {
+          <article class="product-card">
+            <a class="product-image-link" [routerLink]="['/products', product.id]" [attr.aria-label]="'View details for ' + product.name">
+              <div class="product-image" [class]="product.tone">
+                <img [src]="product.mainImageUrl" [alt]="product.name" loading="lazy" />
+                @if (product.tag) { <span class="tag">{{ product.tag }}</span> }
+              </div>
+            </a>
+            <div class="product-info">
+              <p class="product-category">{{ product.category }}</p>
+              <h3>{{ product.name }}</h3>
+              <p class="product-price">{{ product.price }}</p>
+            </div>
+          </article>
+        }
+      </div>
+        </section>
+      }
+    </div>
+  </section>
+
+  @for (category of otherCategories; track category) {
     <section class="product-section section-shell">
       <div class="section-heading">
         <h2>{{ category }}</h2>

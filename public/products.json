@@ -313,5 +313,44 @@
       "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=700&q=85",
       "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=700&q=85"
     ]
+  },
+  {
+    "id": "food-001",
+    "name": "Artisan Granola Jar",
+    "price": 499,
+    "productType": "Food",
+    "category": "Breakfast",
+    "fabric": "Natural Ingredients",
+    "color": "Honey Oat",
+    "description": "A crunchy small-batch granola blend made with oats, nuts and dried fruit.",
+    "tone": "mango",
+    "mainImageUrl": "https://images.unsplash.com/photo-1517093728432-a0440f8d45af?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": []
+  },
+  {
+    "id": "food-002",
+    "name": "Cold Brew Coffee Bottle",
+    "price": 249,
+    "productType": "Food",
+    "category": "Beverages",
+    "fabric": "Arabica Coffee",
+    "color": "Classic Roast",
+    "description": "Smooth ready-to-drink cold brew coffee for an easy everyday pick-me-up.",
+    "tone": "charcoal",
+    "mainImageUrl": "https://images.unsplash.com/photo-1511081692775-05d0f180a065?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": []
+  },
+  {
+    "id": "food-003",
+    "name": "Handmade Chocolate Box",
+    "price": 799,
+    "productType": "Food",
+    "category": "Gifting",
+    "fabric": "Dark Chocolate",
+    "color": "Cocoa",
+    "description": "A gift-ready box of handmade chocolate bites with rich cocoa flavour.",
+    "tone": "espresso",
+    "mainImageUrl": "https://images.unsplash.com/photo-1548907040-4d42fcaa7b1c?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": []
   }
 ]

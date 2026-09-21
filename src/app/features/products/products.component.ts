@@ -13,6 +13,7 @@ interface Product {
   id: string;
   name: string;
   price: number;
+  productType: string;
   category: string;
   fabric: string;
   color: string;
@@ -43,14 +44,27 @@ export class ProductsComponent implements OnInit {
   loadingMore = false;
   errorMessage = '';
   filterOpen = false;
+  selectedProductTypes: string[] = [];
   selectedCategories: string[] = [];
   sortOption = '';
-  readonly categoryOptions = ['Women', 'Men', 'Kids', 'Accessories', 'Occasionwear'];
+  minPrice: number | null = null;
+  maxPrice: number | null = null;
+  readonly productTypes = ['Clothes', 'Food', 'Accessories'];
+  readonly clothingCategories = ['Women', 'Men', 'Kids', 'Occasionwear'];
+  readonly foodCategories = ['Breakfast', 'Beverages', 'Gifting'];
+  readonly accessoryCategories = ['Accessories'];
+  readonly categoryOptions = [...this.clothingCategories, ...this.foodCategories, ...this.accessoryCategories];
+  readonly priceStep = 500;
+  readonly priceFloor = 0;
+  readonly priceCeiling = 10000;
+  openFilterSection = 'type';
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
       const category = params.get('category');
+      const type = params.get('type');
       this.selectedCategories = category && this.categoryOptions.includes(category) ? [category] : [];
+      this.selectedProductTypes = type && this.productTypes.includes(type) ? [type] : [];
       if (this.allProducts.length) {
         this.previewFilters();
       }
@@ -63,7 +77,25 @@ export class ProductsComponent implements OnInit {
   }
 
   get activeFilterCount(): number {
-    return this.selectedCategories.length + (this.sortOption ? 1 : 0);
+    return this.selectedProductTypes.length + this.selectedCategories.length + (this.sortOption ? 1 : 0)
+      + (this.minPrice !== null ? 1 : 0) + (this.maxPrice !== null ? 1 : 0);
+  }
+
+  get visibleProductTypes(): string[] {
+    return this.selectedProductTypes.length ? this.selectedProductTypes : this.productTypes;
+  }
+
+  showCategoryGroup(productType: string): boolean {
+    return !this.selectedProductTypes.length || this.selectedProductTypes.includes(productType);
+  }
+
+  selectedCountFor(section: string): number {
+    if (section === 'type') return this.selectedProductTypes.length;
+    if (section === 'clothes') return this.selectedCategories.filter(category => this.clothingCategories.includes(category)).length;
+    if (section === 'food') return this.selectedCategories.filter(category => this.foodCategories.includes(category)).length;
+    if (section === 'accessories') return this.selectedCategories.filter(category => this.accessoryCategories.includes(category)).length;
+    if (section === 'sort') return this.sortOption ? 1 : 0;
+    return (this.minPrice !== null ? 1 : 0) + (this.maxPrice !== null ? 1 : 0);
   }
 
   get productCount(): number {
@@ -99,11 +131,37 @@ export class ProductsComponent implements OnInit {
   toggleFilters(): void { this.filterOpen = !this.filterOpen; }
   closeFilters(): void { this.filterOpen = false; }
 
+  toggleFilterSection(section: string, event: Event): void {
+    event.preventDefault();
+    this.openFilterSection = this.openFilterSection === section ? '' : section;
+  }
+
   toggleCategory(category: string): void {
     this.selectedCategories = this.selectedCategories.includes(category)
       ? this.selectedCategories.filter(selected => selected !== category)
       : [...this.selectedCategories, category];
     this.previewFilters();
+  }
+
+  toggleProductType(productType: string): void {
+    this.selectedProductTypes = this.selectedProductTypes.includes(productType)
+      ? this.selectedProductTypes.filter(selected => selected !== productType)
+      : [...this.selectedProductTypes, productType];
+    this.previewFilters();
+  }
+
+  updatePriceRange(): void {
+    this.previewFilters();
+  }
+
+  setPriceFromSlider(bound: 'min' | 'max', event: Event): void {
+    const value = Number((event.target as HTMLInputElement).value);
+    if (bound === 'min') {
+      this.minPrice = Math.min(value, this.maxPrice ?? this.priceCeiling);
+    } else {
+      this.maxPrice = Math.max(value, this.minPrice ?? this.priceFloor);
+    }
+    this.updatePriceRange();
   }
 
   previewFilters(): void {
@@ -118,15 +176,21 @@ export class ProductsComponent implements OnInit {
   }
 
   resetFilters(): void {
+    this.selectedProductTypes = [];
     this.selectedCategories = [];
     this.sortOption = '';
+    this.minPrice = null;
+    this.maxPrice = null;
     this.applyFilters();
   }
 
   private loadProducts(): void {
     this.http.get<Product[]>(this.productSource).subscribe({
       next: products => {
-        this.allProducts = products;
+        this.allProducts = products.map(product => ({
+          ...product,
+          productType: product.productType ?? (product.category === 'Accessories' ? 'Accessories' : 'Clothes')
+        }));
         this.displayedProducts = this.getFilteredProducts().slice(0, this.batchSize);
         this.loading = false;
         this.changeDetector.markForCheck();
@@ -152,11 +216,19 @@ export class ProductsComponent implements OnInit {
   }
 
   private getFilteredProducts(): Product[] {
+    const byType = this.selectedProductTypes.length
+      ? this.allProducts.filter(product => this.selectedProductTypes.includes(product.productType))
+      : this.allProducts;
     const filtered = this.selectedCategories.length
-      ? this.allProducts.filter(product => this.selectedCategories.includes(product.category))
-      : [...this.allProducts];
+      ? byType.filter(product => this.selectedCategories.includes(product.category))
+      : [...byType];
 
-    return filtered.sort((first, second) => {
+    const priceFiltered = filtered.filter(product =>
+      (this.minPrice === null || product.price >= this.minPrice)
+      && (this.maxPrice === null || product.price <= this.maxPrice)
+    );
+
+    return priceFiltered.sort((first, second) => {
       if (this.sortOption === 'price-low') return first.price - second.price;
       if (this.sortOption === 'price-high') return second.price - first.price;
       if (this.sortOption === 'name') return first.name.localeCompare(second.name);
