@@ -12,11 +12,25 @@ import { RazorpayService } from '../../core/services/razorpay.service';
 interface Product {
   id: string;
   name: string;
+  sku?: string;
   price: number;
+  salePrice?: number | null;
+  currency?: string;
+  productType?: string;
   category: string;
-  fabric: string;
-  color: string;
+  brand?: string;
+  fabric?: string;
+  color?: string;
   description: string;
+  stock?: number;
+  inStock?: boolean;
+  attributes?: Record<string, string | string[]>;
+  rating?: number;
+  reviewCount?: number;
+  isFeatured?: boolean;
+  isNew?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
   mainImageUrl: string;
   extraImageUrls: string[];
   tone: string;
@@ -57,9 +71,15 @@ export class ProductDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.http.get<Product[]>('products.json').subscribe({
       next: products => {
-        this.product = products.find(item => item.id === this.id) ?? null;
+        const normalizedProducts = products.map(item => ({
+          ...item,
+          currency: item.currency ?? 'INR',
+          inStock: item.inStock ?? ((item.stock ?? 1) > 0),
+          stock: item.stock ?? 0
+        }));
+        this.product = normalizedProducts.find(item => item.id === this.id) ?? null;
         this.relatedProducts = this.product
-          ? products.filter(item => item.id !== this.product?.id)
+          ? normalizedProducts.filter(item => item.id !== this.product?.id)
           : [];
         this.errorMessage = this.product ? '' : 'Product not found.';
         this.loading = false;
@@ -74,11 +94,11 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   addToCart(): void {
-    if (!this.product) return;
+    if (!this.product || this.product.inStock === false) return;
     this.cart.add({
       id: this.product.id,
       name: this.product.name,
-      price: this.product.price,
+      price: this.product.salePrice ?? this.product.price,
       quantity: this.quantity,
       tone: 'cart-product',
       mainImageUrl: this.product.mainImageUrl

@@ -34,10 +34,11 @@
               </button>
             </div>
             <mat-card-content>
-              <p class="product-fabric">{{ product.fabric }} · {{ product.color }}</p>
+              <p class="product-fabric">{{ product.productType }} · {{ product.category }}</p>
               <h2>{{ product.name }}</h2>
               <p class="product-description">{{ product.description }}</p>
-              <p class="product-price">₹{{ product.price | number:'1.0-0' }}</p>
+              <p class="product-price">₹{{ (product.salePrice ?? product.price) | number:'1.0-0' }}</p>
+              @if (!product.inStock) { <p class="product-stock">Out of stock</p> }
             </mat-card-content>
           </mat-card>
         }

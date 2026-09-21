@@ -12,12 +12,25 @@ import { WishlistProduct, WishlistService } from '../../core/services/wishlist.s
 interface Product {
   id: string;
   name: string;
+  sku?: string;
   price: number;
+  salePrice?: number | null;
+  currency?: string;
   productType: string;
   category: string;
-  fabric: string;
-  color: string;
+  brand?: string;
+  fabric?: string;
+  color?: string;
   description: string;
+  stock?: number;
+  inStock?: boolean;
+  attributes?: Record<string, string | string[]>;
+  rating?: number;
+  reviewCount?: number;
+  isFeatured?: boolean;
+  isNew?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
   tone: string;
   mainImageUrl: string;
   extraImageUrls: string[];
@@ -189,7 +202,12 @@ export class ProductsComponent implements OnInit {
       next: products => {
         this.allProducts = products.map(product => ({
           ...product,
-          productType: product.productType ?? (product.category === 'Accessories' ? 'Accessories' : 'Clothes')
+          productType: product.productType ?? (product.category === 'Accessories' ? 'Accessories' : 'Clothes'),
+          currency: product.currency ?? 'INR',
+          inStock: product.inStock ?? ((product.stock ?? 1) > 0),
+          stock: product.stock ?? 0,
+          isFeatured: product.isFeatured ?? false,
+          isNew: product.isNew ?? false
         }));
         this.displayedProducts = this.getFilteredProducts().slice(0, this.batchSize);
         this.loading = false;
