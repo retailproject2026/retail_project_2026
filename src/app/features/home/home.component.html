@@ -1,6 +1,11 @@
 <main class="home-page">
-  <section class="hero-banner" aria-label="Featured products">
-    <img class="hero-image" [src]="carouselProducts[activeSlide].mainImageUrl" [alt]="carouselProducts[activeSlide].name" />
+  @if (loading) {
+    <p class="section-shell" role="status">Loading products...</p>
+  } @else if (errorMessage) {
+    <p class="section-shell" role="alert">{{ errorMessage }}</p>
+  } @else if (carouselProducts.length) {
+    <section class="hero-banner" aria-label="Featured products">
+      <img class="hero-image" [src]="carouselProducts[activeSlide].mainImageUrl" [alt]="carouselProducts[activeSlide].name" />
     <div class="hero-controls">
       <button type="button" class="hero-arrow" aria-label="Previous slide" (click)="previousSlide()">&#8592;</button>
       <div class="hero-dots" aria-label="Choose a slide">
@@ -16,7 +21,8 @@
       </div>
       <button type="button" class="hero-arrow" aria-label="Next slide" (click)="nextSlide()">&#8594;</button>
     </div>
-  </section>
+    </section>
+  }
 
   <section class="product-section section-shell" aria-labelledby="new-arrivals-title">
     <div class="section-heading">

@@ -71,21 +71,23 @@
     <mat-icon>close</mat-icon>
   </button>
   <a routerLink="/products" (click)="closeMenu()">NEW ARRIVALS</a>
-  <button
-    class="nav-group-trigger"
-    type="button"
-    [attr.aria-expanded]="clothesOpen"
-    (click)="toggleClothes()">
-    <span>CLOTHES</span>
-    <mat-icon aria-hidden="true">{{ clothesOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
-  </button>
-  @if (clothesOpen) {
-    <div class="clothes-nav-links">
-      <a routerLink="/products" [queryParams]="{ category: 'Women' }" (click)="closeMenu()">WOMEN</a>
-      <a routerLink="/products" [queryParams]="{ category: 'Men' }" (click)="closeMenu()">MEN</a>
-      <a routerLink="/products" [queryParams]="{ category: 'Kids' }" (click)="closeMenu()">KIDS</a>
-    </div>
-  }
+  <div class="clothes-nav-group">
+    <button
+      class="nav-group-trigger"
+      type="button"
+      [attr.aria-expanded]="clothesOpen"
+      (click)="toggleClothes()">
+      <span>CLOTHES</span>
+      <mat-icon aria-hidden="true">{{ clothesOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
+    </button>
+    @if (clothesOpen) {
+      <div class="clothes-nav-links">
+        <a routerLink="/products" [queryParams]="{ category: 'Women' }" (click)="closeMenu()">WOMEN</a>
+        <a routerLink="/products" [queryParams]="{ category: 'Men' }" (click)="closeMenu()">MEN</a>
+        <a routerLink="/products" [queryParams]="{ category: 'Kids' }" (click)="closeMenu()">KIDS</a>
+      </div>
+    }
+  </div>
   <a routerLink="/products" [queryParams]="{ type: 'Food' }" (click)="closeMenu()">FOOD</a>
   <a routerLink="/products" [queryParams]="{ category: 'Accessories' }" (click)="closeMenu()">ACCESSORIES</a>
 </nav>
@@ -119,7 +121,7 @@
     @if (searchQuery) {
       <div class="search-results" aria-live="polite">
         @for (product of filteredProducts; track product.name) {
-          <a routerLink="/products" (click)="closeSearch()">
+          <a [routerLink]="['/products', product.id]" (click)="closeSearch()">
             <span>{{ product.name }}</span><strong>{{ product.price }}</strong>
           </a>
         } @empty {

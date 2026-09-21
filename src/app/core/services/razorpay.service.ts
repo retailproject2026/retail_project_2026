@@ -51,7 +51,8 @@ declare global {
 
 @Injectable({ providedIn: 'root' })
 export class RazorpayService {
-  private readonly apiUrl = 'https://retail-project-backend.onrender.com/api';
+ // private readonly apiUrl = 'https://retail-project-backend.onrender.com/api';
+ private readonly apiUrl = 'http://localhost:3000/api';
   private readonly scriptUrl = 'https://checkout.razorpay.com/v1/checkout.js';
   private readonly keyId = 'rzp_test_Te8ZLRQeOlYAZD';
   private scriptPromise?: Promise<void>;

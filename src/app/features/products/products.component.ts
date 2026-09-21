@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, HostListener, OnInit, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,33 +7,7 @@ import { RouterLink } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { WishlistProduct, WishlistService } from '../../core/services/wishlist.service';
-
-interface Product {
-  id: string;
-  name: string;
-  sku?: string;
-  price: number;
-  salePrice?: number | null;
-  currency?: string;
-  productType: string;
-  category: string;
-  brand?: string;
-  fabric?: string;
-  color?: string;
-  description: string;
-  stock?: number;
-  inStock?: boolean;
-  attributes?: Record<string, string | string[]>;
-  rating?: number;
-  reviewCount?: number;
-  isFeatured?: boolean;
-  isNew?: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-  tone: string;
-  mainImageUrl: string;
-  extraImageUrls: string[];
-}
+import { Product, ProductService } from '../../core/services/product.service';
 
 @Component({
   selector: 'app-products',
@@ -44,13 +17,14 @@ interface Product {
   styleUrl: './products.component.scss'
 })
 export class ProductsComponent implements OnInit {
-  private readonly http = inject(HttpClient);
+  private readonly productService = inject(ProductService);
   private readonly route = inject(ActivatedRoute);
   private readonly wishlist = inject(WishlistService);
   private readonly changeDetector = inject(ChangeDetectorRef);
-  private readonly productSource = 'products.json';
   private readonly batchSize = 10;
   private allProducts: Product[] = [];
+  private currentPage = 0;
+  private hasMoreRemoteProducts = true;
 
   displayedProducts: Product[] = [];
   loading = true;
@@ -86,7 +60,7 @@ export class ProductsComponent implements OnInit {
   }
 
   get hasMoreProducts(): boolean {
-    return this.displayedProducts.length < this.getFilteredProducts().length;
+    return this.displayedProducts.length < this.getFilteredProducts().length || this.hasMoreRemoteProducts;
   }
 
   get activeFilterCount(): number {
@@ -198,27 +172,18 @@ export class ProductsComponent implements OnInit {
   }
 
   private loadProducts(): void {
-    this.http.get<Product[]>(this.productSource).subscribe({
-      next: products => {
-        this.allProducts = products.map(product => ({
-          ...product,
-          productType: product.productType ?? (product.category === 'Accessories' ? 'Accessories' : 'Clothes'),
-          currency: product.currency ?? 'INR',
-          inStock: product.inStock ?? ((product.stock ?? 1) > 0),
-          stock: product.stock ?? 0,
-          isFeatured: product.isFeatured ?? false,
-          isNew: product.isNew ?? false
-        }));
+    this.currentPage = 0;
+    this.productService.getProductListPage(this.currentPage, this.batchSize).then(page => {
+      this.allProducts = page.products;
+      this.hasMoreRemoteProducts = page.hasMore;
         this.displayedProducts = this.getFilteredProducts().slice(0, this.batchSize);
         this.loading = false;
         this.changeDetector.markForCheck();
-      },
-      error: () => {
+      }).catch(() => {
         this.errorMessage = 'Unable to load products right now.';
         this.loading = false;
         this.changeDetector.markForCheck();
-      }
-    });
+      });
   }
 
   private loadNextBatch(): void {
@@ -228,6 +193,23 @@ export class ProductsComponent implements OnInit {
 
     this.loadingMore = true;
     const nextCount = this.displayedProducts.length + this.batchSize;
+    const nextPage = this.currentPage + 1;
+
+    if (this.hasMoreRemoteProducts) {
+      this.productService.getProductListPage(nextPage, this.batchSize).then(page => {
+        this.currentPage = nextPage;
+        this.hasMoreRemoteProducts = page.hasMore;
+        this.allProducts = [...this.allProducts, ...page.products];
+        this.displayedProducts = this.getFilteredProducts().slice(0, nextCount);
+      }).catch(() => {
+        this.errorMessage = 'Unable to load more products right now.';
+      }).finally(() => {
+        this.loadingMore = false;
+        this.changeDetector.markForCheck();
+      });
+      return;
+    }
+
     this.displayedProducts = this.getFilteredProducts().slice(0, nextCount);
     this.loadingMore = false;
     this.changeDetector.markForCheck();

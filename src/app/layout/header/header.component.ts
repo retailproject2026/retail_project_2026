@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { RazorpayService } from '../../core/services/razorpay.service';
 import { WishlistService } from '../../core/services/wishlist.service';
 import { CartService } from '../../core/services/cart.service';
+import { ProductService } from '../../core/services/product.service';
 
 @Component({
   selector: 'app-header',
@@ -17,22 +18,13 @@ import { CartService } from '../../core/services/cart.service';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   wishlistOpen = false;
   accountOpen = false;
   searchOpen = false;
   searchQuery = '';
   readonly wishlistQuantities: Record<string, number> = {};
-  readonly searchCatalog = [
-    { name: 'Lavender Embellished Dress', price: '₹3,599' },
-    { name: 'Classic Orange Kurta Set', price: '₹3,249' },
-    { name: 'Sunshine Yellow Co-ord Set', price: '₹2,795' },
-    { name: 'Navy Blue Blazer', price: '₹4,995' },
-    { name: 'Mango Yellow Cotton Shirt', price: '₹1,795' },
-    { name: 'Teal Green Casual Shirt', price: '₹1,895' },
-    { name: 'Maroon Cotton Dress', price: '₹2,595' },
-    { name: 'Emerald Green Occasion Set', price: '₹3,895' }
-  ];
+  searchCatalog: Array<{ id: string; name: string; price: string }> = [];
   mobileNumber = '';
   notifyNewArrivals = false;
   loggedIn = false;
@@ -46,8 +38,21 @@ export class HeaderComponent {
   constructor(
     private readonly razorpayService: RazorpayService,
     private readonly wishlist: WishlistService,
-    private readonly cart: CartService
+    private readonly cart: CartService,
+    private readonly productService: ProductService
   ) {}
+
+  ngOnInit(): void {
+    this.productService.getProductList().then(products => {
+      this.searchCatalog = products.map(product => ({
+        id: product.id,
+        name: product.name,
+        price: `${product.currency === 'INR' ? '₹' : product.currency ?? ''}${(product.salePrice ?? product.price).toLocaleString('en-IN')}`
+      }));
+    }).catch(() => {
+      this.searchCatalog = [];
+    });
+  }
 
   get cartItems() {
     return this.cart.cartItems();
@@ -114,7 +119,7 @@ export class HeaderComponent {
     this.clothesOpen = !this.clothesOpen;
   }
 
-  get filteredProducts(): Array<{ name: string; price: string }> {
+  get filteredProducts(): Array<{ id: string; name: string; price: string }> {
     const query = this.searchQuery.trim().toLowerCase();
     return query ? this.searchCatalog.filter(product => product.name.toLowerCase().includes(query)) : this.searchCatalog;
   }

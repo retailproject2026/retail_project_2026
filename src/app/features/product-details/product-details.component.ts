@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,33 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { CartService } from '../../core/services/cart.service';
 import { WishlistService, WishlistProduct } from '../../core/services/wishlist.service';
 import { RazorpayService } from '../../core/services/razorpay.service';
-
-interface Product {
-  id: string;
-  name: string;
-  sku?: string;
-  price: number;
-  salePrice?: number | null;
-  currency?: string;
-  productType?: string;
-  category: string;
-  brand?: string;
-  fabric?: string;
-  color?: string;
-  description: string;
-  stock?: number;
-  inStock?: boolean;
-  attributes?: Record<string, string | string[]>;
-  rating?: number;
-  reviewCount?: number;
-  isFeatured?: boolean;
-  isNew?: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-  mainImageUrl: string;
-  extraImageUrls: string[];
-  tone: string;
-}
+import { Product, ProductService } from '../../core/services/product.service';
 
 @Component({
   selector: 'app-product-details',
@@ -45,7 +18,7 @@ interface Product {
 })
 export class ProductDetailsComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
-  private readonly http = inject(HttpClient);
+  private readonly productService = inject(ProductService);
   private readonly changeDetector = inject(ChangeDetectorRef);
   private readonly cart = inject(CartService);
   private readonly wishlist = inject(WishlistService);
@@ -69,28 +42,23 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.http.get<Product[]>('products.json').subscribe({
-      next: products => {
-        const normalizedProducts = products.map(item => ({
-          ...item,
-          currency: item.currency ?? 'INR',
-          inStock: item.inStock ?? ((item.stock ?? 1) > 0),
-          stock: item.stock ?? 0
-        }));
-        this.product = normalizedProducts.find(item => item.id === this.id) ?? null;
-        this.relatedProducts = this.product
-          ? normalizedProducts.filter(item => item.id !== this.product?.id)
-          : [];
+    if (!this.id) {
+      this.errorMessage = 'Product not found.';
+      this.loading = false;
+      return;
+    }
+
+    this.productService.getProductById(this.id).then(product => {
+        this.product = product;
+        this.relatedProducts = [];
         this.errorMessage = this.product ? '' : 'Product not found.';
         this.loading = false;
         this.changeDetector.markForCheck();
-      },
-      error: () => {
+      }).catch(() => {
         this.errorMessage = 'Unable to load product details.';
         this.loading = false;
         this.changeDetector.markForCheck();
-      }
-    });
+      });
   }
 
   addToCart(): void {
@@ -147,7 +115,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   get galleryImages(): string[] {
-    return this.product ? [this.product.mainImageUrl, ...this.product.extraImageUrls] : [];
+    return this.product ? [this.product.mainImageUrl, this.product.extraImageUrl1, this.product.extraImageUrl2] : [];
   }
 
   previousImage(): void {
