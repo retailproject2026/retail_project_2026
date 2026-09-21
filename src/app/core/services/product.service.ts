@@ -77,7 +77,7 @@ export interface ProductPage {
 @Injectable({ providedIn: 'root' })
 export class ProductService {
   private readonly supabase: SupabaseClient = createClient(environment.supabaseUrl, environment.supabaseAnonKey);
-  private readonly apiUrl = 'https://retail-project-backend.onrender.com/api'; 
+  private readonly apiUrl = environment.apiUrl;
   constructor(private readonly http: HttpClient) {}
 
   async getProductList(): Promise<Product[]> {
