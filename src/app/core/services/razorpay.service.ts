@@ -102,8 +102,8 @@ export class RazorpayService {
         key: this.keyId,
         amount: order.amount ?? Math.round(amountInRupees),
         currency: order.currency ?? order.order?.currency ?? 'INR',
-        name: 'SAREE SILKS & MORE',
-        description: 'Saree collection purchase',
+        name: 'RETAIL CLOTHING',
+        description: 'Clothing collection purchase',
         order_id: orderId,
         handler: async (response) => {
           try {

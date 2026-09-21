@@ -16,22 +16,14 @@
   </div>
 
   <a class="brand" routerLink="/" aria-label="Home">
-    <div class="brand-mark">RS</div>
+    <div class="brand-mark">AP</div>
     <div class="brand-copy">
-      <span class="brand-name">SAREE</span>
-      <span class="brand-subtitle">SILKS &amp; MORE</span>
+      <span class="brand-name">ALL PRODUCTS</span>
+      <span class="brand-subtitle">SHOP EVERYTHING</span>
     </div>
   </a>
 
   <div class="header-right">
-    <button
-      mat-icon-button
-      type="button"
-      aria-label="Search products"
-      [attr.aria-expanded]="searchOpen"
-      (click)="toggleSearch()">
-      <mat-icon>search</mat-icon>
-    </button>
     <button
       mat-icon-button
       type="button"
@@ -62,16 +54,28 @@
       <mat-icon>shopping_bag</mat-icon>
       <span class="badge">{{ cartCount }}</span>
     </button>
+    <button
+      mat-icon-button
+      class="search-button"
+      type="button"
+      aria-label="Search products"
+      [attr.aria-expanded]="searchOpen"
+      (click)="toggleSearch()">
+      <mat-icon>search</mat-icon>
+    </button>
   </div>
 </header>
 
 <nav class="category-nav" [class.is-open]="menuOpen" aria-label="Main navigation">
+  <button class="menu-close-button" type="button" aria-label="Close navigation menu" (click)="closeMenu()">
+    <mat-icon>close</mat-icon>
+  </button>
   <a routerLink="/products" (click)="closeMenu()">NEW ARRIVALS</a>
-  <a routerLink="/products" [queryParams]="{ category: 'Kanjivaram' }" (click)="closeMenu()">KANCHIVARAM</a>
-  <a routerLink="/products" [queryParams]="{ category: 'Silk cotton' }" (click)="closeMenu()">SILK SAREES</a>
-  <a routerLink="/products" [queryParams]="{ category: 'Cotton' }" (click)="closeMenu()">COTTON SAREES</a>
-  <a routerLink="/products" [queryParams]="{ category: 'Designer' }" (click)="closeMenu()">DESIGNER</a>
-  <a routerLink="/products" [queryParams]="{ category: 'Bridal' }" (click)="closeMenu()">BRIDAL</a>
+  <a routerLink="/products" [queryParams]="{ category: 'Women' }" (click)="closeMenu()">WOMEN</a>
+  <a routerLink="/products" [queryParams]="{ category: 'Men' }" (click)="closeMenu()">MEN</a>
+  <a routerLink="/products" [queryParams]="{ category: 'Kids' }" (click)="closeMenu()">KIDS</a>
+  <a routerLink="/products" [queryParams]="{ category: 'Accessories' }" (click)="closeMenu()">ACCESSORIES</a>
+  <a routerLink="/products" [queryParams]="{ category: 'Occasionwear' }" (click)="closeMenu()">OCCASIONWEAR</a>
   <a routerLink="/products" (click)="closeMenu()">SALE</a>
 </nav>
 
@@ -86,7 +90,7 @@
     style="right: 50%; transform: translateX(50%); width: min(680px, calc(100vw - 32px));">
     <div class="account-popup-heading">
       <div>
-        <span class="account-kicker">FIND YOUR NEXT DRAPE</span>
+        <span class="account-kicker">FIND YOUR NEXT LOOK</span>
         <h2 id="search-title">Search the collection</h2>
       </div>
       <button mat-icon-button type="button" aria-label="Close search" (click)="closeSearch()">
@@ -98,7 +102,7 @@
       <input
         type="search"
         aria-label="Search products"
-        placeholder="Search sarees, silk, colours..."
+        placeholder="Search clothing, styles, colours..."
         [(ngModel)]="searchQuery" />
     </div>
     @if (searchQuery) {
@@ -108,7 +112,7 @@
             <span>{{ product.name }}</span><strong>{{ product.price }}</strong>
           </a>
         } @empty {
-          <p>No sarees found for “{{ searchQuery }}”.</p>
+          <p>No products found for “{{ searchQuery }}”.</p>
         }
       </div>
     }
@@ -121,7 +125,7 @@
     <div class="wishlist-heading">
       <div>
         <span class="wishlist-kicker">SAVED FOR LATER</span>
-        <h2 id="wishlist-title">Your Wishlist</h2>
+        <h2 id="wishlist-title">Your Wishlist ({{ wishlistCount }})</h2>
       </div>
       <button mat-icon-button type="button" aria-label="Close wishlist" (click)="closeWishlist()">
         <mat-icon>close</mat-icon>
@@ -135,6 +139,17 @@
           <div class="wishlist-item-details">
             <h3>{{ item.name }}</h3>
             <p>{{ item.priceLabel }}</p>
+            <div class="item-quantity-row">
+              <label>
+                Qty
+                <select [ngModel]="getWishlistQuantity(item.id)" (ngModelChange)="setWishlistQuantity(item.id, $event)">
+                  @for (qty of [1,2,3,4,5]; track qty) {
+                    <option [value]="qty">{{ qty }}</option>
+                  }
+                </select>
+              </label>
+              <button type="button" class="mini-action-button" (click)="addWishlistItemToCart(item.id)">Add to bag</button>
+            </div>
             <span class="wishlist-status">{{ item.status }}</span>
           </div>
           <button mat-icon-button type="button" aria-label="Remove from wishlist" (click)="removeWishlistItem(item.id)">
@@ -144,9 +159,18 @@
       }
     </div>
 
-    <a mat-flat-button color="primary" class="wishlist-action" routerLink="/products" (click)="closeWishlist()">
-      Explore More Sarees
-    </a>
+    <div class="wishlist-footer">
+      <div class="wishlist-summary">
+        <span>{{ wishlistCount }} item{{ wishlistCount === 1 ? '' : 's' }}</span>
+        <strong>₹{{ wishlistTotal | number:'1.0-0' }}</strong>
+      </div>
+      <button mat-flat-button color="primary" class="wishlist-action" type="button" [disabled]="!wishlistItems.length" (click)="checkoutWishlist()">
+        CHECKOUT
+      </button>
+      <a mat-flat-button class="wishlist-secondary-action" routerLink="/products" (click)="closeWishlist()">
+        Explore More Styles
+      </a>
+    </div>
   </aside>
 }
 
@@ -156,7 +180,7 @@
     <div class="cart-heading">
       <div>
         <span class="cart-kicker">YOUR SELECTION</span>
-        <h2 id="cart-title">Shopping Bag</h2>
+        <h2 id="cart-title">Shopping Bag ({{ cartCount }})</h2>
       </div>
       <button mat-icon-button type="button" aria-label="Close shopping bag" (click)="closeCart()">
         <mat-icon>close</mat-icon>
@@ -170,7 +194,16 @@
           <div class="cart-item-details">
             <h3>{{ item.name }}</h3>
             <p>{{ item.price }}</p>
-            <span>Quantity: {{ item.quantity }}</span>
+            <div class="item-quantity-row cart-quantity-row">
+              <label>
+                Qty
+                <select [ngModel]="item.quantity" (ngModelChange)="updateCartQuantity(item.id, $event)">
+                  @for (qty of [1,2,3,4,5]; track qty) {
+                    <option [value]="qty">{{ qty }}</option>
+                  }
+                </select>
+              </label>
+            </div>
           </div>
           <button mat-icon-button type="button" aria-label="Remove item from shopping bag" (click)="removeCartItem(item.id)">
             <mat-icon>delete_outline</mat-icon>
@@ -246,12 +279,12 @@
       <div><span class="account-kicker">DELIVERY DETAILS</span><h2 id="delivery-title">Where should we deliver?</h2></div>
       <button mat-icon-button type="button" aria-label="Close delivery address" (click)="closeAddress()"><mat-icon>close</mat-icon></button>
     </div>
-    <form class="account-form address-form" (submit)="$event.preventDefault(); confirmCheckout()">
+    <form class="account-form address-form" autocomplete="off" (submit)="$event.preventDefault(); confirmCheckout()">
       <label for="delivery-address">Address</label>
-      <div class="mobile-input"><input id="delivery-address" name="address" placeholder="Street address" [(ngModel)]="deliveryAddress.address" required /></div>
-      <div class="address-row"><label>City<div class="mobile-input"><input name="city" [(ngModel)]="deliveryAddress.city" required /></div></label><label>State<div class="mobile-input"><input name="state" [(ngModel)]="deliveryAddress.state" required /></div></label></div>
+      <textarea id="delivery-address" name="address" autocomplete="off" rows="3" [(ngModel)]="deliveryAddress.address"></textarea>
+      <div class="address-row"><label>City<input name="city" autocomplete="off" [(ngModel)]="deliveryAddress.city" /></label><label>State<input name="state" autocomplete="off" [(ngModel)]="deliveryAddress.state" /></label></div>
       <label for="delivery-postal">PIN code</label>
-      <div class="mobile-input"><input id="delivery-postal" name="postalCode" inputmode="numeric" maxlength="6" placeholder="6-digit PIN code" pattern="[0-9]{6}" [(ngModel)]="deliveryAddress.postalCode" required /></div>
+      <input id="delivery-postal" name="postalCode" autocomplete="off" [(ngModel)]="deliveryAddress.postalCode" />
       <button mat-flat-button class="login-button" type="submit" [disabled]="checkoutLoading">CONTINUE TO PAYMENT</button>
     </form>
   </section>

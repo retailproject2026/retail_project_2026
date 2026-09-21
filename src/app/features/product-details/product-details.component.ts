@@ -83,6 +83,7 @@ export class ProductDetailsComponent implements OnInit {
       tone: 'cart-product',
       mainImageUrl: this.product.mainImageUrl
     });
+    this.cart.openDrawer();
     this.actionMessage = `${this.quantity} item${this.quantity > 1 ? 's' : ''} added to your bag.`;
   }
 
@@ -109,7 +110,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   async confirmBuyNow(): Promise<void> {
-    if (!this.product || !this.deliveryAddress.address.trim() || !this.deliveryAddress.city.trim() || !this.deliveryAddress.state.trim() || !/^\d{6}$/.test(this.deliveryAddress.postalCode)) return;
+    if (!this.product) return;
     this.checkoutLoading = true;
     this.actionMessage = '';
     try {

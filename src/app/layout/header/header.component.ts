@@ -22,15 +22,16 @@ export class HeaderComponent {
   accountOpen = false;
   searchOpen = false;
   searchQuery = '';
+  readonly wishlistQuantities: Record<string, number> = {};
   readonly searchCatalog = [
-    { name: 'Lavender Peacock Zari Kanjivaram', price: '₹35,995' },
-    { name: 'Classic Orange Kanjivaram Silk', price: '₹32,495' },
-    { name: 'Sunshine Yellow Kanjivaram', price: '₹9,795' },
-    { name: 'Navy Blue Kanjivaram Silk', price: '₹9,795' },
-    { name: 'Mango Yellow Silk Cotton', price: '₹5,795' },
-    { name: 'Teal Green Silk Cotton', price: '₹5,795' },
-    { name: 'Maroon Silk Cotton', price: '₹5,795' },
-    { name: 'Emerald Green Silk Cotton', price: '₹5,895' }
+    { name: 'Lavender Embellished Dress', price: '₹3,599' },
+    { name: 'Classic Orange Kurta Set', price: '₹3,249' },
+    { name: 'Sunshine Yellow Co-ord Set', price: '₹2,795' },
+    { name: 'Navy Blue Blazer', price: '₹4,995' },
+    { name: 'Mango Yellow Cotton Shirt', price: '₹1,795' },
+    { name: 'Teal Green Casual Shirt', price: '₹1,895' },
+    { name: 'Maroon Cotton Dress', price: '₹2,595' },
+    { name: 'Emerald Green Occasion Set', price: '₹3,895' }
   ];
   mobileNumber = '';
   notifyNewArrivals = false;
@@ -63,12 +64,40 @@ export class HeaderComponent {
     return this.wishlistItems.length;
   }
 
+  get wishlistTotal(): number {
+    return this.wishlistItems.reduce((total, item) => total + item.price, 0);
+  }
+
   get cartCount(): number {
     return this.cartItems.reduce((total, item) => total + item.quantity, 0);
   }
 
   get cartTotal(): number {
     return this.cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  }
+
+  getWishlistQuantity(itemId: string): number {
+    return this.wishlistQuantities[itemId] ?? 1;
+  }
+
+  setWishlistQuantity(itemId: string, quantity: number): void {
+    this.wishlistQuantities[itemId] = Math.max(1, Number(quantity) || 1);
+  }
+
+  addWishlistItemToCart(itemId: string): void {
+    const item = this.wishlist.wishlistItems().find(current => current.id === itemId);
+    if (!item) return;
+
+    this.cart.add({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity: this.getWishlistQuantity(itemId),
+      tone: item.tone,
+      mainImageUrl: item.mainImageUrl
+    });
+    this.closeWishlist();
+    this.cart.openDrawer();
   }
 
   toggleMenu(): void {
@@ -100,18 +129,43 @@ export class HeaderComponent {
     this.wishlistOpen = false;
   }
 
-  cartOpen = false;
+  checkoutWishlist(): void {
+    const items = this.wishlist.wishlistItems();
+    if (!items.length) return;
+
+    items.forEach(item => {
+      this.cart.add({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: this.getWishlistQuantity(item.id),
+        tone: item.tone,
+        mainImageUrl: item.mainImageUrl
+      });
+    });
+
+    this.closeWishlist();
+    this.checkout();
+  }
+
+  get cartOpen(): boolean {
+    return this.cart.isDrawerOpen();
+  }
 
   toggleCart(): void {
-    this.cartOpen = !this.cartOpen;
+    this.cart.toggleDrawer();
   }
 
   closeCart(): void {
-    this.cartOpen = false;
+    this.cart.closeDrawer();
   }
 
   removeCartItem(itemId: string): void {
     this.cart.remove(itemId);
+  }
+
+  updateCartQuantity(itemId: string, quantity: number): void {
+    this.cart.updateQuantity(itemId, quantity);
   }
 
   async checkout(): Promise<void> {
@@ -124,11 +178,6 @@ export class HeaderComponent {
   }
 
   async confirmCheckout(): Promise<void> {
-    const { address, city, state, postalCode } = this.deliveryAddress;
-    if (!address.trim() || !city.trim() || !state.trim() || !/^\d{6}$/.test(postalCode)) {
-      return;
-    }
-
     this.checkoutLoading = true;
     this.checkoutMessage = '';
 

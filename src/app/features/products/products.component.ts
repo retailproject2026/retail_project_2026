@@ -45,7 +45,7 @@ export class ProductsComponent implements OnInit {
   filterOpen = false;
   selectedCategories: string[] = [];
   sortOption = '';
-  readonly categoryOptions = ['Kanjivaram', 'Silk cotton', 'Banarasi', 'Designer', 'Handloom', 'Gadwal', 'Bridal', 'Soft silk', 'Cotton'];
+  readonly categoryOptions = ['Women', 'Men', 'Kids', 'Accessories', 'Occasionwear'];
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {

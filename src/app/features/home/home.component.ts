@@ -1,11 +1,11 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
 
 interface ProductCard {
   id: string;
   name: string;
   price: string;
+  category: string;
   tag?: string;
   tone: string;
   fabric: string;
@@ -13,67 +13,41 @@ interface ProductCard {
   mainImageUrl: string;
 }
 
-interface HeroSlide {
-  eyebrow: string;
-  title: string;
-  description: string;
-  tone: string;
-}
-
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, MatButtonModule],
+  imports: [RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  priceRanges = ['Under ₹2,000', 'Under ₹5,000', '₹5,000 – ₹15,000', '₹15,000 – ₹35,000', 'Above ₹35,000'];
+  readonly categories = ['Women', 'Men', 'Kids', 'Accessories', 'Occasionwear'];
   activeSlide = 0;
   private slideTimer?: ReturnType<typeof setInterval>;
 
   constructor(private readonly changeDetector: ChangeDetectorRef) {}
 
-  heroSlides: HeroSlide[] = [
-    {
-      eyebrow: 'THE ART OF THE DRAPE',
-      title: 'Timeless Silk.\nModern Elegance.',
-      description: 'Discover handpicked sarees crafted for celebrations, traditions and everyday elegance.',
-      tone: 'hero-plum'
-    },
-    {
-      eyebrow: 'NEW SEASON / 2026',
-      title: 'Colour\nThat Lingers.',
-      description: 'Meet jewel-toned weaves designed to make every entrance unforgettable.',
-      tone: 'hero-coral'
-    },
-    {
-      eyebrow: 'HANDWOVEN HERITAGE',
-      title: 'Woven By\nGenerations.',
-      description: 'Explore Kanjivaram classics where every thread carries a story worth wearing.',
-      tone: 'hero-indigo'
-    },
-    {
-      eyebrow: 'THE FESTIVE EDIT',
-      title: 'Made For\nYour Moment.',
-      description: 'Elegant silk cottons and statement drapes for the celebrations ahead.',
-      tone: 'hero-green'
-    }
-  ];
-
   newArrivals: ProductCard[] = [
-    { id: 'saree-001', name: 'Lavender Peacock Zari Kanjivaram', price: '₹35,995', tag: 'NEW', tone: 'lavender', fabric: 'Pure Kanjivaram Silk', description: 'A graceful lavender drape with peacock zari details, handwoven for celebrations.', mainImageUrl: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85' },
-    { id: 'saree-002', name: 'Classic Orange Kanjivaram Silk', price: '₹32,495', tag: 'NEW', tone: 'orange', fabric: 'Pure Kanjivaram Silk', description: 'A vivid orange silk saree finished with a traditional zari border.', mainImageUrl: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85' },
-    { id: 'saree-003', name: 'Sunshine Yellow Kanjivaram', price: '₹9,795', tag: 'NEW', tone: 'yellow', fabric: 'Silk Cotton', description: 'A bright, lightweight weave designed for effortless festive dressing.', mainImageUrl: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85' },
-    { id: 'saree-004', name: 'Navy Blue Kanjivaram Silk', price: '₹9,795', tag: 'NEW', tone: 'navy', fabric: 'Kanjivaram Silk', description: 'Deep navy silk with a polished finish and timeless temple-inspired details.', mainImageUrl: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85' }
+    { id: 'women-001', category: 'Women', name: 'Floral Shirt Dress', price: '₹3,299', tag: 'NEW', tone: 'lavender', fabric: 'Cotton Blend', description: 'A breezy floral shirt dress with a relaxed silhouette and everyday versatility.', mainImageUrl: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=85' },
+    { id: 'men-001', category: 'Men', name: 'Linen Overshirt', price: '₹3,199', tag: 'NEW', tone: 'orange', fabric: 'Linen Blend', description: 'A relaxed overshirt with breathable texture and a polished casual finish.', mainImageUrl: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=900&q=85' },
+    { id: 'kids-001', category: 'Kids', name: 'Mini Graphic Tee', price: '₹1,499', tag: 'NEW', tone: 'yellow', fabric: 'Cotton Jersey', description: 'A cheerful tee with playful graphics designed for happy everyday wear.', mainImageUrl: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format&fit=crop&w=900&q=85' },
+    { id: 'women-005', category: 'Women', name: 'Satin Evening Gown', price: '₹6,999', tag: 'NEW', tone: 'navy', fabric: 'Satin', description: 'A statement gown with a graceful drape and a luxe finish for special evenings.', mainImageUrl: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=900&q=85' }
   ];
 
   featured: ProductCard[] = [
-    { id: 'saree-005', name: 'Mango Yellow Silk Cotton', price: '₹5,795', tone: 'mango', fabric: 'Silk Cotton', description: 'A warm mango yellow weave that brings an easy glow to every occasion.', mainImageUrl: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85' },
-    { id: 'saree-006', name: 'Teal Green Silk Cotton', price: '₹5,795', tone: 'teal', fabric: 'Silk Cotton', description: 'A rich teal drape with a soft texture and an elegant everyday fall.', mainImageUrl: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85' },
-    { id: 'saree-007', name: 'Maroon Silk Cotton', price: '₹5,795', tone: 'maroon', fabric: 'Silk Cotton', description: 'A classic maroon silk cotton saree with understated festive character.', mainImageUrl: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85' },
-    { id: 'saree-008', name: 'Emerald Green Silk Cotton', price: '₹5,895', tone: 'emerald', fabric: 'Silk Cotton', description: 'A jewel-toned emerald weave made for memorable evening occasions.', mainImageUrl: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85' }
+    { id: 'accessories-001', category: 'Accessories', name: 'Leather Sling Bag', price: '₹2,299', tone: 'mango', fabric: 'Genuine Leather', description: 'A compact sling bag with a clean silhouette and everyday carry comfort.', mainImageUrl: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=900&q=85' },
+    { id: 'occasionwear-002', category: 'Occasionwear', name: 'Festive Anarkali Suit', price: '₹6,499', tone: 'teal', fabric: 'Silk Blend', description: 'A festive anarkali with graceful movement and a rich statement silhouette.', mainImageUrl: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=900&q=85' },
+    { id: 'men-005', category: 'Men', name: 'Heritage Bomber Jacket', price: '₹5,799', tone: 'maroon', fabric: 'Wool Blend', description: 'A structured bomber with heritage detailing and a soft lined finish.', mainImageUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=85' },
+    { id: 'women-003', category: 'Women', name: 'Pleated Co-ord Set', price: '₹3,899', tone: 'emerald', fabric: 'Poly Blend', description: 'A vibrant pleated co-ord that balances ease and elevated design for daily outings.', mainImageUrl: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=85' }
   ];
+
+  get carouselProducts(): ProductCard[] {
+    return [...this.newArrivals, ...this.featured];
+  }
+
+  productsFor(category: string): ProductCard[] {
+    return this.carouselProducts.filter(product => product.category === category);
+  }
 
   ngOnInit(): void {
     this.startAutoPlay();
@@ -86,12 +60,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   nextSlide(): void {
-    this.activeSlide = (this.activeSlide + 1) % this.heroSlides.length;
+    this.activeSlide = (this.activeSlide + 1) % this.carouselProducts.length;
     this.changeDetector.markForCheck();
   }
 
   previousSlide(): void {
-    this.activeSlide = (this.activeSlide - 1 + this.heroSlides.length) % this.heroSlides.length;
+    this.activeSlide = (this.activeSlide - 1 + this.carouselProducts.length) % this.carouselProducts.length;
     this.restartAutoPlay();
     this.changeDetector.markForCheck();
   }

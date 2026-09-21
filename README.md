@@ -57,3 +57,9 @@ http://localhost:4200
 8. Inventory/admin
 9. Payment integration
 10. Error handling/interceptors
+
+
+
+deploy
+npm run build --base-href=/retail_project_2026/
+npx angular-cli-ghpages --dir=dist/retail_project_2026/browser

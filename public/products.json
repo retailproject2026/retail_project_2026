@@ -1,302 +1,317 @@
 [
-    {
-        "id": "saree-001",
-        "name": "Lavender Peacock Zari Kanjivaram",
-        "price": 100,
-        "category": "Kanjivaram",
-        "fabric": "Pure silk",
-        "color": "Lavender",
-        "description": "Lavender silk with peacock zari motifs and a rich traditional border.",
-        "tone": "lavender",
-        "mainImageUrl": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85"
-        ]
-    },
-    {
-        "id": "saree-002",
-        "name": "Classic Orange Kanjivaram Silk",
-        "price": 100,
-        "category": "Kanjivaram",
-        "fabric": "Pure silk",
-        "color": "Orange",
-        "description": "A vivid orange Kanjivaram weave finished with a classic zari border.",
-        "tone": "orange",
-        "mainImageUrl": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85"
-        ]
-    },
-    {
-        "id": "saree-003",
-        "name": "Sunshine Yellow Kanjivaram",
-        "price": 100,
-        "category": "Kanjivaram",
-        "fabric": "Silk cotton",
-        "color": "Yellow",
-        "description": "A bright, lightweight festive drape with a soft silk finish.",
-        "tone": "yellow",
-        "mainImageUrl": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85"
-        ]
-    },
-    {
-        "id": "saree-004",
-        "name": "Navy Blue Kanjivaram Silk",
-        "price": 100,
-        "category": "Kanjivaram",
-        "fabric": "Pure silk",
-        "color": "Navy blue",
-        "description": "Deep navy silk with temple-inspired details and a polished fall.",
-        "tone": "navy",
-        "mainImageUrl": "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85"
-        ]
-    },
-    {
-        "id": "saree-005",
-        "name": "Mango Yellow Silk Cotton",
-        "price": 100,
-        "category": "Silk cotton",
-        "fabric": "Silk cotton",
-        "color": "Mango",
-        "description": "A warm mango yellow weave designed for effortless festive dressing.",
-        "tone": "mango",
-        "mainImageUrl": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=85"
-        ]
-    },
-    {
-        "id": "saree-006",
-        "name": "Teal Green Silk Cotton",
-        "price": 100,
-        "category": "Silk cotton",
-        "fabric": "Silk cotton",
-        "color": "Teal",
-        "description": "A rich teal drape with a soft texture and elegant everyday fall.",
-        "tone": "teal",
-        "mainImageUrl": "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85"
-        ]
-    },
-    {
-        "id": "saree-007",
-        "name": "Maroon Silk Cotton",
-        "price": 100,
-        "category": "Silk cotton",
-        "fabric": "Silk cotton",
-        "color": "Maroon",
-        "description": "A classic maroon silk cotton saree with understated festive character.",
-        "tone": "maroon",
-        "mainImageUrl": "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85"
-        ]
-    },
-    {
-        "id": "saree-008",
-        "name": "Emerald Green Silk Cotton",
-        "price": 100,
-        "category": "Silk cotton",
-        "fabric": "Silk cotton",
-        "color": "Emerald",
-        "description": "A jewel-toned emerald weave made for memorable occasions.",
-        "tone": "emerald",
-        "mainImageUrl": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85"
-        ]
-    },
-    {
-        "id": "saree-009",
-        "name": "Rose Pink Banarasi Silk",
-        "price": 100,
-        "category": "Banarasi",
-        "fabric": "Banarasi silk",
-        "color": "Rose pink",
-        "description": "Rose pink silk with delicate floral brocade woven across the body.",
-        "tone": "rose",
-        "mainImageUrl": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85"
-        ]
-    },
-    {
-        "id": "saree-010",
-        "name": "Midnight Blue Banarasi",
-        "price": 100,
-        "category": "Banarasi",
-        "fabric": "Banarasi silk",
-        "color": "Midnight blue",
-        "description": "A midnight blue Banarasi with antique gold brocade detailing.",
-        "tone": "midnight",
-        "mainImageUrl": "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=85"
-        ]
-    },
-    {
-        "id": "saree-011",
-        "name": "Ivory Gold Tissue Silk",
-        "price": 100,
-        "category": "Designer",
-        "fabric": "Tissue silk",
-        "color": "Ivory",
-        "description": "An ivory tissue silk drape with a luminous gold edge.",
-        "tone": "ivory",
-        "mainImageUrl": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85"
-        ]
-    },
-    {
-        "id": "saree-012",
-        "name": "Rust Copper Handloom Silk",
-        "price": 100,
-        "category": "Handloom",
-        "fabric": "Handloom silk",
-        "color": "Rust",
-        "description": "Textured handloom silk in rust copper with a confident modern finish.",
-        "tone": "rust",
-        "mainImageUrl": "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=85"
-        ]
-    },
-    {
-        "id": "saree-013",
-        "name": "Peacock Blue Gadwal Silk",
-        "price": 100,
-        "category": "Gadwal",
-        "fabric": "Gadwal silk",
-        "color": "Peacock blue",
-        "description": "Peacock blue silk with a contrasting border and lightweight drape.",
-        "tone": "peacock",
-        "mainImageUrl": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85"
-        ]
-    },
-    {
-        "id": "saree-014",
-        "name": "Blush Pink Organza Saree",
-        "price": 100,
-        "category": "Designer",
-        "fabric": "Organza silk",
-        "color": "Blush pink",
-        "description": "Airy blush organza with subtle woven florals for evening occasions.",
-        "tone": "blush",
-        "mainImageUrl": "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=85"
-        ]
-    },
-    {
-        "id": "saree-015",
-        "name": "Bottle Green Bridal Silk",
-        "price": 100,
-        "category": "Bridal",
-        "fabric": "Pure silk",
-        "color": "Bottle green",
-        "description": "A deep green bridal silk with an ornate zari pallu.",
-        "tone": "bottle",
-        "mainImageUrl": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85"
-        ]
-    },
-    {
-        "id": "saree-016",
-        "name": "Coral Pink Soft Silk",
-        "price": 100,
-        "category": "Soft silk",
-        "fabric": "Soft silk",
-        "color": "Coral pink",
-        "description": "Easy-to-drape coral pink soft silk for celebrations and family gatherings.",
-        "tone": "coral",
-        "mainImageUrl": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=85"
-        ]
-    },
-    {
-        "id": "saree-017",
-        "name": "Charcoal Grey Linen Saree",
-        "price": 100,
-        "category": "Cotton",
-        "fabric": "Linen cotton",
-        "color": "Charcoal",
-        "description": "A breathable charcoal linen weave with a clean contemporary border.",
-        "tone": "charcoal",
-        "mainImageUrl": "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85"
-        ]
-    },
-    {
-        "id": "saree-018",
-        "name": "Turmeric Yellow Cotton Saree",
-        "price": 100,
-        "category": "Cotton",
-        "fabric": "Pure cotton",
-        "color": "Turmeric yellow",
-        "description": "A cheerful turmeric cotton saree made for comfortable daily elegance.",
-        "tone": "turmeric",
-        "mainImageUrl": "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=85"
-        ]
-    },
-    {
-        "id": "saree-019",
-        "name": "Plum Purple Designer Silk",
-        "price": 100,
-        "category": "Designer",
-        "fabric": "Art silk",
-        "color": "Plum",
-        "description": "A dramatic plum designer silk with a sculpted contemporary border.",
-        "tone": "plum",
-        "mainImageUrl": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=700&q=85"
-        ]
-    },
-    {
-        "id": "saree-020",
-        "name": "Aqua Blue Printed Silk",
-        "price": 100,
-        "category": "Designer",
-        "fabric": "Printed silk",
-        "color": "Aqua blue",
-        "description": "A fresh aqua silk with an artistic print and fluid drape.",
-        "tone": "aqua",
-        "mainImageUrl": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=85",
-        "extraImageUrls": [
-            "https://images.unsplash.com/photo-1610030469668-8e9f641aaf87?auto=format&fit=crop&w=700&q=85",
-            "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=85"
-        ]
-    }
+  {
+    "id": "women-001",
+    "name": "Floral Shirt Dress",
+    "price": 3299,
+    "category": "Women",
+    "fabric": "Cotton Blend",
+    "color": "Rose",
+    "description": "A breezy floral shirt dress with a relaxed silhouette and everyday versatility.",
+    "tone": "rose",
+    "mainImageUrl": "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "women-002",
+    "name": "Tailored Linen Set",
+    "price": 4599,
+    "category": "Women",
+    "fabric": "Linen",
+    "color": "Sand",
+    "description": "A polished linen co-ord set designed for comfort, structure and all-day styling.",
+    "tone": "sand",
+    "mainImageUrl": "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "women-003",
+    "name": "Pleated Co-ord Set",
+    "price": 3899,
+    "category": "Women",
+    "fabric": "Poly Blend",
+    "color": "Teal",
+    "description": "A vibrant pleated co-ord that balances ease and elevated design for daily outings.",
+    "tone": "teal",
+    "mainImageUrl": "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "women-004",
+    "name": "Utility Jacket",
+    "price": 4999,
+    "category": "Women",
+    "fabric": "Cotton Canvas",
+    "color": "Olive",
+    "description": "A lightweight utility jacket with a modern cut and easy layering appeal.",
+    "tone": "olive",
+    "mainImageUrl": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "women-005",
+    "name": "Satin Evening Gown",
+    "price": 6999,
+    "category": "Women",
+    "fabric": "Satin",
+    "color": "Champagne",
+    "description": "A statement gown with a graceful drape and a luxe finish for special evenings.",
+    "tone": "champagne",
+    "mainImageUrl": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "men-001",
+    "name": "Linen Overshirt",
+    "price": 3199,
+    "category": "Men",
+    "fabric": "Linen Blend",
+    "color": "Stone",
+    "description": "A relaxed overshirt with breathable texture and a polished casual finish.",
+    "tone": "stone",
+    "mainImageUrl": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1504593811423-6dd665756598?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "men-002",
+    "name": "Classic Polo Set",
+    "price": 2799,
+    "category": "Men",
+    "fabric": "Cotton Knit",
+    "color": "Navy",
+    "description": "A smart, breathable polo pairing made for everyday layering and styling ease.",
+    "tone": "navy",
+    "mainImageUrl": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1504593811423-6dd665756598?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "men-003",
+    "name": "Relaxed Chino Trouser",
+    "price": 3499,
+    "category": "Men",
+    "fabric": "Cotton Twill",
+    "color": "Khaki",
+    "description": "A refined chino trouser with a roomy fit and a modern, dressy finish.",
+    "tone": "khaki",
+    "mainImageUrl": "https://images.unsplash.com/photo-1504593811423-6dd665756598?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "men-004",
+    "name": "Woven Kurta",
+    "price": 4299,
+    "category": "Men",
+    "fabric": "Cotton Linen",
+    "color": "Rust",
+    "description": "A woven kurta with subtle texture and soft tailoring for elevated everyday looks.",
+    "tone": "rust",
+    "mainImageUrl": "https://images.unsplash.com/photo-1504593811423-6dd665756598?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "men-005",
+    "name": "Heritage Bomber Jacket",
+    "price": 5799,
+    "category": "Men",
+    "fabric": "Wool Blend",
+    "color": "Forest",
+    "description": "A structured bomber with heritage detailing and a soft lined finish.",
+    "tone": "forest",
+    "mainImageUrl": "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1504593811423-6dd665756598?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "kids-001",
+    "name": "Mini Graphic Tee",
+    "price": 1499,
+    "category": "Kids",
+    "fabric": "Cotton Jersey",
+    "color": "Blue",
+    "description": "A cheerful tee with playful graphics designed for happy everyday wear.",
+    "tone": "blue",
+    "mainImageUrl": "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "kids-002",
+    "name": "Pastel Knit Set",
+    "price": 1899,
+    "category": "Kids",
+    "fabric": "Soft Knit",
+    "color": "Mint",
+    "description": "A cosy knit set in pastel tones that feels comfortable and easy to wear.",
+    "tone": "mint",
+    "mainImageUrl": "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "kids-003",
+    "name": "Adventure Cargo Set",
+    "price": 2199,
+    "category": "Kids",
+    "fabric": "Cotton Twill",
+    "color": "Khaki",
+    "description": "A durable cargo set built for movement, play and everyday adventures.",
+    "tone": "khaki",
+    "mainImageUrl": "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "kids-004",
+    "name": "Birthday Party Dress",
+    "price": 2599,
+    "category": "Kids",
+    "fabric": "Poly Satin",
+    "color": "Pink",
+    "description": "A twirl-ready party dress with a soft finish and joyful festive styling.",
+    "tone": "pink",
+    "mainImageUrl": "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "accessories-001",
+    "name": "Leather Sling Bag",
+    "price": 2299,
+    "category": "Accessories",
+    "fabric": "Genuine Leather",
+    "color": "Espresso",
+    "description": "A compact sling bag with a clean silhouette and everyday carry comfort.",
+    "tone": "espresso",
+    "mainImageUrl": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "accessories-002",
+    "name": "Classic Sunglasses",
+    "price": 1999,
+    "category": "Accessories",
+    "fabric": "Metal Frame",
+    "color": "Black",
+    "description": "A sleek pair of sunglasses that add a polished finish to any outfit.",
+    "tone": "black",
+    "mainImageUrl": "https://images.unsplash.com/photo-1577803947579-9faa4c3abf5e?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "accessories-003",
+    "name": "Printed Silk Scarf",
+    "price": 1699,
+    "category": "Accessories",
+    "fabric": "Silk",
+    "color": "Multicolor",
+    "description": "A lightweight scarf with a vibrant print that instantly elevates a look.",
+    "tone": "multicolor",
+    "mainImageUrl": "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1577803947579-9faa4c3abf5e?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "occasionwear-001",
+    "name": "Embellished Evening Gown",
+    "price": 7999,
+    "category": "Occasionwear",
+    "fabric": "Crepe Satin",
+    "color": "Royal Blue",
+    "description": "An embellished gown made for evenings, receptions and memorable celebrations.",
+    "tone": "royal-blue",
+    "mainImageUrl": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "occasionwear-002",
+    "name": "Festive Anarkali Suit",
+    "price": 6499,
+    "category": "Occasionwear",
+    "fabric": "Silk Blend",
+    "color": "Wine",
+    "description": "A festive anarkali with graceful movement and a rich statement silhouette.",
+    "tone": "wine",
+    "mainImageUrl": "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "occasionwear-003",
+    "name": "Silk Sherwani",
+    "price": 8999,
+    "category": "Occasionwear",
+    "fabric": "Silk Blend",
+    "color": "Deep Maroon",
+    "description": "An elegant sherwani with refined detailing crafted for grand occasions.",
+    "tone": "maroon",
+    "mainImageUrl": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1504593811423-6dd665756598?auto=format&fit=crop&w=700&q=85"
+    ]
+  },
+  {
+    "id": "occasionwear-004",
+    "name": "Bridal Lehenga Set",
+    "price": 9999,
+    "category": "Occasionwear",
+    "fabric": "Net with Embroidery",
+    "color": "Ivory",
+    "description": "A bridal lehenga set with layered detailing and statement embroidery for the big day.",
+    "tone": "ivory",
+    "mainImageUrl": "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=85",
+    "extraImageUrls": [
+      "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=700&q=85",
+      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=700&q=85"
+    ]
+  }
 ]
