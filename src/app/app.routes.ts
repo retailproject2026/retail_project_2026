@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -20,6 +21,7 @@ export const routes: Routes = [
       },
       {
         path: 'admin/newproduct',
+        canActivate: [adminGuard],
         title: 'Add Product | Retail Store',
         loadComponent: () =>
           import('./features/admin/newproduct/product-create.component').then(m => m.ProductCreateComponent)
@@ -50,9 +52,16 @@ export const routes: Routes = [
       },
       {
         path: 'admin/orders',
+        canActivate: [adminGuard],
         title: 'Admin Orders | Retail Store',
         loadComponent: () =>
           import('./features/admin-orders/admin-orders.component').then(m => m.AdminOrdersComponent)
+      }
+      ,{
+        path: 'admin/login',
+        title: 'Admin Login | Retail Store',
+        loadComponent: () =>
+          import('./features/admin/admin-login/admin-login.component').then(m => m.AdminLoginComponent)
       }
     ]
   },

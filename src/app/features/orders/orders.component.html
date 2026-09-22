@@ -46,15 +46,7 @@
         }
       </div>
 
-      <div class="order-management">
-        <label for="order-status">Delivery status</label>
-        <div class="status-update-row">
-          <select id="order-status" name="status" [(ngModel)]="selectedStatus">
-            @for (status of statuses; track status) { <option [ngValue]="status">{{ status }}</option> }
-          </select>
-          <button mat-flat-button color="primary" type="button" [disabled]="updating || selectedStatus === currentOrder.status" (click)="updateOrderStatus()">{{ updating ? 'Updating...' : 'Update status' }}</button>
-        </div>
-      </div>
+      <p class="customer-status-note">Current delivery status: <strong>{{ currentOrder.status }}</strong></p>
     </section>
   }
 </main>

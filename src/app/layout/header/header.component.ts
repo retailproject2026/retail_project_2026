@@ -12,6 +12,7 @@ import { CartService } from '../../core/services/cart.service';
 import { ProductService } from '../../core/services/product.service';
 import { OrderService } from '../../core/services/order.service';
 import { AddressFormComponent, DeliveryAddress } from '../../shared/components/address-form/address-form.component';
+import { AdminAuthService } from '../../core/services/admin-auth.service';
 
 @Component({
   selector: 'app-header',
@@ -43,7 +44,8 @@ export class HeaderComponent implements OnInit {
     private readonly wishlist: WishlistService,
     private readonly cart: CartService,
     private readonly productService: ProductService,
-    private readonly orderService: OrderService
+    private readonly orderService: OrderService,
+    readonly adminAuth: AdminAuthService
   ) {}
 
   ngOnInit(): void {

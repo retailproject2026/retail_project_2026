@@ -1,0 +1,16 @@
+<main class="admin-login-page">
+  <section class="admin-login-panel" aria-labelledby="admin-login-title">
+    <span class="admin-login-kicker">PRIVATE AREA</span>
+    <h1 id="admin-login-title">Admin sign in</h1>
+    <p>Enter the admin password to manage products and orders.</p>
+
+    <form (ngSubmit)="submit()" autocomplete="off">
+      <label for="admin-password">Password</label>
+      <input id="admin-password" name="password" type="password" [(ngModel)]="password" autocomplete="new-password" required autofocus />
+      @if (errorMessage) { <p class="admin-login-error" role="alert">{{ errorMessage }}</p> }
+      <button mat-flat-button color="primary" type="submit" [disabled]="submitting || !password">{{ submitting ? 'SIGNING IN...' : 'SIGN IN' }}</button>
+    </form>
+
+    <a routerLink="/">Return to store</a>
+  </section>
+</main>

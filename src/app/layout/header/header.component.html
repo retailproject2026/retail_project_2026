@@ -91,8 +91,11 @@
   <a routerLink="/products" [queryParams]="{ type: 'Food' }" (click)="closeMenu()">FOOD</a>
   <a routerLink="/products" [queryParams]="{ category: 'Accessories' }" (click)="closeMenu()">ACCESSORIES</a>
   <a routerLink="/orders" (click)="closeMenu()">TRACK ORDER</a>
-  <a routerLink="/admin/orders" (click)="closeMenu()">ADMIN ORDERS</a>
-  <a routerLink="/admin/newproduct" (click)="closeMenu()">ADD PRODUCT</a>
+  @if (adminAuth.isAuthenticated()) {
+    <a routerLink="/admin/orders" (click)="closeMenu()">ADMIN ORDERS</a>
+    <a routerLink="/admin/newproduct" (click)="closeMenu()">ADD PRODUCT</a>
+    <button class="admin-logout-link" type="button" (click)="adminAuth.logout(); closeMenu()">ADMIN LOG OUT</button>
+  }
 </nav>
 
 @if (menuOpen) {

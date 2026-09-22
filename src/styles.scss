@@ -3,6 +3,8 @@
 .payment-success h3 { margin: 14px 0 8px; color: var(--header-text); font-family: Georgia, 'Times New Roman', serif; font-size: 24px; font-weight: 400; }
 .payment-success p { margin: 0; color: #65534c; font-size: 13px; line-height: 1.5; }
 .payment-error { margin: 14px 0 0; color: #b33a3a; font-size: 13px; line-height: 1.5; }
+.admin-logout-link { border: 0; padding: 0; background: transparent; color: var(--header-menucolor); font: inherit; font-size: var(--menu_font_size); font-weight: var(--menu_font_weight); letter-spacing: var(--menu_spacing); text-transform: var(--menu_type_text); cursor: pointer; }
+.admin-logout-link:hover { color: var(--header-menuhover); }
 :root {
 	--header-background: #fffff9;
 	--header-text: #720974;
