@@ -105,13 +105,6 @@
   <button class="address-backdrop" type="button" aria-label="Close delivery address" (click)="closeAddress()"></button>
   <section class="address-modal" aria-labelledby="delivery-title">
     <div class="address-modal-heading"><div><span class="detail-category">DELIVERY DETAILS</span><h2 id="delivery-title">Where should we deliver?</h2></div><button type="button" aria-label="Close delivery address" (click)="closeAddress()">&#10005;</button></div>
-    <form class="address-form" autocomplete="off" (submit)="$event.preventDefault(); confirmBuyNow()">
-      <label for="detail-delivery-address">Address</label>
-      <textarea id="detail-delivery-address" name="address" autocomplete="off" rows="3" [(ngModel)]="deliveryAddress.address"></textarea>
-      <div class="address-row"><label>City<input name="city" autocomplete="off" [(ngModel)]="deliveryAddress.city" /></label><label>State<input name="state" autocomplete="off" [(ngModel)]="deliveryAddress.state" /></label></div>
-      <label for="detail-delivery-postal">PIN code</label>
-      <input id="detail-delivery-postal" name="postalCode" autocomplete="off" [(ngModel)]="deliveryAddress.postalCode" />
-      <button mat-flat-button class="address-submit" type="submit" [disabled]="checkoutLoading">CONTINUE TO PAYMENT</button>
-    </form>
+    <app-address-form [address]="deliveryAddress" [loading]="checkoutLoading" (submitted)="confirmBuyNow()"></app-address-form>
   </section>
 }

@@ -10,11 +10,12 @@ import { RazorpayService } from '../../core/services/razorpay.service';
 import { WishlistService } from '../../core/services/wishlist.service';
 import { CartService } from '../../core/services/cart.service';
 import { ProductService } from '../../core/services/product.service';
+import { AddressFormComponent, DeliveryAddress } from '../../shared/components/address-form/address-form.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, MatToolbarModule, MatButtonModule, MatIconModule, MatBadgeModule, FormsModule, DecimalPipe],
+  imports: [RouterLink, RouterLinkActive, MatToolbarModule, MatButtonModule, MatIconModule, MatBadgeModule, FormsModule, DecimalPipe, AddressFormComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
@@ -33,7 +34,7 @@ export class HeaderComponent implements OnInit {
   checkoutLoading = false;
   checkoutMessage = '';
   addressOpen = false;
-  deliveryAddress = { address: '', city: '', state: '', postalCode: '' };
+  deliveryAddress: DeliveryAddress = { address: '', city: '', state: '', postalCode: '', mobileNumber: '' };
 
   constructor(
     private readonly razorpayService: RazorpayService,

@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { LoadingService } from './loading.service';
 
 export interface Product {
   id: string;
@@ -78,40 +79,49 @@ export interface ProductPage {
 export class ProductService {
   private readonly supabase: SupabaseClient = createClient(environment.supabaseUrl, environment.supabaseAnonKey);
   private readonly apiUrl = environment.apiUrl;
-  constructor(private readonly http: HttpClient) {}
+  constructor(
+    private readonly http: HttpClient,
+    private readonly loading: LoadingService
+  ) {}
 
   async getProductList(): Promise<Product[]> {
-    const { data, error } = await this.supabase
-      .from('products')
-      .select('id,name,price,sale_price,currency,product_type,category,description,stock,inStock,tone,main_image_url,fabric,is_new,is_featured');
-    if (error) throw error;
+    return this.loading.track((async () => {
+      const { data, error } = await this.supabase
+        .from('products')
+        .select('id,name,price,sale_price,currency,product_type,category,description,stock,inStock,tone,main_image_url,fabric,is_new,is_featured');
+      if (error) throw error;
 
-    return Promise.all(((data ?? []) as DatabaseProduct[]).map(product => this.normalizeProduct(product)));
+      return Promise.all(((data ?? []) as DatabaseProduct[]).map(product => this.normalizeProduct(product)));
+    })());
   }
 
   async getProductListPage(page: number, pageSize: number): Promise<ProductPage> {
-    const from = page * pageSize;
-    const to = from + pageSize - 1;
-    const { data, error, count } = await this.supabase
-      .from('products')
-      .select('id,name,price,sale_price,currency,product_type,category,description,stock,inStock,tone,main_image_url,fabric,is_new,is_featured', { count: 'exact' })
-      .range(from, to);
-    if (error) throw error;
+    return this.loading.track((async () => {
+      const from = page * pageSize;
+      const to = from + pageSize - 1;
+      const { data, error, count } = await this.supabase
+        .from('products')
+        .select('id,name,price,sale_price,currency,product_type,category,description,stock,inStock,tone,main_image_url,fabric,is_new,is_featured', { count: 'exact' })
+        .range(from, to);
+      if (error) throw error;
 
-    const products = await Promise.all(((data ?? []) as DatabaseProduct[]).map(product => this.normalizeProduct(product)));
-    return { products, hasMore: from + products.length < (count ?? 0) };
+      const products = await Promise.all(((data ?? []) as DatabaseProduct[]).map(product => this.normalizeProduct(product)));
+      return { products, hasMore: from + products.length < (count ?? 0) };
+    })());
   }
 
   async getProductById(id: string): Promise<Product | null> {
-    const { data, error } = await this.supabase
-      .from('products')
-      .select('*')
-      .eq('id', id)
-      .maybeSingle();
-    if (error) throw error;
-    if (!data) return null;
+    return this.loading.track((async () => {
+      const { data, error } = await this.supabase
+        .from('products')
+        .select('*')
+        .eq('id', id)
+        .maybeSingle();
+      if (error) throw error;
+      if (!data) return null;
 
-    return this.normalizeProduct(data as DatabaseProduct, true);
+      return this.normalizeProduct(data as DatabaseProduct, true);
+    })());
   }
 
   private async normalizeProduct(product: DatabaseProduct, includeGallery = false): Promise<Product> {

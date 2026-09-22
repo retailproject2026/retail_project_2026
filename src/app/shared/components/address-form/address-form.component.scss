@@ -1,0 +1,59 @@
+:host {
+  display: block;
+}
+
+.address-form {
+  display: grid;
+  gap: 10px;
+  padding-top: 23px;
+}
+
+.address-form label {
+  color: #493731;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.address-form input,
+.address-form textarea {
+  width: 100%;
+  margin-top: 6px;
+  padding: 13px 12px;
+  border: 1px solid #cdbdb4;
+  outline: 0;
+  background: transparent;
+  color: #493731;
+  font: inherit;
+  box-sizing: border-box;
+}
+
+.address-form input:focus,
+.address-form textarea:focus {
+  border-color: var(--header-text, #720974);
+  box-shadow: 0 0 0 1px var(--header-text, #720974);
+}
+
+.address-form textarea {
+  resize: vertical;
+}
+
+.address-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.address-submit {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 10px;
+  background: var(--header-text, #720974) !important;
+  color: #fff !important;
+  letter-spacing: .14em;
+}
+
+@media (max-width: 420px) {
+  .address-row {
+    grid-template-columns: 1fr;
+  }
+}

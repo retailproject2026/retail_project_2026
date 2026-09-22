@@ -1,0 +1,44 @@
+<form class="address-form" autocomplete="off" (ngSubmit)="submitAddress()">
+  <label for="delivery-mobile-number">Mobile number</label>
+  <input
+    id="delivery-mobile-number"
+    type="tel"
+    inputmode="numeric"
+    autocomplete="new-password"
+    maxlength="10"
+    placeholder="Enter 10-digit number"
+    [(ngModel)]="address.mobileNumber"
+    name="mobileNumber"
+    required
+    pattern="[0-9]{10}" />
+
+  <label for="delivery-address">Address</label>
+  <textarea
+    id="delivery-address"
+    autocomplete="new-password"
+    rows="3"
+    [(ngModel)]="address.address"
+    name="address"
+    required></textarea>
+
+  <div class="address-row">
+    <label>City<input autocomplete="new-password" [(ngModel)]="address.city" name="city" required /></label>
+    <label>State<input autocomplete="new-password" [(ngModel)]="address.state" name="state" required /></label>
+  </div>
+
+  <label for="delivery-postal">PIN code</label>
+  <input
+    id="delivery-postal"
+    autocomplete="new-password"
+    [(ngModel)]="address.postalCode"
+    name="postalCode"
+    required />
+
+  <button mat-flat-button class="address-submit" type="submit" [disabled]="loading">
+    @if (loading) {
+      <span>OPENING PAYMENT...</span>
+    } @else {
+      <span>CONTINUE TO PAYMENT</span>
+    }
+  </button>
+</form>

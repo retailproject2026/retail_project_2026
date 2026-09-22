@@ -8,11 +8,12 @@ import { CartService } from '../../core/services/cart.service';
 import { WishlistService, WishlistProduct } from '../../core/services/wishlist.service';
 import { RazorpayService } from '../../core/services/razorpay.service';
 import { Product, ProductService } from '../../core/services/product.service';
+import { AddressFormComponent, DeliveryAddress } from '../../shared/components/address-form/address-form.component';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, RouterLink, DecimalPipe, FormsModule],
+  imports: [MatButtonModule, MatIconModule, RouterLink, DecimalPipe, FormsModule, AddressFormComponent],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.scss'
 })
@@ -35,7 +36,7 @@ export class ProductDetailsComponent implements OnInit {
   shippingOpen = false;
   helpOpen = false;
   addressOpen = false;
-  deliveryAddress = { address: '', city: '', state: '', postalCode: '' };
+  deliveryAddress: DeliveryAddress = { address: '', city: '', state: '', postalCode: '', mobileNumber: '' };
 
   get isFavorite(): boolean {
     return this.product ? this.wishlist.isFavorite(this.product.id) : false;

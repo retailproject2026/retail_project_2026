@@ -116,6 +116,7 @@
         type="search"
         aria-label="Search products"
         placeholder="Search clothing, styles, colours..."
+        autocomplete="off"
         [(ngModel)]="searchQuery" />
     </div>
     @if (searchQuery) {
@@ -256,16 +257,15 @@
     @if (loggedIn) {
       <p class="account-message" role="status">You are now logged in. We’ll keep you updated on your saved preferences.</p>
     } @else {
-      <form class="account-form" (submit)="login($event)">
+      <form class="account-form" autocomplete="off" (submit)="login($event)">
         <label for="mobile-number">Mobile number</label>
         <div class="mobile-input">
           <span aria-hidden="true">+91</span>
           <input
             id="mobile-number"
-            name="mobileNumber"
             type="tel"
             inputmode="numeric"
-            autocomplete="tel"
+            autocomplete="new-password"
             maxlength="10"
             placeholder="Enter 10-digit number"
             [(ngModel)]="mobileNumber"
@@ -273,7 +273,7 @@
             pattern="[0-9]{10}" />
         </div>
         <label class="notify-option">
-          <input type="checkbox" name="notifyNewArrivals" [(ngModel)]="notifyNewArrivals" />
+          <input type="checkbox"  autocomplete="off" [(ngModel)]="notifyNewArrivals" />
           <span>Notify me when new arrivals come in</span>
         </label>
         <button mat-flat-button color="primary" class="login-button" type="submit">LOGIN</button>
@@ -289,13 +289,6 @@
       <div><span class="account-kicker">DELIVERY DETAILS</span><h2 id="delivery-title">Where should we deliver?</h2></div>
       <button mat-icon-button type="button" aria-label="Close delivery address" (click)="closeAddress()"><mat-icon>close</mat-icon></button>
     </div>
-    <form class="account-form address-form" autocomplete="off" (submit)="$event.preventDefault(); confirmCheckout()">
-      <label for="delivery-address">Address</label>
-      <textarea id="delivery-address" name="address" autocomplete="off" rows="3" [(ngModel)]="deliveryAddress.address"></textarea>
-      <div class="address-row"><label>City<input name="city" autocomplete="off" [(ngModel)]="deliveryAddress.city" /></label><label>State<input name="state" autocomplete="off" [(ngModel)]="deliveryAddress.state" /></label></div>
-      <label for="delivery-postal">PIN code</label>
-      <input id="delivery-postal" name="postalCode" autocomplete="off" [(ngModel)]="deliveryAddress.postalCode" />
-      <button mat-flat-button class="login-button" type="submit" [disabled]="checkoutLoading">CONTINUE TO PAYMENT</button>
-    </form>
+    <app-address-form [address]="deliveryAddress" [loading]="checkoutLoading" (submitted)="confirmCheckout()"></app-address-form>
   </section>
 }
