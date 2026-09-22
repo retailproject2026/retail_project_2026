@@ -1,0 +1,1 @@
+function n(t,r){return t.startsWith(`product:`)?t:`product:${encodeURIComponent(t||r)}:${encodeURIComponent(r)}`}function o(t){return t.startsWith(`product:`)?decodeURIComponent(t.slice(8).split(`:`)[0]):t}export{o as n,n as t};
