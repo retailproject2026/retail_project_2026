@@ -2,10 +2,10 @@
   <div class="create-product-heading">
     <div>
       <span class="eyebrow">PRODUCT ADMIN</span>
-      <h1>Add a product</h1>
-      <p>Enter the product details to create a new row in the products table.</p>
+      <h1>{{ editingId ? 'Edit product' : 'Add a product' }}</h1>
+      <p>{{ editingId ? 'Update the product details in the products table.' : 'Enter the product details to create a new row in the products table.' }}</p>
     </div>
-    <a mat-button routerLink="/products">Back to products</a>
+    <a mat-button routerLink="/admin/products">Back to admin products</a>
   </div>
 
   @if (successMessage) {
@@ -15,6 +15,9 @@
     <p class="form-error" role="alert">{{ errorMessage }}</p>
   }
 
+  @if (loadingProduct) {
+    <p class="form-success" role="status">Loading product...</p>
+  }
   <form #productForm="ngForm" class="product-form" novalidate (ngSubmit)="submit(productForm)" autocomplete="off">
     <section class="form-section">
       <h2>Identity</h2>
@@ -69,8 +72,8 @@
     </section>
 
     <div class="form-actions">
-      <a mat-button routerLink="/products">Cancel</a>
-      <button mat-flat-button color="primary" type="submit" [disabled]="submitting">{{ submitting ? 'Creating product...' : 'Create product' }}</button>
+      <a mat-button routerLink="/admin/products">Cancel</a>
+      <button mat-flat-button color="primary" type="submit" [disabled]="submitting || loadingProduct">{{ submitting ? (editingId ? 'Updating product...' : 'Creating product...') : (editingId ? 'Update product' : 'Create product') }}</button>
     </div>
   </form>
 </main>

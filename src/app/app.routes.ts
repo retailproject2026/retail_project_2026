@@ -27,6 +27,13 @@ export const routes: Routes = [
           import('./features/admin/newproduct/product-create.component').then(m => m.ProductCreateComponent)
       },
       {
+        path: 'admin/newproduct/:id',
+        canActivate: [adminGuard],
+        title: 'Edit Product | Retail Store',
+        loadComponent: () =>
+          import('./features/admin/newproduct/product-create.component').then(m => m.ProductCreateComponent)
+      },
+      {
         path: 'products/:id',
         title: 'Product Details | Retail Store',
         loadComponent: () =>
@@ -56,6 +63,34 @@ export const routes: Routes = [
         title: 'Admin Orders | Retail Store',
         loadComponent: () =>
           import('./features/admin-orders/admin-orders.component').then(m => m.AdminOrdersComponent)
+      },
+      {
+        path: 'admin/products',
+        canActivate: [adminGuard],
+        title: 'Admin Products | Retail Store',
+        loadComponent: () =>
+          import('./features/admin/products/admin-products.component').then(m => m.AdminProductsComponent)
+      },
+      {
+        path: 'admin/customer',
+        canActivate: [adminGuard],
+        title: 'Admin Customers | Retail Store',
+        loadComponent: () =>
+          import('./features/admin/customer/admin-customer.component').then(m => m.AdminCustomerComponent)
+      },
+      {
+        path: 'admin/customers/new',
+        canActivate: [adminGuard],
+        title: 'Add Customer | Retail Store',
+        loadComponent: () =>
+          import('./features/admin/customer/admin-customer.component').then(m => m.AdminCustomerComponent)
+      },
+      {
+        path: 'admin/customers/edit/:id',
+        canActivate: [adminGuard],
+        title: 'Edit Customer | Retail Store',
+        loadComponent: () =>
+          import('./features/admin/customer/admin-customer.component').then(m => m.AdminCustomerComponent)
       }
       ,{
         path: 'admin/login',

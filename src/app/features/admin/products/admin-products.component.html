@@ -1,0 +1,38 @@
+<main class="admin-products-page">
+  <header class="admin-products-heading">
+    <div>
+      <span class="admin-kicker">ADMINISTRATION</span>
+      <h1>Products</h1>
+      <p>View, edit, or remove products from the catalogue.</p>
+    </div>
+    <div class="admin-product-actions">
+      <button mat-stroked-button type="button" (click)="loadProducts()" [disabled]="loading">REFRESH</button>
+      <a mat-flat-button color="primary" routerLink="/admin/newproduct">ADD PRODUCT</a>
+    </div>
+  </header>
+
+  @if (errorMessage) { <p class="admin-error" role="alert">{{ errorMessage }}</p> }
+  @if (successMessage) { <p class="admin-success" role="status">{{ successMessage }}</p> }
+  @if (loading) {
+    <p class="admin-empty" role="status">Loading products...</p>
+  } @else if (!products.length) {
+    <p class="admin-empty">No data found.</p>
+  } @else {
+    <div class="admin-products-table-wrap">
+      <table class="admin-products-table">
+        <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr></thead>
+        <tbody>
+          @for (product of products; track product.id) {
+            <tr>
+              <td><strong>{{ product.name }}</strong><small>{{ product.sku ?? product.id }}</small></td>
+              <td>{{ product.productType }} · {{ product.category }}</td>
+              <td>₹{{ (product.salePrice ?? product.price) | number:'1.0-0' }}</td>
+              <td>{{ product.stock ?? 0 }} <span [class.out-of-stock]="product.inStock === false">{{ product.inStock === false ? 'Out' : 'Available' }}</span></td>
+              <td class="admin-product-row-actions"><a mat-button [routerLink]="['/admin/newproduct', product.id]">EDIT</a><button mat-button type="button" [disabled]="deletingId === product.id" (click)="deleteProduct(product)">{{ deletingId === product.id ? 'DELETING...' : 'DELETE' }}</button></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</main>

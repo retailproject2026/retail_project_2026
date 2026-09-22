@@ -1,0 +1,74 @@
+<main class="admin-contacts-page">
+  <header class="admin-contacts-heading">
+    <div>
+      <span class="admin-kicker">ADMINISTRATION</span>
+      <h1>{{ newOnly ? 'Add customer' : (editOnly ? 'Edit customer' : 'Customers') }}</h1>
+      <p>{{ newOnly || editOnly ? 'Manage customer and delivery address details.' : 'View, edit, and deactivate customer records.' }}</p>
+    </div>
+    @if (newOnly || editOnly) {
+      <a mat-stroked-button routerLink="/admin/customer">BACK TO CUSTOMERS</a>
+    } @else {
+      <div class="customer-page-actions">
+        <button mat-stroked-button type="button" (click)="loadContacts()" [disabled]="loading">REFRESH</button>
+        <a mat-flat-button color="primary" routerLink="/admin/customers/new">ADD CUSTOMER</a>
+      </div>
+    }
+  </header>
+
+  @if (errorMessage) { <p class="admin-error" role="alert">{{ errorMessage }}</p> }
+  @if (successMessage) { <p class="admin-success" role="status">{{ successMessage }}</p> }
+
+  @if (newOnly || editOnly) {
+    <section class="contact-form-panel" [class.new-customer-panel]="newOnly || editOnly">
+      <h2>{{ editingId ? 'Edit customer' : 'Add customer' }}</h2>
+      <form #contactForm="ngForm" (ngSubmit)="save(contactForm)" novalidate>
+        <div class="contact-form-grid">
+        <label>First name<input name="first_name" [(ngModel)]="form.first_name" required maxlength="100" /></label>
+        <label>Last name<input name="last_name" [(ngModel)]="form.last_name" maxlength="100" /></label>
+        <label>Email<input name="email" type="email" [(ngModel)]="form.email" required maxlength="255" /></label>
+        <label>Mobile number<input name="mobile_number" type="tel" [(ngModel)]="form.mobile_number" required maxlength="15" pattern="[0-9]{10,15}" /></label>
+        <label>Customer created at<input name="created_at" type="datetime-local" [(ngModel)]="form.created_at" required /></label>
+        <label>Customer updated at<input name="updated_at" type="datetime-local" [(ngModel)]="form.updated_at" required /></label>
+        <label>Address type<select name="address_type" [(ngModel)]="form.address_type" required><option value="Home">Home</option><option value="Office">Office</option><option value="Other">Other</option></select></label>
+        <label>Address line 1<input name="address_line1" [(ngModel)]="form.address_line1" required /></label>
+        <label>Address line 2<input name="address_line2" [(ngModel)]="form.address_line2" /></label>
+        <label>City<input name="city" [(ngModel)]="form.city" required /></label>
+        <label>State<input name="state" [(ngModel)]="form.state" required /></label>
+        <label>Country<input name="country" [(ngModel)]="form.country" required /></label>
+        <label>PIN code<input name="pin_code" [(ngModel)]="form.pin_code" required pattern="[0-9]{6}" maxlength="6" /></label>
+        <label>Address created at<input name="address_created_at" type="datetime-local" [(ngModel)]="form.address_created_at" required /></label>
+        <label>Address updated at<input name="address_updated_at" type="datetime-local" [(ngModel)]="form.address_updated_at" required /></label>
+        </div>
+        <div class="customer-flags"><label><input name="is_active" type="checkbox" [(ngModel)]="form.is_active" /> Active customer</label><label><input name="is_default" type="checkbox" [(ngModel)]="form.is_default" /> Default address</label></div>
+        <div class="contact-form-actions">
+          @if (editingId) { <button mat-button type="button" (click)="cancelEdit(contactForm)">CANCEL</button> }
+          <button mat-flat-button color="primary" type="submit" [disabled]="saving">{{ saving ? 'SAVING...' : (editingId ? 'UPDATE CUSTOMER' : 'ADD CUSTOMER') }}</button>
+        </div>
+      </form>
+    </section>
+  }
+
+  @if (!newOnly && !editOnly && loading) {
+    <p class="admin-empty" role="status">Loading customers...</p>
+  } @else if (!newOnly && !editOnly && !contacts.length) {
+    <p class="admin-empty">No data found.</p>
+  } @else if (!newOnly && !editOnly) {
+    <div class="contacts-table-wrap">
+      <table class="contacts-table">
+        <thead><tr><th>Customer</th><th>Mobile</th><th>Email</th><th>Address</th><th>Created</th><th>Actions</th></tr></thead>
+        <tbody>
+          @for (contact of contacts; track contact.id) {
+            <tr>
+              <td><strong>{{ contact.first_name }} {{ contact.last_name }}</strong><small>{{ contact.id }}</small></td>
+              <td>{{ contact.mobile_number }}</td>
+              <td>{{ contact.email || 'No email' }}</td>
+              <td>{{ contact.address_line1 }}, {{ contact.city }}, {{ contact.state }} {{ contact.pin_code }}</td>
+              <td>{{ contact.created_at | date:'mediumDate' }}</td>
+              <td class="contact-actions"><button mat-button type="button" (click)="edit(contact)">EDIT</button><button mat-button type="button" [disabled]="deletingId === contact.id" (click)="remove(contact)">{{ deletingId === contact.id ? 'DEACTIVATING...' : 'DEACTIVATE' }}</button></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</main>

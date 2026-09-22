@@ -93,7 +93,8 @@
   <a routerLink="/orders" (click)="closeMenu()">TRACK ORDER</a>
   @if (adminAuth.isAuthenticated()) {
     <a routerLink="/admin/orders" (click)="closeMenu()">ADMIN ORDERS</a>
-    <a routerLink="/admin/newproduct" (click)="closeMenu()">ADD PRODUCT</a>
+    <a routerLink="/admin/products" (click)="closeMenu()">ADMIN PRODUCTS</a>
+    <a routerLink="/admin/customer" (click)="closeMenu()">ADMIN CUSTOMERS</a>
     <button class="admin-logout-link" type="button" (click)="adminAuth.logout(); closeMenu()">ADMIN LOG OUT</button>
   }
 </nav>

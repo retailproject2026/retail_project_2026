@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { CreateProductInput, ProductService } from '../../../core/services/product.service';
 
@@ -40,8 +40,10 @@ interface ProductFormModel {
   templateUrl: './product-create.component.html',
   styleUrl: './product-create.component.scss'
 })
-export class ProductCreateComponent {
+export class ProductCreateComponent implements OnInit {
   private readonly productService = inject(ProductService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly changeDetector = inject(ChangeDetectorRef);
   readonly uuidPattern = '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$';
   readonly productTypes = ['Clothes', 'Food', 'Accessories'];
   readonly categories = ['Women', 'Men', 'Kids', 'Occasionwear', 'Breakfast', 'Beverages', 'Gifting', 'Accessories'];
@@ -49,6 +51,57 @@ export class ProductCreateComponent {
   submitting = false;
   successMessage = '';
   errorMessage = '';
+  editingId: string | null = null;
+  loadingProduct = false;
+
+  ngOnInit(): void {
+    this.editingId = this.route.snapshot.paramMap.get('id');
+    if (this.editingId) this.loadProduct(this.editingId);
+  }
+
+  private async loadProduct(id: string): Promise<void> {
+    this.loadingProduct = true;
+    try {
+      const product = await this.productService.getProductById(id);
+      if (!product) {
+        this.errorMessage = 'Product not found.';
+        return;
+      }
+      this.form = {
+        id: product.id,
+        sku: product.sku ?? '',
+        sale_price: product.salePrice ?? null,
+        currency: product.currency ?? 'INR',
+        product_type: product.productType,
+        brand: product.brand ?? '',
+        stock: product.stock ?? 0,
+        inStock: product.inStock ?? false,
+        attributes: JSON.stringify(product.attributes ?? {}, null, 2),
+        rating: product.rating ?? null,
+        review_count: product.reviewCount ?? 0,
+        is_featured: product.isFeatured ?? false,
+        is_new: product.isNew ?? false,
+        created_at: this.toDateTimeLocal(product.createdAt),
+        updated_at: this.toDateTimeLocal(product.updatedAt),
+        name: product.name,
+        price: product.price,
+        category: product.category,
+        fabric: product.fabric ?? '',
+        color: product.color ?? '',
+        description: product.description,
+        tone: product.tone,
+        main_image_url: product.mainImageUrl,
+        extra_image_urls: JSON.stringify(product.extraImageUrls ?? [], null, 2),
+        extra_image_url1: product.extraImageUrl1,
+        extra_image_url2: product.extraImageUrl2
+      };
+      this.changeDetector.markForCheck();
+    } catch (error) {
+      this.errorMessage = error instanceof Error ? error.message : 'Unable to load product.';
+    } finally {
+      this.loadingProduct = false;
+    }
+  }
 
   async submit(formElement: NgForm): Promise<void> {
     this.successMessage = '';
@@ -81,10 +134,15 @@ export class ProductCreateComponent {
 
     this.submitting = true;
     try {
-      await this.productService.createProduct(product);
-      this.successMessage = 'Product created successfully.';
-      this.form = this.createInitialForm();
-      formElement.resetForm(this.form);
+      if (this.editingId) {
+        await this.productService.updateProduct(this.editingId, product);
+        this.successMessage = 'Product updated successfully.';
+      } else {
+        await this.productService.createProduct(product);
+        this.successMessage = 'Product created successfully.';
+        this.form = this.createInitialForm();
+        formElement.resetForm(this.form);
+      }
     } catch (error) {
       this.errorMessage = error instanceof Error ? error.message : 'Unable to create product.';
     } finally {
@@ -119,5 +177,9 @@ export class ProductCreateComponent {
       category: 'Women', fabric: '', color: '', description: '', tone: 'default', main_image_url: '',
       extra_image_urls: '[]', extra_image_url1: '', extra_image_url2: ''
     };
+  }
+
+  private toDateTimeLocal(value?: string): string {
+    return value ? new Date(value).toISOString().slice(0, 16) : new Date().toISOString().slice(0, 16);
   }
 }

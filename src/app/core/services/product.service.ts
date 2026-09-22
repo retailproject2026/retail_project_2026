@@ -160,6 +160,20 @@ export class ProductService {
     })());
   }
 
+  async updateProduct(id: string, product: CreateProductInput): Promise<void> {
+    await this.loading.track((async () => {
+      const { error } = await this.supabase.from('products').update(product).eq('id', id);
+      if (error) throw error;
+    })());
+  }
+
+  async deleteProduct(id: string): Promise<void> {
+    await this.loading.track((async () => {
+      const { error } = await this.supabase.from('products').delete().eq('id', id);
+      if (error) throw error;
+    })());
+  }
+
   private async normalizeProduct(product: DatabaseProduct, includeGallery = false): Promise<Product> {
     const mainImageUrl = product.main_image_url ?? '';
     const extraImageUrl1 = includeGallery ? product.extra_image_url1 ?? '' : '';
