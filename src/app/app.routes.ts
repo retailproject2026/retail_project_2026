@@ -19,6 +19,12 @@ export const routes: Routes = [
           import('./features/products/products.component').then(m => m.ProductsComponent)
       },
       {
+        path: 'admin/newproduct',
+        title: 'Add Product | Retail Store',
+        loadComponent: () =>
+          import('./features/admin/newproduct/product-create.component').then(m => m.ProductCreateComponent)
+      },
+      {
         path: 'products/:id',
         title: 'Product Details | Retail Store',
         loadComponent: () =>
@@ -35,6 +41,18 @@ export const routes: Routes = [
         title: 'Checkout | Retail Store',
         loadComponent: () =>
           import('./features/checkout/checkout.component').then(m => m.CheckoutComponent)
+      },
+      {
+        path: 'orders',
+        title: 'Track Order | Retail Store',
+        loadComponent: () =>
+          import('./features/orders/orders.component').then(m => m.OrdersComponent)
+      },
+      {
+        path: 'admin/orders',
+        title: 'Admin Orders | Retail Store',
+        loadComponent: () =>
+          import('./features/admin-orders/admin-orders.component').then(m => m.AdminOrdersComponent)
       }
     ]
   },

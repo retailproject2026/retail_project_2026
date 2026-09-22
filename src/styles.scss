@@ -1,3 +1,8 @@
+.payment-success { padding: 28px 8px 8px; color: #38834a; text-align: center; }
+.payment-success mat-icon { width: 48px; height: 48px; font-size: 48px; }
+.payment-success h3 { margin: 14px 0 8px; color: var(--header-text); font-family: Georgia, 'Times New Roman', serif; font-size: 24px; font-weight: 400; }
+.payment-success p { margin: 0; color: #65534c; font-size: 13px; line-height: 1.5; }
+.payment-error { margin: 14px 0 0; color: #b33a3a; font-size: 13px; line-height: 1.5; }
 :root {
 	--header-background: #fffff9;
 	--header-text: #720974;

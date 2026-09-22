@@ -10,7 +10,14 @@
     [(ngModel)]="address.mobileNumber"
     name="mobileNumber"
     required
-    pattern="[0-9]{10}" />
+    pattern="[0-9]{10}"
+    (blur)="lookupAddress()"
+    (keydown.enter)="lookupAddress(); $event.preventDefault()" />
+  @if (lookupLoading) {
+    <small class="address-status" role="status">Checking saved addresses...</small>
+  } @else if (addressMessage) {
+    <small class="address-status" role="status">{{ addressMessage }}</small>
+  }
 
   <label for="delivery-address">Address</label>
   <textarea
@@ -34,8 +41,8 @@
     name="postalCode"
     required />
 
-  <button mat-flat-button class="address-submit" type="submit" [disabled]="loading">
-    @if (loading) {
+  <button mat-flat-button class="address-submit" type="submit" [disabled]="loading || saveLoading || lookupLoading">
+    @if (loading || saveLoading) {
       <span>OPENING PAYMENT...</span>
     } @else {
       <span>CONTINUE TO PAYMENT</span>

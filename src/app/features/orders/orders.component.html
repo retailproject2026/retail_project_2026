@@ -1,0 +1,60 @@
+<main class="orders-page">
+  <header class="orders-heading">
+    <span class="orders-kicker">ORDER CARE</span>
+    <h1>Track an order</h1>
+    <p>Enter the order number from your payment confirmation.</p>
+  </header>
+
+  <form class="order-search" (ngSubmit)="findOrder()">
+    <label for="order-number">Order number</label>
+    <div class="order-search-row">
+      <input id="order-number" name="orderNumber" [(ngModel)]="orderNumber" required placeholder="ORD-..." autocomplete="off" />
+      <button mat-flat-button color="primary" type="submit" [disabled]="loading">{{ loading ? 'Searching...' : 'Track order' }}</button>
+    </div>
+  </form>
+
+  @if (errorMessage) { <p class="order-error" role="alert">{{ errorMessage }}</p> }
+  @if (successMessage) { <p class="order-success" role="status">{{ successMessage }}</p> }
+  @if (!loading && !order && !errorMessage && orderNumber) { <p class="order-error" role="status">No data found.</p> }
+
+  @if (order; as currentOrder) {
+    <section class="order-summary" aria-labelledby="order-title">
+      <div class="order-summary-heading">
+        <div>
+          <span class="orders-kicker">{{ currentOrder.payment_status }} PAYMENT</span>
+          <h2 id="order-title">{{ currentOrder.order_number }}</h2>
+          <p>Placed {{ currentOrder.created_at | date:'mediumDate' }}</p>
+        </div>
+        <strong>₹{{ currentOrder.total_amount | number:'1.0-0' }}</strong>
+      </div>
+
+      <div class="status-track" aria-label="Order delivery status">
+        @for (status of statuses; track status; let index = $index) {
+          <div class="status-step" [class.is-current]="status === currentOrder.status" [class.is-complete]="index <= statusIndex(currentOrder.status)">
+            <span>{{ index + 1 }}</span><small>{{ status }}</small>
+          </div>
+        }
+      </div>
+
+      <div class="order-items">
+        <h3>Ordered items</h3>
+        @for (item of currentOrder.items; track item.id) {
+          <article class="order-item">
+            <div><strong>{{ item.product_name }}</strong><span>Qty {{ item.quantity }}</span></div>
+            <span>₹{{ item.total_price | number:'1.0-0' }}</span>
+          </article>
+        }
+      </div>
+
+      <div class="order-management">
+        <label for="order-status">Delivery status</label>
+        <div class="status-update-row">
+          <select id="order-status" name="status" [(ngModel)]="selectedStatus">
+            @for (status of statuses; track status) { <option [ngValue]="status">{{ status }}</option> }
+          </select>
+          <button mat-flat-button color="primary" type="button" [disabled]="updating || selectedStatus === currentOrder.status" (click)="updateOrderStatus()">{{ updating ? 'Updating...' : 'Update status' }}</button>
+        </div>
+      </div>
+    </section>
+  }
+</main>

@@ -1,0 +1,58 @@
+<main class="admin-orders-page">
+  <header class="admin-orders-heading">
+    <div>
+      <span class="admin-kicker">ADMINISTRATION</span>
+      <h1>Orders</h1>
+      <p>Review every paid order and move delivery status forward.</p>
+    </div>
+    <button mat-stroked-button type="button" (click)="loadOrders()" [disabled]="loading">REFRESH ORDERS</button>
+  </header>
+
+  @if (errorMessage) { <p class="admin-error" role="alert">{{ errorMessage }}</p> }
+  @if (successMessage) { <p class="admin-success" role="status">{{ successMessage }}</p> }
+  @if (loading) {
+    <p class="admin-empty" role="status">Loading orders...</p>
+  } @else if (!orders.length) {
+    <p class="admin-empty">No data found.</p>
+  } @else {
+    <div class="orders-list">
+      @for (order of orders; track order.id) {
+        <article class="admin-order-card">
+          <div class="admin-order-header">
+            <div>
+              <span class="admin-kicker">{{ order.payment_status }} · {{ order.payment_method ?? 'Payment pending' }}</span>
+              <h2>{{ order.order_number }}</h2>
+              <p>{{ order.created_at | date:'medium' }}</p>
+            </div>
+            <strong>₹{{ order.total_amount | number:'1.0-0' }}</strong>
+          </div>
+
+          <div class="admin-order-body">
+            <div class="admin-order-items">
+              @for (item of order.items; track item.id) {
+                <div class="admin-item"><span>{{ item.product_name }} × {{ item.quantity }}</span><strong>₹{{ item.total_price | number:'1.0-0' }}</strong></div>
+              }
+            </div>
+            <div class="admin-shipping">
+              <span>DELIVER TO</span>
+              <p>{{ order.shipping_address['address_line1'] }}, {{ order.shipping_address['city'] }}, {{ order.shipping_address['state'] }} {{ order.shipping_address['pin_code'] }}</p>
+              <small>{{ order.shipping_address['mobile_number'] }}</small>
+            </div>
+          </div>
+
+          <div class="admin-order-footer">
+            <div class="admin-status-control">
+              <label [for]="'status-' + order.id">Delivery status</label>
+              <select [id]="'status-' + order.id" [name]="'status-' + order.id" [(ngModel)]="selectedStatuses[order.id]">
+                @for (status of statuses; track status) { <option [ngValue]="status">{{ status }}</option> }
+              </select>
+            </div>
+            <button mat-flat-button color="primary" type="button" [disabled]="updatingOrderId === order.id || selectedStatuses[order.id] === order.status" (click)="updateStatus(order)">
+              {{ updatingOrderId === order.id ? 'UPDATING...' : 'UPDATE STATUS' }}
+            </button>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</main>

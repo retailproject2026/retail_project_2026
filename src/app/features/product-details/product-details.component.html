@@ -105,6 +105,17 @@
   <button class="address-backdrop" type="button" aria-label="Close delivery address" (click)="closeAddress()"></button>
   <section class="address-modal" aria-labelledby="delivery-title">
     <div class="address-modal-heading"><div><span class="detail-category">DELIVERY DETAILS</span><h2 id="delivery-title">Where should we deliver?</h2></div><button type="button" aria-label="Close delivery address" (click)="closeAddress()">&#10005;</button></div>
-    <app-address-form [address]="deliveryAddress" [loading]="checkoutLoading" (submitted)="confirmBuyNow()"></app-address-form>
+    @if (paymentSuccess) {
+      <div class="payment-success" role="status">
+        <mat-icon aria-hidden="true">check_circle</mat-icon>
+        <h3>Payment verified</h3>
+        <p>{{ actionMessage }}</p>
+      </div>
+    } @else {
+      <app-address-form [address]="deliveryAddress" [loading]="checkoutLoading" (submitted)="confirmBuyNow()"></app-address-form>
+      @if (actionMessage) {
+        <p class="payment-error" role="alert">{{ actionMessage }}</p>
+      }
+    }
   </section>
 }

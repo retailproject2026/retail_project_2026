@@ -10,6 +10,11 @@
 .address-backdrop { position: fixed; inset: 0; z-index: 40; width: 100%; border: 0; background: rgba(25, 10, 24, .35); }.address-modal { position: fixed; top: 50%; left: 50%; z-index: 41; width: min(390px, calc(100vw - 32px)); padding: 25px 26px 28px; background: var(--header-background); box-shadow: 0 14px 35px rgba(64, 18, 59, .2); transform: translate(-50%, -50%); }.address-modal-heading { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(var(--header-border-color), 1); padding-bottom: 18px; }.address-modal-heading h2 { margin: 8px 0 0; color: var(--header-text); font-family: Georgia, 'Times New Roman', serif; font-size: 25px; font-weight: 400; line-height: 1.2; }.address-modal-heading > button { border: 0; background: transparent; color: var(--header-text); cursor: pointer; }.address-form { display: grid; gap: 10px; padding-top: 23px; }.address-form label { color: #493731; font-size: 13px; font-weight: 600; }.address-form input, .address-form textarea { width: 100%; margin-top: 6px; padding: 13px 12px; border: 1px solid #cdbdb4; outline: 0; background: transparent; color: #493731; font: inherit; }.address-form input:focus, .address-form textarea:focus { border-color: var(--header-text); box-shadow: 0 0 0 1px var(--header-text); }.address-form textarea { resize: vertical; }.address-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }.address-submit { width: 100%; min-height: 46px; margin-top: 10px; background: var(--header-text) !important; color: #fff !important; letter-spacing: .14em; }
 @media (max-width: 760px) { .related-products { margin-top: 55px; }.related-track { gap: 12px; }.related-card { flex-basis: 155px; } }
 .address-backdrop { z-index: 105; }
+.payment-success { padding: 28px 8px 8px; color: #38834a; text-align: center; }
+.payment-success mat-icon { width: 48px; height: 48px; font-size: 48px; }
+.payment-success h3 { margin: 14px 0 8px; color: var(--header-text); font-family: Georgia, 'Times New Roman', serif; font-size: 24px; font-weight: 400; }
+.payment-success p { margin: 0; color: #65534c; font-size: 13px; line-height: 1.5; }
+.payment-error { margin: 14px 0 0; color: #b33a3a; font-size: 13px; line-height: 1.5; }
 .address-modal {
 	top: 50%;
 	z-index: 110;

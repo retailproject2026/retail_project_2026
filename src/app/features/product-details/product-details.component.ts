@@ -9,6 +9,7 @@ import { WishlistService, WishlistProduct } from '../../core/services/wishlist.s
 import { RazorpayService } from '../../core/services/razorpay.service';
 import { Product, ProductService } from '../../core/services/product.service';
 import { AddressFormComponent, DeliveryAddress } from '../../shared/components/address-form/address-form.component';
+import { OrderService } from '../../core/services/order.service';
 
 @Component({
   selector: 'app-product-details',
@@ -24,6 +25,7 @@ export class ProductDetailsComponent implements OnInit {
   private readonly cart = inject(CartService);
   private readonly wishlist = inject(WishlistService);
   private readonly razorpay = inject(RazorpayService);
+  private readonly orderService = inject(OrderService);
   product: Product | null = null;
   loading = true;
   errorMessage = '';
@@ -32,6 +34,7 @@ export class ProductDetailsComponent implements OnInit {
   quantity = 1;
   actionMessage = '';
   checkoutLoading = false;
+  paymentSuccess = false;
   shippingOpen = false;
   helpOpen = false;
   addressOpen = false;
@@ -107,6 +110,8 @@ export class ProductDetailsComponent implements OnInit {
 
   async buyNow(): Promise<void> {
     if (!this.product) return;
+    this.actionMessage = '';
+    this.paymentSuccess = false;
     this.addressOpen = true;
   }
 
@@ -119,11 +124,23 @@ export class ProductDetailsComponent implements OnInit {
     this.checkoutLoading = true;
     this.actionMessage = '';
     try {
-      const payment = await this.razorpay.openCheckout(this.product.price * this.quantity);
-      this.actionMessage = payment
-        ? `Payment successful. Payment ID: ${payment.razorpay_payment_id}`
-        : 'Payment window closed.';
-      this.addressOpen = false;
+      const payment = await this.razorpay.openCheckout((this.product.salePrice ?? this.product.price) * this.quantity);
+      if (!payment) {
+        this.actionMessage = 'Payment window closed.';
+        this.paymentSuccess = false;
+        return;
+      }
+
+      const orderNumber = await this.orderService.createPaidOrder(this.deliveryAddress, [{
+        id: this.product.id,
+        name: this.product.name,
+        price: this.product.salePrice ?? this.product.price,
+        quantity: this.quantity,
+        tone: this.product.tone,
+        mainImageUrl: this.product.mainImageUrl
+      }], payment);
+      this.actionMessage = `Payment successful. Order number: ${orderNumber}`;
+      this.paymentSuccess = true;
     } catch (error) {
       this.actionMessage = error instanceof Error ? error.message : 'Unable to start payment.';
     } finally {

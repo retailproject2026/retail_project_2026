@@ -75,6 +75,35 @@ export interface ProductPage {
   hasMore: boolean;
 }
 
+export interface CreateProductInput {
+  id: string;
+  sku: string;
+  sale_price: number | null;
+  currency: string;
+  product_type: string;
+  brand: string;
+  stock: number;
+  inStock: boolean;
+  attributes: Record<string, string | string[]>;
+  rating: number | null;
+  review_count: number;
+  is_featured: boolean;
+  is_new: boolean;
+  created_at: string;
+  updated_at: string;
+  name: string;
+  price: number;
+  category: string;
+  fabric: string;
+  color: string;
+  description: string;
+  tone: string;
+  main_image_url: string;
+  extra_image_urls: string[];
+  extra_image_url1: string;
+  extra_image_url2: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ProductService {
   private readonly supabase: SupabaseClient = createClient(environment.supabaseUrl, environment.supabaseAnonKey);
@@ -121,6 +150,13 @@ export class ProductService {
       if (!data) return null;
 
       return this.normalizeProduct(data as DatabaseProduct, true);
+    })());
+  }
+
+  async createProduct(product: CreateProductInput): Promise<void> {
+    await this.loading.track((async () => {
+      const { error } = await this.supabase.from('products').insert(product);
+      if (error) throw error;
     })());
   }
 

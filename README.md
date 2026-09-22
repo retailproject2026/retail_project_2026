@@ -63,3 +63,5 @@ http://localhost:4200
 deploy
 npm run build --base-href=/retail_project_2026/
 npx angular-cli-ghpages --dir=dist/retail_project_2026/browser
+
+4100 2800 0000 1007

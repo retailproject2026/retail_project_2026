@@ -1,0 +1,76 @@
+<main class="create-product-page">
+  <div class="create-product-heading">
+    <div>
+      <span class="eyebrow">PRODUCT ADMIN</span>
+      <h1>Add a product</h1>
+      <p>Enter the product details to create a new row in the products table.</p>
+    </div>
+    <a mat-button routerLink="/products">Back to products</a>
+  </div>
+
+  @if (successMessage) {
+    <p class="form-success" role="status">{{ successMessage }}</p>
+  }
+  @if (errorMessage) {
+    <p class="form-error" role="alert">{{ errorMessage }}</p>
+  }
+
+  <form #productForm="ngForm" class="product-form" novalidate (ngSubmit)="submit(productForm)" autocomplete="off">
+    <section class="form-section">
+      <h2>Identity</h2>
+      <div class="form-grid">
+        <label>Product ID (UUID)<input name="id" [(ngModel)]="form.id" required [pattern]="uuidPattern" autocomplete="new-password" /><small>Must be a valid UUID.</small></label>
+        <label>SKU<input name="sku" [(ngModel)]="form.sku" required maxlength="100" autocomplete="new-password" /></label>
+        <label>Product name<input name="name" [(ngModel)]="form.name" required maxlength="200" autocomplete="new-password" /></label>
+        <label>Brand<input name="brand" [(ngModel)]="form.brand" required maxlength="120" autocomplete="new-password" /></label>
+        <label>Product type<select name="product_type" [(ngModel)]="form.product_type" required>@for (type of productTypes; track type) { <option [value]="type">{{ type }}</option> }</select></label>
+        <label>Category<select name="category" [(ngModel)]="form.category" required>@for (category of categories; track category) { <option [value]="category">{{ category }}</option> }</select></label>
+      </div>
+    </section>
+
+    <section class="form-section">
+      <h2>Pricing and stock</h2>
+      <div class="form-grid">
+        <label>Price<input name="price" type="number" [(ngModel)]="form.price" required min="0" step="0.01" /></label>
+        <label>Sale price<input name="sale_price" type="number" [(ngModel)]="form.sale_price" min="0" step="0.01" /></label>
+        <label>Currency<input name="currency" [(ngModel)]="form.currency" required maxlength="3" pattern="[A-Za-z]{3}" /></label>
+        <label>Stock<input name="stock" type="number" [(ngModel)]="form.stock" required min="0" step="1" /></label>
+        <label>Rating<input name="rating" type="number" [(ngModel)]="form.rating" min="0" max="5" step="0.1" /></label>
+        <label>Review count<input name="review_count" type="number" [(ngModel)]="form.review_count" required min="0" step="1" /></label>
+      </div>
+      <div class="checkbox-row">
+        <label><input name="inStock" type="checkbox" [(ngModel)]="form.inStock" /> In stock</label>
+        <label><input name="is_featured" type="checkbox" [(ngModel)]="form.is_featured" /> Featured</label>
+        <label><input name="is_new" type="checkbox" [(ngModel)]="form.is_new" /> New arrival</label>
+      </div>
+    </section>
+
+    <section class="form-section">
+      <h2>Product information</h2>
+      <div class="form-grid">
+        <label>Fabric<input name="fabric" [(ngModel)]="form.fabric" required maxlength="120" /></label>
+        <label>Color<input name="color" [(ngModel)]="form.color" required maxlength="80" /></label>
+        <label>Tone<input name="tone" [(ngModel)]="form.tone" required maxlength="80" /></label>
+        <label class="full-width">Description<textarea name="description" [(ngModel)]="form.description" required rows="5" maxlength="2000"></textarea></label>
+        <label class="full-width">Attributes JSON<textarea name="attributes" [(ngModel)]="form.attributes" rows="4" required placeholder="Enter a JSON object"></textarea><small>Use a JSON object with key/value pairs, such as size with an array of options.</small></label>
+      </div>
+    </section>
+
+    <section class="form-section">
+      <h2>Images and timestamps</h2>
+      <div class="form-grid">
+        <label class="full-width">Main image URL<input name="main_image_url" type="url" [(ngModel)]="form.main_image_url" required maxlength="1000" /></label>
+        <label>Extra image URL 1<input name="extra_image_url1" type="url" [(ngModel)]="form.extra_image_url1" maxlength="1000" /></label>
+        <label>Extra image URL 2<input name="extra_image_url2" type="url" [(ngModel)]="form.extra_image_url2" maxlength="1000" /></label>
+        <label class="full-width">Extra image URLs JSON<textarea name="extra_image_urls" [(ngModel)]="form.extra_image_urls" rows="3" required placeholder="Enter a JSON array of image URL strings"></textarea><small>Use a JSON array containing image URL strings.</small></label>
+        <label>Created at<input name="created_at" type="datetime-local" [(ngModel)]="form.created_at" required /></label>
+        <label>Updated at<input name="updated_at" type="datetime-local" [(ngModel)]="form.updated_at" required /></label>
+      </div>
+    </section>
+
+    <div class="form-actions">
+      <a mat-button routerLink="/products">Cancel</a>
+      <button mat-flat-button color="primary" type="submit" [disabled]="submitting">{{ submitting ? 'Creating product...' : 'Create product' }}</button>
+    </div>
+  </form>
+</main>

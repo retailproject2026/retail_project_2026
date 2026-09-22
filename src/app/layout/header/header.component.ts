@@ -10,6 +10,7 @@ import { RazorpayService } from '../../core/services/razorpay.service';
 import { WishlistService } from '../../core/services/wishlist.service';
 import { CartService } from '../../core/services/cart.service';
 import { ProductService } from '../../core/services/product.service';
+import { OrderService } from '../../core/services/order.service';
 import { AddressFormComponent, DeliveryAddress } from '../../shared/components/address-form/address-form.component';
 
 @Component({
@@ -33,6 +34,7 @@ export class HeaderComponent implements OnInit {
   clothesOpen = false;
   checkoutLoading = false;
   checkoutMessage = '';
+  paymentSuccess = false;
   addressOpen = false;
   deliveryAddress: DeliveryAddress = { address: '', city: '', state: '', postalCode: '', mobileNumber: '' };
 
@@ -40,7 +42,8 @@ export class HeaderComponent implements OnInit {
     private readonly razorpayService: RazorpayService,
     private readonly wishlist: WishlistService,
     private readonly cart: CartService,
-    private readonly productService: ProductService
+    private readonly productService: ProductService,
+    private readonly orderService: OrderService
   ) {}
 
   ngOnInit(): void {
@@ -182,6 +185,8 @@ export class HeaderComponent implements OnInit {
 
   async checkout(): Promise<void> {
     this.closeCart();
+    this.checkoutMessage = '';
+    this.paymentSuccess = false;
     this.addressOpen = true;
   }
 
@@ -195,11 +200,16 @@ export class HeaderComponent implements OnInit {
 
     try {
       const payment = await this.razorpayService.openCheckout(this.cartTotal);
-      this.checkoutMessage = payment
-        ? `Payment successful. Payment ID: ${payment.razorpay_payment_id}`
-        : 'Payment window closed.';
+      if (!payment) {
+        this.checkoutMessage = 'Payment window closed.';
+        this.paymentSuccess = false;
+        return;
+      }
+
+      const orderNumber = await this.orderService.createPaidOrder(this.deliveryAddress, this.cartItems, payment);
+      this.checkoutMessage = `Payment successful. Order number: ${orderNumber}`;
+      this.paymentSuccess = true;
       this.closeCart();
-      this.addressOpen = false;
     } catch (error) {
       this.checkoutMessage = error instanceof Error ? error.message : 'Unable to start payment.';
     } finally {
