@@ -90,7 +90,7 @@ export class ProductsComponent implements OnInit {
   }
 
   isFavorite(product: Product): boolean {
-    return this.wishlist.isFavorite(product.id);
+    return this.wishlist.isFavorite(product.id, product.name);
   }
 
   toggleFavorite(product: Product, event: Event): void {

@@ -24,7 +24,6 @@ export class ProductDetailsComponent implements OnInit {
   private readonly cart = inject(CartService);
   private readonly wishlist = inject(WishlistService);
   private readonly razorpay = inject(RazorpayService);
-  readonly id = this.route.snapshot.paramMap.get('id');
   product: Product | null = null;
   loading = true;
   errorMessage = '';
@@ -39,22 +38,39 @@ export class ProductDetailsComponent implements OnInit {
   deliveryAddress: DeliveryAddress = { address: '', city: '', state: '', postalCode: '', mobileNumber: '' };
 
   get isFavorite(): boolean {
-    return this.product ? this.wishlist.isFavorite(this.product.id) : false;
+    return this.product ? this.wishlist.isFavorite(this.product.id, this.product.name) : false;
   }
 
   ngOnInit(): void {
-    if (!this.id) {
+    this.route.paramMap.subscribe(params => this.loadProduct(params.get('id')));
+  }
+
+  private loadProduct(id: string | null): void {
+    this.loading = true;
+    this.product = null;
+    this.relatedProducts = [];
+
+    if (!id) {
       this.errorMessage = 'Product not found.';
       this.loading = false;
       return;
     }
 
-    this.productService.getProductById(this.id).then(product => {
+    this.productService.getProductById(id).then(product => {
         this.product = product;
-        this.relatedProducts = [];
         this.errorMessage = this.product ? '' : 'Product not found.';
         this.loading = false;
         this.changeDetector.markForCheck();
+        if (this.product) {
+          this.productService.getProductList().then(products => {
+            const sameCategory = products.filter(item => item.id !== this.product?.id && item.category === this.product?.category);
+            const otherProducts = products.filter(item => item.id !== this.product?.id && item.category !== this.product?.category);
+            this.relatedProducts = [...sameCategory, ...otherProducts].slice(0, 4);
+            this.changeDetector.markForCheck();
+          }).catch(() => {
+            this.relatedProducts = [];
+          });
+        }
       }).catch(() => {
         this.errorMessage = 'Unable to load product details.';
         this.loading = false;

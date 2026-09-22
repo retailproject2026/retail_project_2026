@@ -30,6 +30,10 @@ h2 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size
 .section-heading > a.view-all-link { display: inline-flex; align-items: center; gap: 7px; padding: 9px 12px; border: 1px solid #6e1722; color: #6e1722; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-decoration: none; }.view-all-link span { font-size: 17px; }
 .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
 .product-card { min-width: 0; cursor: pointer; }
+.product-image-wrap { position: relative; }
+.favorite-button { position: absolute; z-index: 2; top: 8px; right: 8px; display: grid; width: 34px; height: 34px; place-items: center; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .9); color: #720974; cursor: pointer; }
+.favorite-button mat-icon { font-size: 20px; }
+.favorite-button.is-favorite { color: #e35353; }
 .product-image-link { display: block; color: inherit; text-decoration: none; }
 .product-image img { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; }
 .product-card:focus-visible { outline: 2px solid var(--header-text); outline-offset: 5px; }

@@ -1,6 +1,8 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { Product, ProductService } from '../../core/services/product.service';
+import { WishlistProduct, WishlistService } from '../../core/services/wishlist.service';
 
 interface ProductCard {
   id: string;
@@ -9,6 +11,7 @@ interface ProductCard {
   category: string;
   tag?: string;
   tone: string;
+  priceValue: number;
   fabric: string;
   description: string;
   mainImageUrl: string;
@@ -17,7 +20,7 @@ interface ProductCard {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, MatIconModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -35,7 +38,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly changeDetector: ChangeDetectorRef,
-    private readonly productService: ProductService
+    private readonly productService: ProductService,
+    private readonly wishlist: WishlistService
   ) {}
 
   get carouselProducts(): ProductCard[] {
@@ -44,6 +48,24 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   productsFor(category: string): ProductCard[] {
     return this.allProducts.filter(product => product.category === category);
+  }
+
+  isFavorite(product: ProductCard): boolean {
+    return this.wishlist.isFavorite(product.id, product.name);
+  }
+
+  toggleFavorite(product: ProductCard, event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    const favorite: WishlistProduct = {
+      id: product.id,
+      name: product.name,
+      price: product.priceValue,
+      category: product.category,
+      tone: product.tone,
+      mainImageUrl: product.mainImageUrl
+    };
+    this.wishlist.toggle(favorite);
   }
 
   ngOnInit(): void {
@@ -103,6 +125,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       category: product.category,
       name: product.name,
       price: `${product.currency === 'INR' ? '₹' : product.currency ?? ''}${(product.salePrice ?? product.price).toLocaleString('en-IN')}`,
+      priceValue: product.salePrice ?? product.price,
       tag: product.isNew ? 'NEW' : product.isFeatured ? 'FEATURED' : undefined,
       tone: product.tone,
       fabric: product.fabric ?? '',

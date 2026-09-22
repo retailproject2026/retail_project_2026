@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { productIdentity } from './product-identity';
 
 export interface CartItem {
   id: string;
@@ -17,14 +18,15 @@ export class CartService {
   readonly isDrawerOpen = this.drawerOpen.asReadonly();
 
   add(item: CartItem): void {
+    const normalizedItem = { ...item, id: productIdentity(item.id, item.name) };
     this.items.update(items => {
-      const existing = items.find(current => current.id === item.id);
+      const existing = items.find(current => current.id === normalizedItem.id);
       if (existing) {
-        return items.map(current => current.id === item.id
-          ? { ...current, quantity: current.quantity + item.quantity }
+        return items.map(current => current.id === normalizedItem.id
+          ? { ...current, quantity: current.quantity + normalizedItem.quantity }
           : current);
       }
-      return [...items, item];
+      return [...items, normalizedItem];
     });
   }
 
@@ -41,11 +43,12 @@ export class CartService {
   }
 
   remove(itemId: string): void {
-    this.items.update(items => items.filter(item => item.id !== itemId));
+    this.items.update(items => items.filter(item => item.id !== productIdentity(itemId, '')));
   }
 
   updateQuantity(itemId: string, quantity: number): void {
     const nextQuantity = Math.max(1, Number(quantity) || 1);
-    this.items.update(items => items.map(item => item.id === itemId ? { ...item, quantity: nextQuantity } : item));
+    const normalizedId = productIdentity(itemId, '');
+    this.items.update(items => items.map(item => item.id === normalizedId ? { ...item, quantity: nextQuantity } : item));
   }
 }

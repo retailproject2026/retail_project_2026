@@ -32,12 +32,17 @@
     <div class="product-grid">
       @for (product of newArrivals; track product.id) {
         <article class="product-card">
-          <a class="product-image-link" [routerLink]="['/products', product.id]" [attr.aria-label]="'View details for ' + product.name">
-            <div class="product-image" [class]="product.tone">
-              <img [src]="product.mainImageUrl" [alt]="product.name" loading="lazy" />
-              @if (product.tag) { <span class="tag">{{ product.tag }}</span> }
-            </div>
-          </a>
+          <div class="product-image-wrap">
+            <a class="product-image-link" [routerLink]="['/products', product.id]" [attr.aria-label]="'View details for ' + product.name">
+              <div class="product-image" [class]="product.tone">
+                <img [src]="product.mainImageUrl" [alt]="product.name" loading="lazy" />
+                @if (product.tag) { <span class="tag">{{ product.tag }}</span> }
+              </div>
+            </a>
+            <button class="favorite-button" type="button" [class.is-favorite]="isFavorite(product)" [attr.aria-label]="isFavorite(product) ? 'Remove ' + product.name + ' from favorites' : 'Add ' + product.name + ' to favorites'" (click)="toggleFavorite(product, $event)">
+              <mat-icon>{{ isFavorite(product) ? 'favorite' : 'favorite_border' }}</mat-icon>
+            </button>
+          </div>
           <div class="product-info">
             <p class="product-category">{{ product.category }}</p>
             <h3>{{ product.name }}</h3>
@@ -62,12 +67,17 @@
       <div class="product-grid">
         @for (product of productsFor(category); track product.id) {
           <article class="product-card">
-            <a class="product-image-link" [routerLink]="['/products', product.id]" [attr.aria-label]="'View details for ' + product.name">
-              <div class="product-image" [class]="product.tone">
-                <img [src]="product.mainImageUrl" [alt]="product.name" loading="lazy" />
-                @if (product.tag) { <span class="tag">{{ product.tag }}</span> }
-              </div>
-            </a>
+            <div class="product-image-wrap">
+              <a class="product-image-link" [routerLink]="['/products', product.id]" [attr.aria-label]="'View details for ' + product.name">
+                <div class="product-image" [class]="product.tone">
+                  <img [src]="product.mainImageUrl" [alt]="product.name" loading="lazy" />
+                  @if (product.tag) { <span class="tag">{{ product.tag }}</span> }
+                </div>
+              </a>
+              <button class="favorite-button" type="button" [class.is-favorite]="isFavorite(product)" [attr.aria-label]="isFavorite(product) ? 'Remove ' + product.name + ' from favorites' : 'Add ' + product.name + ' to favorites'" (click)="toggleFavorite(product, $event)">
+                <mat-icon>{{ isFavorite(product) ? 'favorite' : 'favorite_border' }}</mat-icon>
+              </button>
+            </div>
             <div class="product-info">
               <p class="product-category">{{ product.category }}</p>
               <h3>{{ product.name }}</h3>
@@ -90,12 +100,17 @@
       <div class="product-grid">
         @for (product of productsFor(category); track product.id) {
           <article class="product-card">
-            <a class="product-image-link" [routerLink]="['/products', product.id]" [attr.aria-label]="'View details for ' + product.name">
-              <div class="product-image" [class]="product.tone">
-                <img [src]="product.mainImageUrl" [alt]="product.name" loading="lazy" />
-                @if (product.tag) { <span class="tag">{{ product.tag }}</span> }
-              </div>
-            </a>
+            <div class="product-image-wrap">
+              <a class="product-image-link" [routerLink]="['/products', product.id]" [attr.aria-label]="'View details for ' + product.name">
+                <div class="product-image" [class]="product.tone">
+                  <img [src]="product.mainImageUrl" [alt]="product.name" loading="lazy" />
+                  @if (product.tag) { <span class="tag">{{ product.tag }}</span> }
+                </div>
+              </a>
+              <button class="favorite-button" type="button" [class.is-favorite]="isFavorite(product)" [attr.aria-label]="isFavorite(product) ? 'Remove ' + product.name + ' from favorites' : 'Add ' + product.name + ' to favorites'" (click)="toggleFavorite(product, $event)">
+                <mat-icon>{{ isFavorite(product) ? 'favorite' : 'favorite_border' }}</mat-icon>
+              </button>
+            </div>
             <div class="product-info">
               <p class="product-category">{{ product.category }}</p>
               <h3>{{ product.name }}</h3>
