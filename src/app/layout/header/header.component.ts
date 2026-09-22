@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -45,6 +45,7 @@ export class HeaderComponent implements OnInit {
     private readonly cart: CartService,
     private readonly productService: ProductService,
     private readonly orderService: OrderService,
+    private readonly router: Router,
     readonly adminAuth: AdminAuthService
   ) {}
 
@@ -212,6 +213,8 @@ export class HeaderComponent implements OnInit {
       this.checkoutMessage = `Payment successful. Order number: ${orderNumber}`;
       this.paymentSuccess = true;
       this.closeCart();
+      this.addressOpen = false;
+      await this.router.navigate(['/products']);
     } catch (error) {
       this.checkoutMessage = error instanceof Error ? error.message : 'Unable to start payment.';
     } finally {

@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../../../environments/environment';
+import { LoadingService } from './loading.service';
 import type { DeliveryAddress } from '../../shared/components/address-form/address-form.component';
 
 @Injectable({ providedIn: 'root' })
 export class CustomerAddressService {
   private readonly supabase: SupabaseClient = createClient(environment.supabaseUrl, environment.supabaseAnonKey);
 
-  async findByMobile(mobileNumber: string): Promise<DeliveryAddress | null> {
+  constructor(private readonly loading: LoadingService) {}
+
+  findByMobile(mobileNumber: string): Promise<DeliveryAddress | null> {
+    return this.loading.track((async () => {
     const { data: customer, error: customerError } = await this.supabase
       .from('customers')
       .select('id')
@@ -35,9 +39,11 @@ export class CustomerAddressService {
       state: savedAddress.state ?? '',
       postalCode: savedAddress.pin_code ?? ''
     };
+    })());
   }
 
-  async save(address: DeliveryAddress): Promise<string> {
+  save(address: DeliveryAddress): Promise<string> {
+    return this.loading.track((async () => {
     const { data: existingCustomer, error: lookupError } = await this.supabase
       .from('customers')
       .select('id')
@@ -83,5 +89,6 @@ export class CustomerAddressService {
     const { error: addressError } = await addressRequest;
     if (addressError) throw addressError;
     return customerId;
+    })());
   }
 }

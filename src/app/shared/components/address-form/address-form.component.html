@@ -11,11 +11,10 @@
     name="mobileNumber"
     required
     pattern="[0-9]{10}"
+    [disabled]="lookupLoading || saveLoading"
     (blur)="lookupAddress()"
     (keydown.enter)="lookupAddress(); $event.preventDefault()" />
-  @if (lookupLoading) {
-    <small class="address-status" role="status">Checking saved addresses...</small>
-  } @else if (addressMessage) {
+  @if (addressMessage) {
     <small class="address-status" role="status">{{ addressMessage }}</small>
   }
 
@@ -26,11 +25,12 @@
     rows="3"
     [(ngModel)]="address.address"
     name="address"
-    required></textarea>
+    required
+    [disabled]="lookupLoading || saveLoading"></textarea>
 
   <div class="address-row">
-    <label>City<input autocomplete="new-password" [(ngModel)]="address.city" name="city" required /></label>
-    <label>State<input autocomplete="new-password" [(ngModel)]="address.state" name="state" required /></label>
+    <label>City<input autocomplete="new-password" [(ngModel)]="address.city" name="city" required [disabled]="lookupLoading || saveLoading" /></label>
+    <label>State<input autocomplete="new-password" [(ngModel)]="address.state" name="state" required [disabled]="lookupLoading || saveLoading" /></label>
   </div>
 
   <label for="delivery-postal">PIN code</label>
@@ -39,7 +39,8 @@
     autocomplete="new-password"
     [(ngModel)]="address.postalCode"
     name="postalCode"
-    required />
+    required
+    [disabled]="lookupLoading || saveLoading" />
 
   <button mat-flat-button class="address-submit" type="submit" [disabled]="loading || saveLoading || lookupLoading">
     @if (loading || saveLoading) {

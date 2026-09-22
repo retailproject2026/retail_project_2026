@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
@@ -26,6 +26,7 @@ export class ProductDetailsComponent implements OnInit {
   private readonly wishlist = inject(WishlistService);
   private readonly razorpay = inject(RazorpayService);
   private readonly orderService = inject(OrderService);
+  private readonly router = inject(Router);
   product: Product | null = null;
   loading = true;
   errorMessage = '';
@@ -141,6 +142,8 @@ export class ProductDetailsComponent implements OnInit {
       }], payment);
       this.actionMessage = `Payment successful. Order number: ${orderNumber}`;
       this.paymentSuccess = true;
+      this.addressOpen = false;
+      await this.router.navigate(['/products']);
     } catch (error) {
       this.actionMessage = error instanceof Error ? error.message : 'Unable to start payment.';
     } finally {
