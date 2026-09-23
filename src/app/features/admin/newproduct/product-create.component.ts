@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { CreateProductInput, ProductService } from '../../../core/services/product.service';
 
 interface ProductFormModel {
@@ -37,7 +38,7 @@ interface ProductFormModel {
 @Component({
   selector: 'app-product-create',
   standalone: true,
-  imports: [FormsModule, RouterLink, MatButtonModule],
+  imports: [FormsModule, RouterLink, MatButtonModule, MatIconModule],
   templateUrl: './product-create.component.html',
   styleUrl: './product-create.component.scss'
 })
@@ -49,12 +50,16 @@ export class ProductCreateComponent implements OnInit {
   readonly productTypes = ['Clothes', 'Food', 'Accessories'];
   readonly categories = ['Women', 'Men', 'Kids', 'Occasionwear', 'Breakfast', 'Beverages', 'Gifting', 'Accessories'];
   form: ProductFormModel = this.createInitialForm();
+  additionalImages: string[] = [];
+  newImageUrlInput = '';
   submitting = false;
   successMessage = '';
   errorMessage = '';
   editingId: string | null = null;
   loadingProduct = false;
-  uploadingImage: 'main' | 'extra1' | 'extra2' | null = null;
+  uploadingImage: 'main' | null = null;
+  uploadingMultiple = false;
+  uploadProgressText = '';
 
   ngOnInit(): void {
     this.editingId = this.route.snapshot.paramMap.get('id');
@@ -69,6 +74,22 @@ export class ProductCreateComponent implements OnInit {
         this.errorMessage = 'Product not found.';
         return;
       }
+
+      const extraUrls: string[] = [];
+      if (Array.isArray(product.extraImageUrls)) {
+        for (const url of product.extraImageUrls) {
+          if (url && !extraUrls.includes(url)) extraUrls.push(url);
+        }
+      }
+      if (product.extraImageUrl1 && !extraUrls.includes(product.extraImageUrl1)) {
+        extraUrls.push(product.extraImageUrl1);
+      }
+      if (product.extraImageUrl2 && !extraUrls.includes(product.extraImageUrl2)) {
+        extraUrls.push(product.extraImageUrl2);
+      }
+
+      this.additionalImages = extraUrls;
+
       this.form = {
         id: product.id,
         sku: product.sku ?? '',
@@ -94,9 +115,9 @@ export class ProductCreateComponent implements OnInit {
         description: product.description,
         tone: product.tone,
         main_image_url: product.mainImageUrl,
-        extra_image_urls: JSON.stringify(product.extraImageUrls ?? [], null, 2),
-        extra_image_url1: product.extraImageUrl1,
-        extra_image_url2: product.extraImageUrl2
+        extra_image_urls: JSON.stringify(this.additionalImages, null, 2),
+        extra_image_url1: this.additionalImages[0] ?? '',
+        extra_image_url2: this.additionalImages[1] ?? ''
       };
       this.changeDetector.markForCheck();
     } catch (error) {
@@ -110,7 +131,7 @@ export class ProductCreateComponent implements OnInit {
   async submit(formElement: NgForm): Promise<void> {
     this.successMessage = '';
     this.errorMessage = '';
-    if (this.uploadingImage) {
+    if (this.uploadingImage || this.uploadingMultiple) {
       this.errorMessage = 'Please wait for the image upload to finish.';
       return;
     }
@@ -120,14 +141,14 @@ export class ProductCreateComponent implements OnInit {
     }
 
     let attributes: Record<string, string | string[]>;
-    let extraImageUrls: string[];
     try {
       attributes = this.parseAttributes(this.form.attributes);
-      extraImageUrls = this.parseImageUrls(this.form.extra_image_urls);
     } catch (error) {
       this.errorMessage = error instanceof Error ? error.message : 'Check the JSON fields and try again.';
       return;
     }
+
+    this.syncExtraImageUrls();
 
     const now = new Date().toISOString();
     this.form.updated_at = this.toDateTimeLocal(now);
@@ -142,7 +163,9 @@ export class ProductCreateComponent implements OnInit {
       price: this.form.price ?? 0,
       is_active: this.form.is_active,
       attributes,
-      extra_image_urls: extraImageUrls
+      extra_image_urls: this.additionalImages,
+      extra_image_url1: this.additionalImages[0] ?? '',
+      extra_image_url2: this.additionalImages[1] ?? ''
     };
 
     this.submitting = true;
@@ -154,6 +177,8 @@ export class ProductCreateComponent implements OnInit {
       } else {
         await this.productService.createProduct(product);
         this.successMessage = 'Product created successfully.';
+        this.additionalImages = [];
+        this.newImageUrlInput = '';
         this.form = this.createInitialForm();
         formElement.resetForm(this.form);
       }
@@ -165,28 +190,109 @@ export class ProductCreateComponent implements OnInit {
     }
   }
 
-  async uploadImage(event: Event, field: 'main' | 'extra1' | 'extra2'): Promise<void> {
+  async uploadMainImage(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (!file) return;
 
     this.successMessage = '';
     this.errorMessage = '';
-    this.uploadingImage = field;
+    this.uploadingImage = 'main';
     this.changeDetector.detectChanges();
     try {
       const image = await this.productService.uploadImage(file);
-      if (field === 'main') this.form.main_image_url = image.url;
-      if (field === 'extra1') this.form.extra_image_url1 = image.url;
-      if (field === 'extra2') this.form.extra_image_url2 = image.url;
-      this.successMessage = 'Image uploaded successfully.';
+      this.form.main_image_url = image.url;
+      this.successMessage = 'Main cover image uploaded successfully.';
     } catch (error) {
-      this.errorMessage = error instanceof Error ? error.message : 'Unable to upload image.';
+      this.errorMessage = error instanceof Error ? error.message : 'Unable to upload main image.';
     } finally {
       this.uploadingImage = null;
       input.value = '';
       this.changeDetector.detectChanges();
     }
+  }
+
+  async uploadMultipleImages(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
+    if (!files || files.length === 0) return;
+
+    this.successMessage = '';
+    this.errorMessage = '';
+    this.uploadingMultiple = true;
+    const total = files.length;
+    let uploadedCount = 0;
+
+    try {
+      for (let i = 0; i < total; i++) {
+        const file = files[i];
+        this.uploadProgressText = `Uploading image ${i + 1} of ${total}...`;
+        this.changeDetector.detectChanges();
+        const uploaded = await this.productService.uploadImage(file);
+        if (uploaded?.url && !this.additionalImages.includes(uploaded.url)) {
+          this.additionalImages.push(uploaded.url);
+          uploadedCount++;
+        }
+      }
+      this.syncExtraImageUrls();
+      this.successMessage = `Successfully uploaded ${uploadedCount} image${uploadedCount > 1 ? 's' : ''}.`;
+    } catch (error) {
+      this.errorMessage = error instanceof Error ? error.message : 'Error uploading images.';
+    } finally {
+      this.uploadingMultiple = false;
+      this.uploadProgressText = '';
+      input.value = '';
+      this.changeDetector.detectChanges();
+    }
+  }
+
+  addCustomImageUrl(): void {
+    const url = this.newImageUrlInput.trim();
+    if (!url) return;
+    if (this.additionalImages.includes(url) || this.form.main_image_url === url) {
+      this.errorMessage = 'This image URL is already in use.';
+      return;
+    }
+    this.additionalImages.push(url);
+    this.newImageUrlInput = '';
+    this.syncExtraImageUrls();
+    this.successMessage = 'Image URL added to gallery.';
+    this.changeDetector.detectChanges();
+  }
+
+  removeAdditionalImage(index: number): void {
+    if (index >= 0 && index < this.additionalImages.length) {
+      this.additionalImages.splice(index, 1);
+      this.syncExtraImageUrls();
+      this.changeDetector.detectChanges();
+    }
+  }
+
+  setAsMainImage(index: number): void {
+    if (index < 0 || index >= this.additionalImages.length) return;
+    const selectedUrl = this.additionalImages[index];
+    const currentMain = this.form.main_image_url;
+
+    this.form.main_image_url = selectedUrl;
+    if (currentMain) {
+      this.additionalImages[index] = currentMain;
+    } else {
+      this.additionalImages.splice(index, 1);
+    }
+    this.syncExtraImageUrls();
+    this.successMessage = 'Main cover image updated.';
+    this.changeDetector.detectChanges();
+  }
+
+  clearMainImage(): void {
+    this.form.main_image_url = '';
+    this.changeDetector.detectChanges();
+  }
+
+  syncExtraImageUrls(): void {
+    this.form.extra_image_urls = JSON.stringify(this.additionalImages, null, 2);
+    this.form.extra_image_url1 = this.additionalImages[0] ?? '';
+    this.form.extra_image_url2 = this.additionalImages[1] ?? '';
   }
 
   private parseAttributes(value: string): Record<string, string | string[]> {
@@ -196,15 +302,6 @@ export class ProductCreateComponent implements OnInit {
       throw new Error('Attributes must be a JSON object.');
     }
     return parsed as Record<string, string | string[]>;
-  }
-
-  private parseImageUrls(value: string): string[] {
-    if (!value.trim()) return [];
-    const parsed: unknown = JSON.parse(value);
-    if (!Array.isArray(parsed) || parsed.some(item => typeof item !== 'string')) {
-      throw new Error('Extra image URLs must be a JSON array of strings.');
-    }
-    return parsed;
   }
 
   private createInitialForm(): ProductFormModel {

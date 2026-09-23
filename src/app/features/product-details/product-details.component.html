@@ -8,24 +8,32 @@
     <section class="product-detail-layout">
       <div class="product-detail-media">
         <div class="product-carousel">
-          <img class="product-main-image" [src]="galleryImages[activeImageIndex]" [alt]="item.name + ' image ' + (activeImageIndex + 1)" />
-          <button class="carousel-arrow carousel-previous" type="button" aria-label="Previous product image" (click)="previousImage()">
-            <mat-icon>chevron_left</mat-icon>
-          </button>
-          <button class="carousel-arrow carousel-next" type="button" aria-label="Next product image" (click)="nextImage()">
-            <mat-icon>chevron_right</mat-icon>
-          </button>
+          <div class="carousel-image-stage" (click)="openLightbox(activeImageIndex)" title="Click to view full image">
+            <img class="product-main-image" [src]="galleryImages[activeImageIndex]" [alt]="item.name + ' image ' + (activeImageIndex + 1)" />
+            <button class="zoom-pill-btn" type="button" aria-label="View full image" (click)="$event.stopPropagation(); openLightbox(activeImageIndex)">
+              <mat-icon>zoom_in</mat-icon>
+              <span>View Full</span>
+            </button>
+          </div>
           @if (galleryImages.length > 1) {
+            <button class="carousel-arrow carousel-previous" type="button" aria-label="Previous product image" (click)="previousImage()">
+              <mat-icon>chevron_left</mat-icon>
+            </button>
+            <button class="carousel-arrow carousel-next" type="button" aria-label="Next product image" (click)="nextImage()">
+              <mat-icon>chevron_right</mat-icon>
+            </button>
             <span class="carousel-counter">{{ activeImageIndex + 1 }} / {{ galleryImages.length }}</span>
           }
         </div>
-        <div class="product-gallery" aria-label="Product images">
-          @for (imageUrl of galleryImages; track imageUrl; let index = $index) {
-            <button type="button" [class.is-active]="index === activeImageIndex" [attr.aria-label]="'Show product image ' + (index + 1)" (click)="selectImage(index)">
-              <img [src]="imageUrl" [alt]="item.name + ' thumbnail ' + (index + 1)" loading="lazy" />
-            </button>
-          }
-        </div>
+        @if (galleryImages.length > 1) {
+          <div class="product-gallery" aria-label="Product images">
+            @for (imageUrl of galleryImages; track imageUrl; let index = $index) {
+              <button type="button" class="gallery-thumb-btn" [class.is-active]="index === activeImageIndex" [attr.aria-label]="'Show product image ' + (index + 1)" (click)="selectImage(index)">
+                <img [src]="imageUrl" [alt]="item.name + ' thumbnail ' + (index + 1)" loading="lazy" />
+              </button>
+            }
+          </div>
+        }
       </div>
       <div class="product-detail-copy">
         <span class="product-badge-pill">New</span>
@@ -144,7 +152,30 @@
 @if (addressOpen) {
   <button class="address-backdrop" type="button" aria-label="Close delivery address" (click)="closeAddress()"></button>
   <section class="address-modal" aria-labelledby="delivery-title">
-    <div class="address-modal-heading"><div><span class="detail-category">DELIVERY DETAILS</span><h2 id="delivery-title">Where should we deliver?</h2></div><button type="button" aria-label="Close delivery address" (click)="closeAddress()">&#10005;</button></div>
+    <div class="address-modal-heading">
+      <div>
+        <span class="detail-category">CHECKOUT &middot; DELIVERY</span>
+        <h2 id="delivery-title">Where should we deliver?</h2>
+      </div>
+      <button type="button" aria-label="Close delivery address" (click)="closeAddress()">&#10005;</button>
+    </div>
+
+    <div class="checkout-summary-box">
+      <div class="checkout-summary-item">
+        <span class="checkout-item-title">{{ product?.name }} (Qty: {{ quantity }})</span>
+        <div class="checkout-item-price-block">
+          <strong class="checkout-item-sale-price">₹{{ effectiveTotal | number:'1.2-2' }}</strong>
+          @if (product && product.salePrice && product.salePrice > 0 && product.salePrice < product.price) {
+            <span class="checkout-item-original-price">₹{{ (product.price * quantity) | number:'1.2-2' }}</span>
+          }
+        </div>
+      </div>
+      <div class="checkout-summary-shipping">
+        <span>Delivery:</span>
+        <strong class="free-shipping">FREE</strong>
+      </div>
+    </div>
+
     @if (paymentSuccess) {
       <div class="payment-success" role="status">
         <mat-icon aria-hidden="true">check_circle</mat-icon>
@@ -159,3 +190,48 @@
     }
   </section>
 }
+
+@if (lightboxOpen && galleryImages.length > 0) {
+  <div class="lightbox-overlay" role="dialog" aria-modal="true" aria-label="Full-screen image viewer">
+    <div class="lightbox-backdrop" (click)="closeLightbox()"></div>
+    <div class="lightbox-container">
+      <header class="lightbox-header">
+        <span class="lightbox-counter">{{ activeImageIndex + 1 }} / {{ galleryImages.length }}</span>
+        <button type="button" class="lightbox-close-btn" aria-label="Close full image view" (click)="closeLightbox()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </header>
+
+      <div class="lightbox-stage">
+        @if (galleryImages.length > 1) {
+          <button class="lightbox-nav-btn lightbox-prev" type="button" aria-label="Previous image" (click)="previousImage()">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+        }
+
+        <div class="lightbox-image-box">
+          <img [src]="galleryImages[activeImageIndex]" [alt]="(product?.name || 'Product') + ' full image ' + (activeImageIndex + 1)" class="lightbox-img" />
+        </div>
+
+        @if (galleryImages.length > 1) {
+          <button class="lightbox-nav-btn lightbox-next" type="button" aria-label="Next image" (click)="nextImage()">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        }
+      </div>
+
+      @if (galleryImages.length > 1) {
+        <footer class="lightbox-footer">
+          <div class="lightbox-thumb-strip">
+            @for (img of galleryImages; track img; let i = $index) {
+              <button type="button" class="lightbox-thumb-item" [class.is-active]="i === activeImageIndex" (click)="selectImage(i)" [attr.aria-label]="'Show photo ' + (i + 1)">
+                <img [src]="img" [alt]="'Photo ' + (i + 1)" />
+              </button>
+            }
+          </div>
+        </footer>
+      }
+    </div>
+  </div>
+}
+

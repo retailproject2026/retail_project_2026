@@ -1,31 +1,80 @@
 <div class="page-container">
-  <mat-card>
-    <mat-card-content>
-      <h1>Shopping Cart</h1>
-      <p>Your cart service and cart items can be added here.</p>
-      <p><strong>Total: ₹{{ cartTotal | number }}</strong></p>
-      <a mat-flat-button color="primary" routerLink="/products">Continue Shopping</a>
-      <button
-        mat-button
-        type="button"
-        [disabled]="healthLoading"
-        (click)="checkBackend()">
-        {{ healthLoading ? 'Checking backend...' : 'Check Backend' }}
-      </button>
-      <button
-        mat-flat-button
-        color="accent"
-        type="button"
-        [disabled]="checkoutLoading"
-        (click)="checkout()">
-        {{ checkoutLoading ? 'Opening payment...' : 'Proceed to Checkout' }}
-      </button>
-      @if (checkoutMessage) {
-        <p role="status">{{ checkoutMessage }}</p>
-      }
-      @if (healthMessage) {
-        <p role="status">{{ healthMessage }}</p>
-      }
-    </mat-card-content>
-  </mat-card>
+  <div class="cart-page-header">
+    <span class="eyebrow">YOUR BAG</span>
+    <h1>Shopping Cart ({{ cartCount }})</h1>
+  </div>
+
+  @if (cartItems.length > 0) {
+    <div class="cart-page-layout">
+      <div class="cart-page-items">
+        @for (item of cartItems; track item.id) {
+          <div class="cart-page-item">
+            <div class="item-img-box">
+              @if (item.mainImageUrl) {
+                <img [src]="item.mainImageUrl" [alt]="item.name" />
+              } @else {
+                <div class="item-placeholder-swatch" [class]="item.tone"></div>
+              }
+            </div>
+            <div class="item-info">
+              <h3>{{ item.name }}</h3>
+              <div class="item-price-line">
+                <strong class="item-sale-price">₹{{ item.price | number:'1.2-2' }}</strong>
+                @if (item.originalPrice && item.originalPrice > item.price) {
+                  <span class="item-original-price">₹{{ item.originalPrice | number:'1.2-2' }}</span>
+                }
+              </div>
+              <div class="item-actions">
+                <div class="qty-select">
+                  <label>Qty:
+                    <select [ngModel]="item.quantity" (ngModelChange)="updateQuantity(item.id, $event)">
+                      @for (q of [1,2,3,4,5,6,7,8,9,10]; track q) {
+                        <option [value]="q">{{ q }}</option>
+                      }
+                    </select>
+                  </label>
+                </div>
+                <button type="button" class="remove-btn" (click)="removeItem(item.id)">
+                  <mat-icon>delete_outline</mat-icon> Remove
+                </button>
+              </div>
+            </div>
+            <div class="item-line-total">
+              <strong>₹{{ (item.price * item.quantity) | number:'1.2-2' }}</strong>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="cart-page-summary">
+        <h2>Order summary</h2>
+        <div class="summary-line">
+          <span>Subtotal</span>
+          <strong>₹{{ cartTotal | number:'1.2-2' }}</strong>
+        </div>
+        <div class="summary-line">
+          <span>Shipping</span>
+          <strong class="free-text">FREE</strong>
+        </div>
+        <hr class="summary-divider" />
+        <div class="summary-line total-line">
+          <span>Total</span>
+          <strong class="total-price">₹{{ cartTotal | number:'1.2-2' }}</strong>
+        </div>
+        <button mat-flat-button class="checkout-btn" type="button" (click)="proceedToCheckout()">
+          PROCEED TO CHECKOUT
+        </button>
+        <a mat-button class="continue-btn" routerLink="/products">
+          &larr; Continue shopping
+        </a>
+      </div>
+    </div>
+  } @else {
+    <div class="empty-cart-card">
+      <mat-icon>shopping_bag</mat-icon>
+      <h2>Your bag is empty</h2>
+      <p>Explore our exclusive collection of sarees and styles to add to your bag.</p>
+      <a mat-flat-button class="shop-now-btn" routerLink="/products">START SHOPPING</a>
+    </div>
+  }
 </div>

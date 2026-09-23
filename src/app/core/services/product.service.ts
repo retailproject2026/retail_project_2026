@@ -243,9 +243,45 @@ export class ProductService {
     const extraImageUrl1 = includeGallery ? product.extra_image_url1 ?? '' : '';
     const extraImageUrl2 = includeGallery ? product.extra_image_url2 ?? '' : '';
 
+    let extraImageUrls: string[] = [];
+    if (includeGallery) {
+      if (Array.isArray(product.extra_image_urls)) {
+        extraImageUrls = product.extra_image_urls.filter((url): url is string => typeof url === 'string' && !!url.trim());
+      } else if (typeof product.extra_image_urls === 'string') {
+        try {
+          const parsed = JSON.parse(product.extra_image_urls);
+          if (Array.isArray(parsed)) {
+            extraImageUrls = parsed.filter((url): url is string => typeof url === 'string' && !!url.trim());
+          }
+        } catch {
+          if ((product.extra_image_urls as string).trim()) {
+            extraImageUrls = [(product.extra_image_urls as string).trim()];
+          }
+        }
+      }
+
+      if (extraImageUrl1 && !extraImageUrls.includes(extraImageUrl1)) {
+        extraImageUrls.push(extraImageUrl1);
+      }
+      if (extraImageUrl2 && !extraImageUrls.includes(extraImageUrl2)) {
+        extraImageUrls.push(extraImageUrl2);
+      }
+    }
+
+    let salePrice: number | null = null;
+    if (product.sale_price !== null && product.sale_price !== undefined) {
+      const parsedSale = Number(product.sale_price);
+      if (Number.isFinite(parsedSale) && parsedSale > 0) {
+        salePrice = parsedSale;
+      }
+    }
+    const rawPrice = Number(product.price);
+    const price = Number.isFinite(rawPrice) ? rawPrice : 0;
+
     return {
       ...product,
-      salePrice: product.sale_price,
+      price: price,
+      salePrice: salePrice,
       productType: product.product_type ?? (product.category === 'Accessories' ? 'Accessories' : 'Clothes'),
       reviewCount: product.review_count,
       isFeatured: product.is_featured ?? false,
@@ -253,7 +289,7 @@ export class ProductService {
       createdAt: product.created_at,
       updatedAt: product.updated_at,
       mainImageUrl: mainImageUrl,
-      extraImageUrls: includeGallery ? product.extra_image_urls ?? [] : [],
+      extraImageUrls: extraImageUrls,
       extraImageUrl1: extraImageUrl1,
       extraImageUrl2: extraImageUrl2,
       currency: product.currency ?? 'INR',

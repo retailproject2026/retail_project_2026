@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,7 +17,7 @@ import { AdminAuthService } from '../../core/services/admin-auth.service';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, MatToolbarModule, MatButtonModule, MatIconModule, MatBadgeModule, FormsModule, DecimalPipe, AddressFormComponent],
+  imports: [RouterLink, MatToolbarModule, MatButtonModule, MatIconModule, MatBadgeModule, FormsModule, DecimalPipe, AddressFormComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
@@ -105,6 +105,7 @@ export class HeaderComponent implements OnInit {
       id: item.id,
       name: item.name,
       price: item.price,
+      originalPrice: item.originalPrice,
       quantity: this.getWishlistQuantity(itemId),
       tone: item.tone,
       mainImageUrl: item.mainImageUrl
@@ -156,6 +157,7 @@ export class HeaderComponent implements OnInit {
         id: item.id,
         name: item.name,
         price: item.price,
+        originalPrice: item.originalPrice,
         quantity: this.getWishlistQuantity(item.id),
         tone: item.tone,
         mainImageUrl: item.mainImageUrl

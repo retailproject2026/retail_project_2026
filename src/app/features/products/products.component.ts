@@ -96,10 +96,13 @@ export class ProductsComponent implements OnInit {
   toggleFavorite(product: Product, event: Event): void {
     event.preventDefault();
     event.stopPropagation();
+    const salePrice = (product.salePrice && product.salePrice > 0) ? product.salePrice : null;
+    const price = salePrice ?? product.price;
     const favorite: WishlistProduct = {
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: price,
+      originalPrice: salePrice ? product.price : undefined,
       category: product.category,
       tone: product.tone,
       mainImageUrl: product.mainImageUrl

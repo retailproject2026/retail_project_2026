@@ -1,0 +1,270 @@
+.page-container {
+  width: min(1140px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 42px 0 80px;
+  color: #493731;
+}
+
+.checkout-page-header {
+  margin-bottom: 28px;
+
+  .eyebrow {
+    color: #e35353;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .16em;
+  }
+
+  h1 {
+    margin: 8px 0 0;
+    color: #720974;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(30px, 4vw, 42px);
+    font-weight: 400;
+  }
+}
+
+.checkout-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+  gap: 36px;
+  align-items: start;
+}
+
+.checkout-section {
+  background: #ffffff;
+  border: 1px solid #ebdcd3;
+  border-radius: 12px;
+  padding: 28px;
+  box-shadow: 0 4px 16px rgba(73, 55, 49, 0.06);
+
+  h2 {
+    margin: 0 0 6px;
+    font-size: 20px;
+    color: #720974;
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+
+  .section-hint {
+    margin: 0 0 20px;
+    font-size: 13px;
+    color: #8b6b54;
+  }
+}
+
+.checkout-item-list {
+  display: grid;
+  gap: 14px;
+  max-height: 380px;
+  overflow-y: auto;
+  margin: 18px 0;
+  padding-right: 4px;
+}
+
+.checkout-mini-item {
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px;
+  background: #fbf7f4;
+  border: 1px solid #ebdcd3;
+  border-radius: 8px;
+
+  .mini-img-box {
+    width: 60px;
+    aspect-ratio: 1 / 1;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fdfaf7;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    .mini-swatch {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #720974, #bca8d5);
+    }
+  }
+
+  .mini-details {
+    strong {
+      display: block;
+      font-size: 13px;
+      color: #332520;
+      line-height: 1.3;
+    }
+
+    .mini-qty {
+      display: block;
+      font-size: 12px;
+      color: #8b6b54;
+      margin-top: 2px;
+    }
+
+    .mini-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-top: 3px;
+
+      .mini-sale-price {
+        color: #720974;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .mini-original-price {
+        color: #8b6b54;
+        font-size: 11px;
+        text-decoration: line-through;
+      }
+    }
+  }
+
+  .mini-total {
+    font-size: 14px;
+    color: #720974;
+  }
+}
+
+.checkout-price-breakdown {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #ebdcd3;
+
+  .breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #65534c;
+
+    strong {
+      color: #332520;
+    }
+
+    .free-text {
+      color: #2e7d32;
+      font-weight: 700;
+    }
+
+    &.total-row {
+      margin-top: 14px;
+      font-size: 18px;
+      color: #332520;
+
+      .total-amount {
+        color: #720974;
+        font-size: 24px;
+        font-weight: 700;
+      }
+    }
+  }
+
+  .summary-divider {
+    border: 0;
+    border-top: 1px solid #ebdcd3;
+    margin: 12px 0;
+  }
+}
+
+.checkout-trust-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 10px 14px;
+  background: #f7ede3;
+  border-radius: 6px;
+  color: #720974;
+  font-size: 12px;
+  font-weight: 500;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+}
+
+.checkout-error {
+  margin-top: 12px;
+  color: #b33a3a;
+  font-size: 13px;
+}
+
+.payment-success-card {
+  text-align: center;
+  padding: 30px 16px;
+  color: #2e7d32;
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+  }
+
+  h3 {
+    margin: 12px 0 6px;
+    font-size: 20px;
+    color: #332520;
+  }
+
+  p {
+    margin: 0;
+    color: #65534c;
+    font-size: 14px;
+  }
+}
+
+.empty-checkout-card {
+  text-align: center;
+  padding: 60px 24px;
+  background: #ffffff;
+  border: 1px dashed #d5c8be;
+  border-radius: 12px;
+
+  mat-icon {
+    font-size: 54px;
+    width: 54px;
+    height: 54px;
+    color: #cdbdb4;
+    margin-bottom: 12px;
+  }
+
+  h2 {
+    margin: 0 0 8px;
+    font-size: 24px;
+    color: #720974;
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+
+  p {
+    margin: 0 auto 24px;
+    color: #65534c;
+    max-width: 400px;
+  }
+
+  .shop-now-btn {
+    background: #720974 !important;
+    color: #ffffff !important;
+    padding: 0 28px;
+    min-height: 46px;
+    letter-spacing: .1em;
+  }
+}
+
+@media (max-width: 768px) {
+  .checkout-layout {
+    grid-template-columns: 1fr;
+  }
+}
+

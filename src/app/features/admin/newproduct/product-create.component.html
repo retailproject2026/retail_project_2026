@@ -60,13 +60,98 @@
       </div>
     </section>
 
-    <section class="form-section">
-      <h2>Images and timestamps</h2>
-      <div class="form-grid">
-        <label class="full-width image-field">Main image URL<input name="main_image_url" type="url" [(ngModel)]="form.main_image_url" required maxlength="1000" /><span class="upload-control"><input type="file" accept="image/*" aria-label="Upload main image" (change)="uploadImage($event, 'main')" /></span></label>
-        <label class="image-field">Extra image URL 1<input name="extra_image_url1" type="url" [(ngModel)]="form.extra_image_url1" maxlength="1000" /><span class="upload-control"><input type="file" accept="image/*" aria-label="Upload extra image 1" (change)="uploadImage($event, 'extra1')" /></span></label>
-        <label class="image-field">Extra image URL 2<input name="extra_image_url2" type="url" [(ngModel)]="form.extra_image_url2" maxlength="1000" /><span class="upload-control"><input type="file" accept="image/*" aria-label="Upload extra image 2" (change)="uploadImage($event, 'extra2')" /></span></label>
-        <label class="full-width">Extra image URLs JSON<textarea name="extra_image_urls" [(ngModel)]="form.extra_image_urls" rows="3" required placeholder="Enter a JSON array of image URL strings"></textarea><small>Use a JSON array containing image URL strings.</small></label>
+    <section class="form-section media-section">
+      <h2>Product images</h2>
+      
+      <!-- Primary / Main Image -->
+      <div class="media-box main-image-box">
+        <h3>Cover / Main image</h3>
+        <p class="media-hint">The primary image displayed on catalog cards and store listings.</p>
+        <div class="form-grid">
+          <label class="full-width image-field">
+            Main image URL
+            <div class="url-input-group">
+              <input name="main_image_url" type="url" [(ngModel)]="form.main_image_url" required maxlength="1000" placeholder="https://..." />
+              @if (form.main_image_url) {
+                <button type="button" class="clear-btn" (click)="clearMainImage()" title="Remove main image">&#10005;</button>
+              }
+            </div>
+            <span class="upload-control">
+              <label class="file-picker-label">
+                <mat-icon>cloud_upload</mat-icon>
+                <span>{{ uploadingImage === 'main' ? 'Uploading main photo...' : 'Upload cover photo' }}</span>
+                <input type="file" accept="image/*" [disabled]="uploadingImage === 'main'" (change)="uploadMainImage($event)" />
+              </label>
+            </span>
+          </label>
+        </div>
+        @if (form.main_image_url) {
+          <div class="main-preview-card">
+            <img [src]="form.main_image_url" alt="Main cover preview" />
+            <span class="cover-badge">Primary cover</span>
+          </div>
+        }
+      </div>
+
+      <!-- Additional Gallery Images -->
+      <div class="media-box gallery-box">
+        <div class="gallery-heading-row">
+          <div>
+            <h3>Gallery images ({{ additionalImages.length }})</h3>
+            <p class="media-hint">Upload as many photos as you want. All of them will appear on the product details page.</p>
+          </div>
+          <div class="multi-upload-actions">
+            <label class="multi-file-btn" [class.is-loading]="uploadingMultiple">
+              <mat-icon>add_photo_alternate</mat-icon>
+              <span>{{ uploadingMultiple ? uploadProgressText : 'Upload multiple images' }}</span>
+              <input type="file" multiple accept="image/*" [disabled]="uploadingMultiple" (change)="uploadMultipleImages($event)" />
+            </label>
+          </div>
+        </div>
+
+        <div class="add-url-row">
+          <input type="url" [(ngModel)]="newImageUrlInput" name="newImageUrl" placeholder="Or paste an image URL..." (keydown.enter)="$event.preventDefault(); addCustomImageUrl()" />
+          <button type="button" class="add-url-btn" [disabled]="!newImageUrlInput.trim()" (click)="addCustomImageUrl()">
+            <mat-icon>add</mat-icon> Add URL
+          </button>
+        </div>
+
+        @if (uploadingMultiple) {
+          <div class="upload-banner">
+            <span class="pulse-indicator"></span>
+            <span>{{ uploadProgressText }}</span>
+          </div>
+        }
+
+        @if (additionalImages.length > 0) {
+          <div class="admin-image-grid">
+            @for (img of additionalImages; track img; let i = $index) {
+              <div class="gallery-thumb-card">
+                <div class="thumb-wrapper">
+                  <img [src]="img" [alt]="'Gallery photo ' + (i + 1)" loading="lazy" />
+                  <span class="thumb-index">#{{ i + 1 }}</span>
+                </div>
+                <div class="thumb-actions">
+                  <button type="button" class="thumb-action-btn set-main" (click)="setAsMainImage(i)" title="Make this the main cover image">
+                    <mat-icon>star_border</mat-icon> Cover
+                  </button>
+                  <button type="button" class="thumb-action-btn delete-btn" (click)="removeAdditionalImage(i)" title="Remove image">
+                    <mat-icon>delete_outline</mat-icon>
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="empty-gallery-state">
+            <mat-icon>collections</mat-icon>
+            <p>No additional gallery images yet.</p>
+            <small>Click <strong>Upload multiple images</strong> above to select and upload multiple saree/product shots at once.</small>
+          </div>
+        }
+      </div>
+
+      <div class="form-grid timestamps-grid">
         <label>Created at<input name="created_at" type="datetime-local" [(ngModel)]="form.created_at" required /></label>
         <label>Updated at<input name="updated_at" type="datetime-local" [(ngModel)]="form.updated_at" required /></label>
       </div>

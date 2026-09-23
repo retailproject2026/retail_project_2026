@@ -8,6 +8,21 @@
   box-shadow: 0 6px 24px rgba(73, 55, 49, 0.08);
 }
 
+.carousel-image-stage {
+  position: relative;
+  cursor: zoom-in;
+  overflow: hidden;
+
+  &:hover .product-main-image {
+    transform: scale(1.02);
+  }
+
+  &:hover .zoom-pill-btn {
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+}
+
 .product-main-image {
   display: block;
   width: 100%;
@@ -15,7 +30,39 @@
   object-fit: cover;
   object-position: top center;
   border-radius: 16px;
-  transition: transform 0.3s ease;
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.zoom-pill-btn {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(222, 211, 203, 0.85);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  color: #720974;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+  transition: all 0.2s ease;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    color: #400441;
+    transform: scale(1.04);
+  }
 }
 
 .carousel-arrow {
@@ -82,38 +129,42 @@
 }
 
 .product-gallery {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-top: 14px;
 
-  button {
+  .gallery-thumb-btn {
+    flex: 0 0 calc(20% - 8px);
+    min-width: 60px;
+    max-width: 86px;
     padding: 0;
     border: 2px solid transparent;
     border-radius: 12px;
     overflow: hidden;
-    background: transparent;
+    background: #fdfaf7;
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 2px 8px rgba(73, 55, 49, 0.06);
 
     &.is-active {
       border-color: #720974;
-      box-shadow: 0 0 0 1px #720974, 0 4px 12px rgba(114, 9, 116, 0.2);
+      box-shadow: 0 0 0 1px #720974, 0 4px 12px rgba(114, 9, 116, 0.25);
     }
 
     &:hover:not(.is-active) {
       border-color: #cdbdb4;
+      transform: translateY(-2px);
     }
-  }
 
-  img {
-    display: block;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    object-position: top center;
-    border-radius: 10px;
+    img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      object-position: top center;
+      border-radius: 10px;
+    }
   }
 }
 .product-detail-copy {
@@ -372,6 +423,59 @@
 	transform: translate(-50%, -50%);
 }
 
+.checkout-summary-box {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: #f7ede3;
+  border: 1px solid #ebd8cb;
+  border-radius: 8px;
+
+  .checkout-summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+
+    .checkout-item-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #493731;
+    }
+
+    .checkout-item-price-block {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+
+      .checkout-item-sale-price {
+        color: #720974;
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .checkout-item-original-price {
+        color: #8b6b54;
+        font-size: 12px;
+        text-decoration: line-through;
+      }
+    }
+  }
+
+  .checkout-summary-shipping {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #65534c;
+
+    .free-shipping {
+      color: #2e7d32;
+      font-weight: 700;
+    }
+  }
+}
+
+
 .color-disclaimer-callout {
   display: flex;
   align-items: flex-start;
@@ -405,4 +509,240 @@
     }
   }
 }
+
+/* Full-Screen Image Lightbox Viewer */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  animation: lbFadeIn 0.22s ease-out;
+}
+
+.lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(14, 8, 16, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.lightbox-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px 20px 20px;
+  box-sizing: border-box;
+  pointer-events: none;
+
+  > * {
+    pointer-events: auto;
+  }
+}
+
+.lightbox-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6px 0;
+
+  .lightbox-counter {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.12);
+    padding: 6px 16px;
+    border-radius: 20px;
+  }
+
+  .lightbox-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 0;
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.32);
+      transform: scale(1.1);
+    }
+
+    mat-icon {
+      font-size: 26px;
+      width: 26px;
+      height: 26px;
+    }
+  }
+}
+
+.lightbox-stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  min-height: 0;
+}
+
+.lightbox-image-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  max-height: calc(100vh - 180px);
+  min-height: 0;
+
+  .lightbox-img {
+    max-width: 90vw;
+    max-height: calc(100vh - 190px);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+    user-select: none;
+    animation: lbZoomIn 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+.lightbox-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(30, 20, 30, 0.65);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.95);
+    color: #720974;
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  &.lightbox-prev {
+    left: 8px;
+  }
+
+  &.lightbox-next {
+    right: 8px;
+  }
+}
+
+.lightbox-footer {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding-top: 10px;
+
+  .lightbox-thumb-strip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 6px 4px;
+    scrollbar-width: thin;
+  }
+
+  .lightbox-thumb-item {
+    flex: 0 0 54px;
+    width: 54px;
+    height: 54px;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #1e141c;
+    cursor: pointer;
+    opacity: 0.55;
+    transition: all 0.2s ease;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    &.is-active {
+      opacity: 1;
+      border-color: #ffffff;
+      transform: scale(1.08);
+      box-shadow: 0 0 0 1px #ffffff, 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    &:hover:not(.is-active) {
+      opacity: 0.9;
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+  }
+}
+
+@keyframes lbFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes lbZoomIn {
+  from { transform: scale(0.95); opacity: 0.7; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 760px) {
+  .lightbox-nav-btn {
+    width: 42px;
+    height: 42px;
+
+    mat-icon {
+      font-size: 26px;
+      width: 26px;
+      height: 26px;
+    }
+  }
+
+  .lightbox-thumb-item {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+  }
+}
+
 

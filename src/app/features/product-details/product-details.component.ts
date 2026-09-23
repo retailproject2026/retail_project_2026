@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -40,6 +40,7 @@ export class ProductDetailsComponent implements OnInit {
   helpOpen = false;
   disclaimerOpen = false;
   addressOpen = false;
+  lightboxOpen = false;
   deliveryAddress: DeliveryAddress = { address: '', city: '', state: '', postalCode: '', mobileNumber: '' };
 
   get isFavorite(): boolean {
@@ -106,12 +107,24 @@ export class ProductDetailsComponent implements OnInit {
       });
   }
 
+  get effectivePrice(): number {
+    if (!this.product) return 0;
+    return (this.product.salePrice && this.product.salePrice > 0) ? this.product.salePrice : this.product.price;
+  }
+
+  get effectiveTotal(): number {
+    return this.effectivePrice * this.quantity;
+  }
+
   addToCart(): void {
     if (!this.product || this.product.inStock === false) return;
+    const salePrice = (this.product.salePrice && this.product.salePrice > 0) ? this.product.salePrice : null;
+    const price = salePrice ?? this.product.price;
     this.cart.add({
       id: this.product.id,
       name: this.product.name,
-      price: this.product.salePrice ?? this.product.price,
+      price: price,
+      originalPrice: salePrice ? this.product.price : undefined,
       quantity: this.quantity,
       tone: 'cart-product',
       mainImageUrl: this.product.mainImageUrl
@@ -122,10 +135,13 @@ export class ProductDetailsComponent implements OnInit {
 
   toggleWishlist(): void {
     if (!this.product) return;
+    const salePrice = (this.product.salePrice && this.product.salePrice > 0) ? this.product.salePrice : null;
+    const price = salePrice ?? this.product.price;
     const favorite: WishlistProduct = {
       id: this.product.id,
       name: this.product.name,
-      price: this.product.price,
+      price: price,
+      originalPrice: salePrice ? this.product.price : undefined,
       category: this.product.category,
       tone: 'wishlist-product',
       mainImageUrl: this.product.mainImageUrl
@@ -149,12 +165,16 @@ export class ProductDetailsComponent implements OnInit {
     this.checkoutLoading = true;
     this.actionMessage = '';
 
+    const effectivePrice = this.effectivePrice;
+    const salePrice = (this.product.salePrice && this.product.salePrice > 0) ? this.product.salePrice : null;
+
     let orderInfo: { orderId: string; orderNumber: string } | null = null;
     try {
       orderInfo = await this.orderService.createPendingOrder(this.deliveryAddress, [{
         id: this.product.id,
         name: this.product.name,
-        price: this.product.salePrice ?? this.product.price,
+        price: effectivePrice,
+        originalPrice: salePrice ? this.product.price : undefined,
         quantity: this.quantity,
         tone: this.product.tone,
         mainImageUrl: this.product.mainImageUrl
@@ -166,7 +186,7 @@ export class ProductDetailsComponent implements OnInit {
     }
 
     try {
-      const payment = await this.razorpay.openCheckout((this.product.salePrice ?? this.product.price) * this.quantity);
+      const payment = await this.razorpay.openCheckout(effectivePrice * this.quantity);
       if (payment) {
         await this.orderService.updatePaymentStatus(
           orderInfo.orderId,
@@ -195,19 +215,76 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   get galleryImages(): string[] {
-    return this.product ? [this.product.mainImageUrl, this.product.extraImageUrl1, this.product.extraImageUrl2] : [];
+    if (!this.product) return [];
+    const images: string[] = [];
+
+    if (this.product.mainImageUrl?.trim()) {
+      images.push(this.product.mainImageUrl.trim());
+    }
+
+    if (Array.isArray(this.product.extraImageUrls)) {
+      for (const url of this.product.extraImageUrls) {
+        if (url && typeof url === 'string' && url.trim() && !images.includes(url.trim())) {
+          images.push(url.trim());
+        }
+      }
+    }
+
+    if (this.product.extraImageUrl1?.trim() && !images.includes(this.product.extraImageUrl1.trim())) {
+      images.push(this.product.extraImageUrl1.trim());
+    }
+
+    if (this.product.extraImageUrl2?.trim() && !images.includes(this.product.extraImageUrl2.trim())) {
+      images.push(this.product.extraImageUrl2.trim());
+    }
+
+    return images;
   }
 
   previousImage(): void {
-    this.activeImageIndex = (this.activeImageIndex - 1 + this.galleryImages.length) % this.galleryImages.length;
+    const len = this.galleryImages.length;
+    if (len <= 1) return;
+    this.activeImageIndex = (this.activeImageIndex - 1 + len) % len;
+    this.changeDetector.markForCheck();
   }
 
   nextImage(): void {
-    this.activeImageIndex = (this.activeImageIndex + 1) % this.galleryImages.length;
+    const len = this.galleryImages.length;
+    if (len <= 1) return;
+    this.activeImageIndex = (this.activeImageIndex + 1) % len;
+    this.changeDetector.markForCheck();
   }
 
   selectImage(index: number): void {
-    this.activeImageIndex = index;
+    if (index >= 0 && index < this.galleryImages.length) {
+      this.activeImageIndex = index;
+      this.changeDetector.markForCheck();
+    }
+  }
+
+  openLightbox(index?: number): void {
+    if (typeof index === 'number' && index >= 0 && index < this.galleryImages.length) {
+      this.activeImageIndex = index;
+    }
+    this.lightboxOpen = true;
+    this.changeDetector.detectChanges();
+  }
+
+  closeLightbox(): void {
+    this.lightboxOpen = false;
+    this.changeDetector.detectChanges();
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeydown(event: KeyboardEvent): void {
+    if (!this.lightboxOpen) return;
+    if (event.key === 'Escape') {
+      this.closeLightbox();
+    } else if (event.key === 'ArrowLeft') {
+      this.previousImage();
+    } else if (event.key === 'ArrowRight') {
+      this.nextImage();
+    }
   }
 
   toggleShipping(): void {

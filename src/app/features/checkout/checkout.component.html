@@ -1,9 +1,93 @@
 <div class="page-container">
-  <mat-card>
-    <mat-card-content>
-      <h1>Checkout</h1>
-      <p>Address, delivery, payment and order confirmation can be implemented here.</p>
-      <a mat-button routerLink="/cart">Back to Cart</a>
-    </mat-card-content>
-  </mat-card>
+  <div class="checkout-page-header">
+    <span class="eyebrow">CHECKOUT</span>
+    <h1>Finalise Your Order</h1>
+  </div>
+
+  @if (cartItems.length > 0) {
+    <div class="checkout-layout">
+      <!-- Left Column: Delivery Details -->
+      <section class="checkout-section delivery-section">
+        <h2>1. Delivery Address</h2>
+        <p class="section-hint">Enter the address where you would like your order delivered.</p>
+
+        @if (paymentSuccess) {
+          <div class="payment-success-card">
+            <mat-icon>check_circle</mat-icon>
+            <h3>Payment Confirmed</h3>
+            <p>{{ checkoutMessage }}</p>
+          </div>
+        } @else {
+          <app-address-form
+            [address]="deliveryAddress"
+            [loading]="checkoutLoading"
+            (submitted)="confirmCheckout()">
+          </app-address-form>
+          @if (checkoutMessage) {
+            <p class="checkout-error" role="alert">{{ checkoutMessage }}</p>
+          }
+        }
+      </section>
+
+      <!-- Right Column: Order Summary (Using Sale Prices) -->
+      <aside class="checkout-section summary-section">
+        <h2>2. Order Summary ({{ cartCount }})</h2>
+
+        <div class="checkout-item-list">
+          @for (item of cartItems; track item.id) {
+            <div class="checkout-mini-item">
+              <div class="mini-img-box">
+                @if (item.mainImageUrl) {
+                  <img [src]="item.mainImageUrl" [alt]="item.name" />
+                } @else {
+                  <div class="mini-swatch" [class]="item.tone"></div>
+                }
+              </div>
+              <div class="mini-details">
+                <strong>{{ item.name }}</strong>
+                <span class="mini-qty">Qty: {{ item.quantity }}</span>
+                <div class="mini-price-row">
+                  <span class="mini-sale-price">₹{{ item.price | number:'1.2-2' }}</span>
+                  @if (item.originalPrice && item.originalPrice > item.price) {
+                    <span class="mini-original-price">₹{{ item.originalPrice | number:'1.2-2' }}</span>
+                  }
+                </div>
+              </div>
+              <div class="mini-total">
+                <strong>₹{{ (item.price * item.quantity) | number:'1.2-2' }}</strong>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="checkout-price-breakdown">
+          <div class="breakdown-row">
+            <span>Items subtotal</span>
+            <strong>₹{{ cartTotal | number:'1.2-2' }}</strong>
+          </div>
+          <div class="breakdown-row">
+            <span>Shipping across India</span>
+            <strong class="free-text">FREE</strong>
+          </div>
+          <hr class="summary-divider" />
+          <div class="breakdown-row total-row">
+            <span>Total to Pay</span>
+            <strong class="total-amount">₹{{ cartTotal | number:'1.2-2' }}</strong>
+          </div>
+        </div>
+
+        <div class="checkout-trust-badge">
+          <mat-icon>verified_user</mat-icon>
+          <span>Secured payment with Razorpay &middot; 100% Genuine Sarees</span>
+        </div>
+      </aside>
+    </div>
+  } @else {
+    <div class="empty-checkout-card">
+      <mat-icon>shopping_bag</mat-icon>
+      <h2>Your shopping bag is empty</h2>
+      <p>There are no items to checkout right now. Browse our catalogue to pick your favourite styles.</p>
+      <a mat-flat-button class="shop-now-btn" routerLink="/products">BROWSE PRODUCTS</a>
+    </div>
+  }
 </div>
