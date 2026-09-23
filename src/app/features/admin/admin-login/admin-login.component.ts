@@ -16,24 +16,15 @@ export class AdminLoginComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly changeDetector = inject(ChangeDetectorRef);
 
-  mode: 'signin' | 'signup' = 'signin';
   email = '';
   password = '';
   errorMessage = '';
-  successMessage = '';
   submitting = false;
 
   async ngOnInit(): Promise<void> {
     if (this.adminAuth.isAuthenticated()) {
       await this.router.navigate(['/admin/orders']);
     }
-  }
-
-  switchMode(mode: 'signin' | 'signup'): void {
-    this.mode = mode;
-    this.errorMessage = '';
-    this.successMessage = '';
-    this.changeDetector.markForCheck();
   }
 
   async submit(): Promise<void> {
@@ -44,35 +35,21 @@ export class AdminLoginComponent implements OnInit {
     }
 
     this.errorMessage = '';
-    this.successMessage = '';
     this.submitting = true;
+    this.changeDetector.detectChanges();
 
     try {
-      if (this.mode === 'signin') {
-        const result = await this.adminAuth.login(trimmedEmail, this.password);
-        if (result.success) {
-          await this.router.navigate(['/admin/orders']);
-          return;
-        }
-        this.errorMessage = result.error ?? 'Invalid email or password.';
-      } else {
-        const result = await this.adminAuth.signUp(trimmedEmail, this.password);
-        if (result.success) {
-          if (this.adminAuth.isAuthenticated()) {
-            await this.router.navigate(['/admin/orders']);
-            return;
-          }
-          this.successMessage = result.message ?? 'Registration successful.';
-          this.mode = 'signin';
-        } else {
-          this.errorMessage = result.error ?? 'Failed to register account.';
-        }
+      const result = await this.adminAuth.login(trimmedEmail, this.password);
+      if (result.success) {
+        await this.router.navigate(['/admin/orders']);
+        return;
       }
+      this.errorMessage = result.error ?? 'Invalid email or password.';
     } catch (err) {
       this.errorMessage = err instanceof Error ? err.message : 'Authentication failed.';
     } finally {
       this.submitting = false;
-      this.changeDetector.markForCheck();
+      this.changeDetector.detectChanges();
     }
   }
 }

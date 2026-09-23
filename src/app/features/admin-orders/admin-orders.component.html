@@ -3,24 +3,96 @@
     <div>
       <span class="admin-kicker">ADMINISTRATION</span>
       <h1>Orders</h1>
-      <p>Review every paid order and move delivery status forward.</p>
+      <p>Review customer orders, track payments, and update delivery status.</p>
     </div>
     <button mat-stroked-button type="button" (click)="loadOrders()" [disabled]="loading">REFRESH ORDERS</button>
   </header>
 
   @if (errorMessage) { <p class="admin-error" role="alert">{{ errorMessage }}</p> }
   @if (successMessage) { <p class="admin-success" role="status">{{ successMessage }}</p> }
+
+  <!-- Filters Toolbar -->
+  <section class="admin-orders-filters" aria-label="Filter orders">
+    <div class="filter-row">
+      <div class="search-input-group">
+        <label for="order-search">Search orders</label>
+        <div class="search-field">
+          <input
+            id="order-search"
+            type="search"
+            [(ngModel)]="searchTerm"
+            placeholder="Order ID, phone, city, product..."
+            autocomplete="off" />
+          @if (searchTerm) {
+            <button type="button" class="clear-search-btn" (click)="searchTerm = ''" aria-label="Clear search">×</button>
+          }
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label for="filter-status">Delivery status</label>
+        <select id="filter-status" [(ngModel)]="filterStatus">
+          <option value="ALL">All Delivery Statuses</option>
+          @for (status of statuses; track status) {
+            <option [value]="status">{{ status }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="filter-payment">Payment status</label>
+        <select id="filter-payment" [(ngModel)]="filterPaymentStatus">
+          <option value="ALL">All Payment Statuses</option>
+          @for (pay of paymentStatuses; track pay) {
+            <option [value]="pay">{{ pay }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="sort-by">Sort by</label>
+        <select id="sort-by" [(ngModel)]="sortBy">
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+          <option value="highest">Highest Amount</option>
+          <option value="lowest">Lowest Amount</option>
+        </select>
+      </div>
+
+      @if (hasActiveFilters) {
+        <div class="filter-actions">
+          <button type="button" class="reset-filter-btn" (click)="resetFilters()">
+            Clear Filters
+          </button>
+        </div>
+      }
+    </div>
+
+    @if (!loading && orders.length > 0) {
+      <div class="filter-stats">
+        <span>Showing <strong>{{ filteredOrders.length }}</strong> of {{ orders.length }} orders</span>
+      </div>
+    }
+  </section>
+
   @if (loading) {
     <p class="admin-empty" role="status">Loading orders...</p>
   } @else if (!orders.length) {
-    <p class="admin-empty">No data found.</p>
+    <p class="admin-empty">No orders found in database.</p>
+  } @else if (!filteredOrders.length) {
+    <div class="admin-empty-filtered">
+      <p>No orders match the selected filters.</p>
+      <button mat-stroked-button type="button" (click)="resetFilters()">Clear all filters</button>
+    </div>
   } @else {
     <div class="orders-list">
-      @for (order of orders; track order.id) {
+      @for (order of filteredOrders; track order.id) {
         <article class="admin-order-card">
           <div class="admin-order-header">
             <div>
-              <span class="admin-kicker">{{ order.payment_status }} · {{ order.payment_method ?? 'Payment pending' }}</span>
+              <span class="admin-kicker" [attr.data-payment]="order.payment_status">
+                {{ order.payment_status }} · {{ order.payment_method ?? 'Payment pending' }}
+              </span>
               <h2>{{ order.order_number }}</h2>
               <p>{{ order.created_at | date:'medium' }}</p>
             </div>
@@ -30,7 +102,10 @@
           <div class="admin-order-body">
             <div class="admin-order-items">
               @for (item of order.items; track item.id) {
-                <div class="admin-item"><span>{{ item.product_name }} × {{ item.quantity }}</span><strong>₹{{ item.total_price | number:'1.0-0' }}</strong></div>
+                <div class="admin-item">
+                  <span>{{ item.product_name }} × {{ item.quantity }}</span>
+                  <strong>₹{{ item.total_price | number:'1.0-0' }}</strong>
+                </div>
               }
             </div>
             <div class="admin-shipping">
@@ -44,10 +119,17 @@
             <div class="admin-status-control">
               <label [for]="'status-' + order.id">Delivery status</label>
               <select [id]="'status-' + order.id" [name]="'status-' + order.id" [(ngModel)]="selectedStatuses[order.id]">
-                @for (status of statuses; track status) { <option [ngValue]="status">{{ status }}</option> }
+                @for (status of statuses; track status) {
+                  <option [ngValue]="status">{{ status }}</option>
+                }
               </select>
             </div>
-            <button mat-flat-button color="primary" type="button" [disabled]="updatingOrderId === order.id || selectedStatuses[order.id] === order.status" (click)="updateStatus(order)">
+            <button
+              mat-flat-button
+              color="primary"
+              type="button"
+              [disabled]="updatingOrderId === order.id || selectedStatuses[order.id] === order.status"
+              (click)="updateStatus(order)">
               {{ updatingOrderId === order.id ? 'UPDATING...' : 'UPDATE STATUS' }}
             </button>
           </div>

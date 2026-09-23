@@ -13,16 +13,98 @@
 
   @if (errorMessage) { <p class="admin-error" role="alert">{{ errorMessage }}</p> }
   @if (successMessage) { <p class="admin-success" role="status">{{ successMessage }}</p> }
+
+  <!-- Filters Toolbar -->
+  <section class="admin-products-filters" aria-label="Filter products">
+    <div class="filter-row">
+      <div class="search-input-group">
+        <label for="product-search">Search products</label>
+        <div class="search-field">
+          <input
+            id="product-search"
+            type="search"
+            [(ngModel)]="searchTerm"
+            placeholder="Product name, SKU, category..."
+            autocomplete="off" />
+          @if (searchTerm) {
+            <button type="button" class="clear-search-btn" (click)="searchTerm = ''" aria-label="Clear search">×</button>
+          }
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label for="filter-status">Status</label>
+        <select id="filter-status" [(ngModel)]="filterStatus">
+          <option value="ALL">All Statuses</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="filter-stock">Stock</label>
+        <select id="filter-stock" [(ngModel)]="filterStock">
+          <option value="ALL">All Stock</option>
+          <option value="in_stock">In Stock</option>
+          <option value="out_of_stock">Out of Stock</option>
+        </select>
+      </div>
+
+      @if (availableProductTypes.length) {
+        <div class="filter-group">
+          <label for="filter-type">Product Type</label>
+          <select id="filter-type" [(ngModel)]="filterType">
+            <option value="ALL">All Types</option>
+            @for (type of availableProductTypes; track type) {
+              <option [value]="type">{{ type }}</option>
+            }
+          </select>
+        </div>
+      }
+
+      <div class="filter-group">
+        <label for="sort-by">Sort by</label>
+        <select id="sort-by" [(ngModel)]="sortBy">
+          <option value="name_asc">Name (A to Z)</option>
+          <option value="name_desc">Name (Z to A)</option>
+          <option value="price_asc">Price (Low to High)</option>
+          <option value="price_desc">Price (High to Low)</option>
+          <option value="stock_asc">Stock (Low to High)</option>
+          <option value="stock_desc">Stock (High to Low)</option>
+        </select>
+      </div>
+
+      @if (hasActiveFilters) {
+        <div class="filter-actions">
+          <button type="button" class="reset-filter-btn" (click)="resetFilters()">
+            Clear Filters
+          </button>
+        </div>
+      }
+    </div>
+
+    @if (!loading && products.length > 0) {
+      <div class="filter-stats">
+        <span>Showing <strong>{{ filteredProducts.length }}</strong> of {{ products.length }} products</span>
+      </div>
+    }
+  </section>
+
   @if (loading) {
     <p class="admin-empty" role="status">Loading products...</p>
   } @else if (!products.length) {
-    <p class="admin-empty">No data found.</p>
+    <p class="admin-empty">No products found in catalogue.</p>
+  } @else if (!filteredProducts.length) {
+    <div class="admin-empty-filtered">
+      <p>No products match the selected filters.</p>
+      <button mat-stroked-button type="button" (click)="resetFilters()">Clear all filters</button>
+    </div>
   } @else {
     <div class="admin-products-table-wrap">
       <table class="admin-products-table">
         <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
         <tbody>
-          @for (product of products; track product.id) {
+          @for (product of filteredProducts; track product.id) {
             <tr>
               <td><strong>{{ product.name }}</strong><small>{{ product.sku ?? product.id }}</small></td>
               <td>{{ product.productType }} · {{ product.category }}</td>

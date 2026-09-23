@@ -1,31 +1,8 @@
 <main class="admin-login-page">
   <section class="admin-login-panel" aria-labelledby="admin-login-title">
-    <span class="admin-login-kicker">SUPABASE AUTH</span>
-    <h1 id="admin-login-title">{{ mode === 'signin' ? 'Admin Sign In' : 'Create Admin' }}</h1>
-    <p>
-      {{ mode === 'signin' 
-        ? 'Sign in with your admin credentials to manage products, orders, and customers.' 
-        : 'Register a new admin user in your Supabase authentication service.' }}
-    </p>
-
-    <div class="auth-tabs" role="tablist">
-      <button
-        type="button"
-        role="tab"
-        class="auth-tab"
-        [class.is-active]="mode === 'signin'"
-        (click)="switchMode('signin')">
-        Sign In
-      </button>
-      <button
-        type="button"
-        role="tab"
-        class="auth-tab"
-        [class.is-active]="mode === 'signup'"
-        (click)="switchMode('signup')">
-        Register Admin
-      </button>
-    </div>
+    <span class="admin-login-kicker">PRIVATE AREA</span>
+    <h1 id="admin-login-title">Admin sign in</h1>
+    <p>Sign in with your admin credentials to manage products, orders, and customers.</p>
 
     <form (ngSubmit)="submit()" autocomplete="off">
       <label for="admin-email">Admin Email</label>
@@ -53,36 +30,14 @@
         <p class="admin-login-error" role="alert">{{ errorMessage }}</p>
       }
 
-      @if (successMessage) {
-        <p class="admin-login-success" role="status">{{ successMessage }}</p>
-      }
-
       <button
         mat-flat-button
         color="primary"
         type="submit"
         [disabled]="submitting || !email.trim() || !password">
-        @if (submitting) {
-          {{ mode === 'signin' ? 'SIGNING IN...' : 'CREATING ACCOUNT...' }}
-        } @else {
-          {{ mode === 'signin' ? 'SIGN IN' : 'CREATE ADMIN ACCOUNT' }}
-        }
+        {{ submitting ? 'SIGNING IN...' : 'SIGN IN' }}
       </button>
     </form>
-
-    <div class="auth-footer-help">
-      @if (mode === 'signin') {
-        <span>Need to set up an admin user?</span>
-        <button type="button" class="auth-switch-link" (click)="switchMode('signup')">
-          Register admin here
-        </button>
-      } @else {
-        <span>Already registered?</span>
-        <button type="button" class="auth-switch-link" (click)="switchMode('signin')">
-          Sign in here
-        </button>
-      }
-    </div>
 
     <a routerLink="/" class="back-link">Return to store</a>
   </section>
