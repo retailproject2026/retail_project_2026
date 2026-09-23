@@ -95,11 +95,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (!this.featured.length) this.featured = this.allProducts.filter(product => !this.newArrivals.includes(product)).slice(0, 4);
       this.loading = false;
       this.startAutoPlay();
-      this.changeDetector.markForCheck();
+      this.changeDetector.detectChanges();
     }).catch(() => {
       this.errorMessage = 'Unable to load featured products right now.';
       this.loading = false;
-      this.changeDetector.markForCheck();
+      this.changeDetector.detectChanges();
     });
   }
 
@@ -109,31 +109,39 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  nextSlide(): void {
+  nextSlide(fromUser = false): void {
+    if (!this.carouselProducts.length) return;
     this.activeSlide = (this.activeSlide + 1) % this.carouselProducts.length;
-    this.changeDetector.markForCheck();
+    if (fromUser) {
+      this.restartAutoPlay();
+    }
+    this.changeDetector.detectChanges();
   }
 
   previousSlide(): void {
+    if (!this.carouselProducts.length) return;
     this.activeSlide = (this.activeSlide - 1 + this.carouselProducts.length) % this.carouselProducts.length;
     this.restartAutoPlay();
-    this.changeDetector.markForCheck();
+    this.changeDetector.detectChanges();
   }
 
   selectSlide(index: number): void {
+    if (index < 0 || index >= this.carouselProducts.length) return;
     this.activeSlide = index;
     this.restartAutoPlay();
-    this.changeDetector.markForCheck();
+    this.changeDetector.detectChanges();
   }
 
   private startAutoPlay(): void {
-    this.slideTimer = setInterval(() => this.nextSlide(), 4000);
-  }
-
-  private restartAutoPlay(): void {
     if (this.slideTimer) {
       clearInterval(this.slideTimer);
     }
+    this.slideTimer = setInterval(() => {
+      this.nextSlide(false);
+    }, 3500);
+  }
+
+  private restartAutoPlay(): void {
     this.startAutoPlay();
   }
 

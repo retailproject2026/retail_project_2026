@@ -38,11 +38,30 @@ export class ProductDetailsComponent implements OnInit {
   paymentSuccess = false;
   shippingOpen = false;
   helpOpen = false;
+  disclaimerOpen = false;
   addressOpen = false;
   deliveryAddress: DeliveryAddress = { address: '', city: '', state: '', postalCode: '', mobileNumber: '' };
 
   get isFavorite(): boolean {
     return this.product ? this.wishlist.isFavorite(this.product.id, this.product.name) : false;
+  }
+
+  decreaseQuantity(): void {
+    if (this.quantity > 1) {
+      this.quantity--;
+    }
+  }
+
+  increaseQuantity(): void {
+    const max = this.product?.stock ? Math.min(this.product.stock, 10) : 5;
+    if (this.quantity < max) {
+      this.quantity++;
+    }
+  }
+
+  get stockProgressPercentage(): number {
+    const stock = this.product?.stock ?? 1;
+    return Math.min(Math.max((stock / 5) * 100, 15), 100);
   }
 
   ngOnInit(): void {
@@ -197,5 +216,9 @@ export class ProductDetailsComponent implements OnInit {
 
   toggleHelp(): void {
     this.helpOpen = !this.helpOpen;
+  }
+
+  toggleDisclaimer(): void {
+    this.disclaimerOpen = !this.disclaimerOpen;
   }
 }

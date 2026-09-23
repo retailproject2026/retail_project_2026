@@ -9,8 +9,15 @@
       <div class="product-detail-media">
         <div class="product-carousel">
           <img class="product-main-image" [src]="galleryImages[activeImageIndex]" [alt]="item.name + ' image ' + (activeImageIndex + 1)" />
-          <button class="carousel-arrow carousel-previous" type="button" aria-label="Previous product image" (click)="previousImage()">&#8592;</button>
-          <button class="carousel-arrow carousel-next" type="button" aria-label="Next product image" (click)="nextImage()">&#8594;</button>
+          <button class="carousel-arrow carousel-previous" type="button" aria-label="Previous product image" (click)="previousImage()">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          <button class="carousel-arrow carousel-next" type="button" aria-label="Next product image" (click)="nextImage()">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+          @if (galleryImages.length > 1) {
+            <span class="carousel-counter">{{ activeImageIndex + 1 }} / {{ galleryImages.length }}</span>
+          }
         </div>
         <div class="product-gallery" aria-label="Product images">
           @for (imageUrl of galleryImages; track imageUrl; let index = $index) {
@@ -21,25 +28,34 @@
         </div>
       </div>
       <div class="product-detail-copy">
-        <span class="detail-category">{{ item.productType }} · {{ item.category }}</span>
-        <h1>{{ item.name }}</h1>
-        <p class="detail-price">₹{{ (item.salePrice ?? item.price) | number:'1.0-0' }}</p>
-        @if (item.salePrice !== null && item.salePrice !== undefined) {
-          <p class="detail-original-price">₹{{ item.price | number:'1.0-0' }}</p>
-        }
-        <p class="detail-description">{{ item.description }}</p>
-        @if (item.brand || item.sku || item.rating) {
-          <p class="detail-meta">
-            @if (item.brand) { {{ item.brand }} }@if (item.sku) { · SKU: {{ item.sku }} }@if (item.rating) { · {{ item.rating }}/5 ({{ item.reviewCount ?? 0 }} reviews) }
-          </p>
-        }
+        <span class="product-badge-pill">New</span>
+        <h1 class="product-title">{{ item.name }}</h1>
+
+        <div class="price-availability-row">
+          <span class="detail-price">₹ {{ (item.salePrice ?? item.price) | number:'1.2-2' }}</span>
+          @if (item.salePrice !== null && item.salePrice !== undefined) {
+            <span class="detail-original-price">₹{{ item.price | number:'1.2-2' }}</span>
+          }
+          <span class="stock-available" [class.is-out]="item.inStock === false">
+            {{ item.inStock === false ? 'Out of stock' : ((item.stock ?? 1) + ' Available') }}
+          </span>
+        </div>
+
+        <hr class="product-divider" />
+
+        <div class="stock-urgency-section">
+          <p class="stock-urgency-text">Hurrify, {{ item.stock ?? 1 }} item(s) left in stock!</p>
+          <div class="stock-progress-track">
+            <div class="stock-progress-fill" [style.width.%]="stockProgressPercentage"></div>
+          </div>
+        </div>
+
         <div class="purchase-controls">
-          <label for="product-quantity">Quantity</label>
-          <select id="product-quantity" [(ngModel)]="quantity">
-            @for (amount of [1, 2, 3, 4, 5]; track amount) {
-              <option [ngValue]="amount">{{ amount }}</option>
-            }
-          </select>
+          <div class="quantity-pill">
+            <button type="button" class="qty-btn" (click)="decreaseQuantity()" aria-label="Decrease quantity" [disabled]="quantity <= 1">−</button>
+            <span class="qty-val">{{ quantity }}</span>
+            <button type="button" class="qty-btn" (click)="increaseQuantity()" aria-label="Increase quantity">+</button>
+          </div>
           <button class="wishlist-toggle" type="button" [class.is-favorite]="isFavorite" [attr.aria-label]="isFavorite ? 'Remove from wishlist' : 'Add to wishlist'" (click)="toggleWishlist()">
             <mat-icon>{{ isFavorite ? 'favorite' : 'favorite_border' }}</mat-icon>
           </button>
@@ -49,6 +65,12 @@
           <button mat-flat-button class="buy-now-button" type="button" (click)="buyNow()">BUY IT NOW</button>
         </div>
         @if (actionMessage) { <p class="action-message" role="status">{{ actionMessage }}</p> }
+        <p class="detail-description">{{ item.description }}</p>
+        @if (item.brand || item.sku || item.rating) {
+          <p class="detail-meta">
+            @if (item.brand) { {{ item.brand }} }@if (item.sku) { · SKU: {{ item.sku }} }@if (item.rating) { · {{ item.rating }}/5 ({{ item.reviewCount ?? 0 }} reviews) }
+          </p>
+        }
         <dl>
           @if (item.fabric) { <div><dt>Fabric</dt><dd>{{ item.fabric }}</dd></div> }
           @if (item.color) { <div><dt>Colour</dt><dd>{{ item.color }}</dd></div> }
@@ -71,7 +93,7 @@
       </div>
       <div class="detail-accordion">
         <button type="button" [attr.aria-expanded]="helpOpen" (click)="toggleHelp()">
-          <span>Need help?</span><span aria-hidden="true">{{ helpOpen ? '−' : '+' }}</span>
+          <span>Customer support</span><span aria-hidden="true">{{ helpOpen ? '−' : '+' }}</span>
         </button>
         @if (helpOpen) {
           <div class="accordion-content">
@@ -80,7 +102,25 @@
           </div>
         }
       </div>
+      <div class="detail-accordion">
+        <button type="button" [attr.aria-expanded]="disclaimerOpen" (click)="toggleDisclaimer()">
+          <span>Colour disclaimer</span><span aria-hidden="true">{{ disclaimerOpen ? '−' : '+' }}</span>
+        </button>
+        @if (disclaimerOpen) {
+          <div class="accordion-content">
+            <p>Saree/product colour may slightly differ from the image due to photographic lighting sources or your monitor/display settings.</p>
+          </div>
+        }
+      </div>
     </section>
+
+    <div class="color-disclaimer-callout" role="note">
+      <mat-icon aria-hidden="true">info</mat-icon>
+      <div class="disclaimer-text">
+        <strong>Colour Disclaimer:</strong>
+        <span>Saree colour may slightly differ due to photographic lighting sources or your screen display settings.</span>
+      </div>
+    </div>
     @if (relatedProducts.length) {
       <section class="related-products" aria-labelledby="related-title">
         <p class="detail-category">YOU MAY ALSO LIKE</p>

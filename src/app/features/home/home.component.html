@@ -6,8 +6,12 @@
   } @else if (carouselProducts.length) {
     <section class="hero-banner" aria-label="Featured products">
       <img class="hero-image" [src]="carouselProducts[activeSlide].mainImageUrl" [alt]="carouselProducts[activeSlide].name" />
-    <div class="hero-controls">
-      <button type="button" class="hero-arrow" aria-label="Previous slide" (click)="previousSlide()">&#8592;</button>
+      <button type="button" class="hero-arrow hero-arrow-prev" aria-label="Previous slide" (click)="previousSlide()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <button type="button" class="hero-arrow hero-arrow-next" aria-label="Next slide" (click)="nextSlide(true)">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
       <div class="hero-dots" aria-label="Choose a slide">
         @for (slide of carouselProducts; track slide.id; let index = $index) {
           <button
@@ -19,8 +23,6 @@
             (click)="selectSlide(index)"></button>
         }
       </div>
-      <button type="button" class="hero-arrow" aria-label="Next slide" (click)="nextSlide()">&#8594;</button>
-    </div>
     </section>
   }
 

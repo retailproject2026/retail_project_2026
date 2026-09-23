@@ -22,7 +22,7 @@ h1, h2, p { margin-top: 0; }
 .product-image-wrap { position: relative; }
 .product-image-link { display: block; color: inherit; text-decoration: none; }
 .product-image { position: relative; display: grid; place-items: center; aspect-ratio: 1 / 1; background: linear-gradient(135deg, #c7a5c5, #70476f); color: #fff; }
-.product-image img { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; }
+.product-image img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
 .product-image::after { content: ''; width: 55%; height: 72%; border: 1px solid rgba(255, 255, 255, .55); transform: rotate(8deg); }
 .image-label { position: absolute; z-index: 1; font-family: Georgia, serif; font-size: 24px; letter-spacing: .08em; }
 .product-category { position: absolute; z-index: 1; top: 12px; left: 12px; padding: 5px 8px; background: rgba(255, 255, 255, .88); color: #6e1722; font-size: 10px; text-transform: uppercase; }
