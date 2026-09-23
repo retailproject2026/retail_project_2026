@@ -42,6 +42,7 @@
         <label>Review count<input name="review_count" type="number" [(ngModel)]="form.review_count" required min="0" step="1" /></label>
       </div>
       <div class="checkbox-row">
+        <label><input name="is_active" type="checkbox" [(ngModel)]="form.is_active" /> Active (Visible in store)</label>
         <label><input name="inStock" type="checkbox" [(ngModel)]="form.inStock" /> In stock</label>
         <label><input name="is_featured" type="checkbox" [(ngModel)]="form.is_featured" /> Featured</label>
         <label><input name="is_new" type="checkbox" [(ngModel)]="form.is_new" /> New arrival</label>
@@ -62,9 +63,9 @@
     <section class="form-section">
       <h2>Images and timestamps</h2>
       <div class="form-grid">
-        <label class="full-width">Main image URL<input name="main_image_url" type="url" [(ngModel)]="form.main_image_url" required maxlength="1000" /></label>
-        <label>Extra image URL 1<input name="extra_image_url1" type="url" [(ngModel)]="form.extra_image_url1" maxlength="1000" /></label>
-        <label>Extra image URL 2<input name="extra_image_url2" type="url" [(ngModel)]="form.extra_image_url2" maxlength="1000" /></label>
+        <label class="full-width image-field">Main image URL<input name="main_image_url" type="url" [(ngModel)]="form.main_image_url" required maxlength="1000" /><span class="upload-control"><input type="file" accept="image/*" aria-label="Upload main image" (change)="uploadImage($event, 'main')" /></span></label>
+        <label class="image-field">Extra image URL 1<input name="extra_image_url1" type="url" [(ngModel)]="form.extra_image_url1" maxlength="1000" /><span class="upload-control"><input type="file" accept="image/*" aria-label="Upload extra image 1" (change)="uploadImage($event, 'extra1')" /></span></label>
+        <label class="image-field">Extra image URL 2<input name="extra_image_url2" type="url" [(ngModel)]="form.extra_image_url2" maxlength="1000" /><span class="upload-control"><input type="file" accept="image/*" aria-label="Upload extra image 2" (change)="uploadImage($event, 'extra2')" /></span></label>
         <label class="full-width">Extra image URLs JSON<textarea name="extra_image_urls" [(ngModel)]="form.extra_image_urls" rows="3" required placeholder="Enter a JSON array of image URL strings"></textarea><small>Use a JSON array containing image URL strings.</small></label>
         <label>Created at<input name="created_at" type="datetime-local" [(ngModel)]="form.created_at" required /></label>
         <label>Updated at<input name="updated_at" type="datetime-local" [(ngModel)]="form.updated_at" required /></label>

@@ -50,7 +50,7 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.productService.getProductList().then(products => {
+    this.productService.getProductList({ activeOnly: true }).then(products => {
       this.searchCatalog = products.map(product => ({
         id: product.id,
         name: product.name,
@@ -201,22 +201,41 @@ export class HeaderComponent implements OnInit {
     this.checkoutLoading = true;
     this.checkoutMessage = '';
 
+    let orderInfo: { orderId: string; orderNumber: string } | null = null;
+    try {
+      orderInfo = await this.orderService.createPendingOrder(this.deliveryAddress, this.cartItems);
+    } catch (orderError) {
+      this.checkoutMessage = orderError instanceof Error ? orderError.message : 'Unable to create order.';
+      this.checkoutLoading = false;
+      return;
+    }
+
     try {
       const payment = await this.razorpayService.openCheckout(this.cartTotal);
-      if (!payment) {
-        this.checkoutMessage = 'Payment window closed.';
+      if (payment) {
+        await this.orderService.updatePaymentStatus(
+          orderInfo.orderId,
+          'Paid',
+          'Confirmed',
+          payment.razorpay_payment_id
+        );
+        this.checkoutMessage = `Payment successful. Order number: ${orderInfo.orderNumber}`;
+        this.paymentSuccess = true;
+        this.cart.clear();
+        this.closeCart();
+        this.addressOpen = false;
+        await this.router.navigate(['/orders']);
+      } else {
+        await this.orderService.updatePaymentStatus(orderInfo.orderId, 'Failed', 'Cancelled');
+        this.checkoutMessage = `Payment was cancelled. Order ${orderInfo.orderNumber} payment status set to Failed.`;
         this.paymentSuccess = false;
-        return;
       }
-
-      const orderNumber = await this.orderService.createPaidOrder(this.deliveryAddress, this.cartItems, payment);
-      this.checkoutMessage = `Payment successful. Order number: ${orderNumber}`;
-      this.paymentSuccess = true;
-      this.closeCart();
-      this.addressOpen = false;
-      await this.router.navigate(['/products']);
-    } catch (error) {
-      this.checkoutMessage = error instanceof Error ? error.message : 'Unable to start payment.';
+    } catch (paymentError) {
+      if (orderInfo) {
+        await this.orderService.updatePaymentStatus(orderInfo.orderId, 'Failed', 'Cancelled').catch(() => {});
+      }
+      this.checkoutMessage = paymentError instanceof Error ? paymentError.message : 'Payment failed.';
+      this.paymentSuccess = false;
     } finally {
       this.checkoutLoading = false;
     }

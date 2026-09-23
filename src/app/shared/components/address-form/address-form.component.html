@@ -44,9 +44,9 @@
 
   <button mat-flat-button class="address-submit" type="submit" [disabled]="loading || saveLoading || lookupLoading">
     @if (loading || saveLoading) {
-      <span>OPENING PAYMENT...</span>
+      <span>CREATING ORDER & OPENING PAYMENT...</span>
     } @else {
-      <span>CONTINUE TO PAYMENT</span>
+      <span>CONFIRM PAYMENT</span>
     }
   </button>
 </form>

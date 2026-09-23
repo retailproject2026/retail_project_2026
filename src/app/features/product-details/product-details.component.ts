@@ -61,12 +61,17 @@ export class ProductDetailsComponent implements OnInit {
     }
 
     this.productService.getProductById(id).then(product => {
-        this.product = product;
-        this.errorMessage = this.product ? '' : 'Product not found.';
+        if (product && product.isActive === false) {
+          this.product = null;
+          this.errorMessage = 'This product is currently unavailable.';
+        } else {
+          this.product = product;
+          this.errorMessage = this.product ? '' : 'Product not found.';
+        }
         this.loading = false;
         this.changeDetector.markForCheck();
         if (this.product) {
-          this.productService.getProductList().then(products => {
+          this.productService.getProductList({ activeOnly: true }).then(products => {
             const sameCategory = products.filter(item => item.id !== this.product?.id && item.category === this.product?.category);
             const otherProducts = products.filter(item => item.id !== this.product?.id && item.category !== this.product?.category);
             this.relatedProducts = [...sameCategory, ...otherProducts].slice(0, 4);
@@ -124,28 +129,47 @@ export class ProductDetailsComponent implements OnInit {
     if (!this.product) return;
     this.checkoutLoading = true;
     this.actionMessage = '';
-    try {
-      const payment = await this.razorpay.openCheckout((this.product.salePrice ?? this.product.price) * this.quantity);
-      if (!payment) {
-        this.actionMessage = 'Payment window closed.';
-        this.paymentSuccess = false;
-        return;
-      }
 
-      const orderNumber = await this.orderService.createPaidOrder(this.deliveryAddress, [{
+    let orderInfo: { orderId: string; orderNumber: string } | null = null;
+    try {
+      orderInfo = await this.orderService.createPendingOrder(this.deliveryAddress, [{
         id: this.product.id,
         name: this.product.name,
         price: this.product.salePrice ?? this.product.price,
         quantity: this.quantity,
         tone: this.product.tone,
         mainImageUrl: this.product.mainImageUrl
-      }], payment);
-      this.actionMessage = `Payment successful. Order number: ${orderNumber}`;
-      this.paymentSuccess = true;
-      this.addressOpen = false;
-      await this.router.navigate(['/products']);
+      }]);
+    } catch (orderError) {
+      this.actionMessage = orderError instanceof Error ? orderError.message : 'Unable to create order.';
+      this.checkoutLoading = false;
+      return;
+    }
+
+    try {
+      const payment = await this.razorpay.openCheckout((this.product.salePrice ?? this.product.price) * this.quantity);
+      if (payment) {
+        await this.orderService.updatePaymentStatus(
+          orderInfo.orderId,
+          'Paid',
+          'Confirmed',
+          payment.razorpay_payment_id
+        );
+        this.actionMessage = `Payment successful. Order number: ${orderInfo.orderNumber}`;
+        this.paymentSuccess = true;
+        this.addressOpen = false;
+        await this.router.navigate(['/orders']);
+      } else {
+        await this.orderService.updatePaymentStatus(orderInfo.orderId, 'Failed', 'Cancelled');
+        this.actionMessage = `Payment was cancelled. Order ${orderInfo.orderNumber} payment status set to Failed.`;
+        this.paymentSuccess = false;
+      }
     } catch (error) {
-      this.actionMessage = error instanceof Error ? error.message : 'Unable to start payment.';
+      if (orderInfo) {
+        await this.orderService.updatePaymentStatus(orderInfo.orderId, 'Failed', 'Cancelled').catch(() => {});
+      }
+      this.actionMessage = error instanceof Error ? error.message : 'Unable to complete payment.';
+      this.paymentSuccess = false;
     } finally {
       this.checkoutLoading = false;
     }

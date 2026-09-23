@@ -20,7 +20,7 @@
   } @else {
     <div class="admin-products-table-wrap">
       <table class="admin-products-table">
-        <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr></thead>
+        <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
         <tbody>
           @for (product of products; track product.id) {
             <tr>
@@ -28,6 +28,19 @@
               <td>{{ product.productType }} · {{ product.category }}</td>
               <td>₹{{ (product.salePrice ?? product.price) | number:'1.0-0' }}</td>
               <td>{{ product.stock ?? 0 }} <span [class.out-of-stock]="product.inStock === false">{{ product.inStock === false ? 'Out' : 'Available' }}</span></td>
+              <td>
+                <button
+                  type="button"
+                  class="status-toggle-btn"
+                  [class.is-active]="product.isActive !== false"
+                  [class.is-inactive]="product.isActive === false"
+                  [disabled]="togglingId === product.id"
+                  (click)="toggleActive(product)"
+                  title="Click to toggle product visibility in store">
+                  <span class="status-dot"></span>
+                  {{ togglingId === product.id ? 'Saving...' : (product.isActive !== false ? 'Active' : 'Inactive') }}
+                </button>
+              </td>
               <td class="admin-product-row-actions"><a mat-button [routerLink]="['/admin/newproduct', product.id]">EDIT</a><button mat-button type="button" [disabled]="deletingId === product.id" (click)="deleteProduct(product)">{{ deletingId === product.id ? 'DELETING...' : 'DELETE' }}</button></td>
             </tr>
           }

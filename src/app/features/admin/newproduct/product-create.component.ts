@@ -18,6 +18,7 @@ interface ProductFormModel {
   review_count: number | null;
   is_featured: boolean;
   is_new: boolean;
+  is_active: boolean;
   created_at: string;
   updated_at: string;
   name: string;
@@ -53,6 +54,7 @@ export class ProductCreateComponent implements OnInit {
   errorMessage = '';
   editingId: string | null = null;
   loadingProduct = false;
+  uploadingImage: 'main' | 'extra1' | 'extra2' | null = null;
 
   ngOnInit(): void {
     this.editingId = this.route.snapshot.paramMap.get('id');
@@ -81,6 +83,7 @@ export class ProductCreateComponent implements OnInit {
         review_count: product.reviewCount ?? 0,
         is_featured: product.isFeatured ?? false,
         is_new: product.isNew ?? false,
+        is_active: product.isActive ?? true,
         created_at: this.toDateTimeLocal(product.createdAt),
         updated_at: this.toDateTimeLocal(product.updatedAt),
         name: product.name,
@@ -100,12 +103,17 @@ export class ProductCreateComponent implements OnInit {
       this.errorMessage = error instanceof Error ? error.message : 'Unable to load product.';
     } finally {
       this.loadingProduct = false;
+      this.changeDetector.detectChanges();
     }
   }
 
   async submit(formElement: NgForm): Promise<void> {
     this.successMessage = '';
     this.errorMessage = '';
+    if (this.uploadingImage) {
+      this.errorMessage = 'Please wait for the image upload to finish.';
+      return;
+    }
     if (formElement.invalid) {
       formElement.control.markAllAsTouched();
       return;
@@ -121,18 +129,24 @@ export class ProductCreateComponent implements OnInit {
       return;
     }
 
+    const now = new Date().toISOString();
+    this.form.updated_at = this.toDateTimeLocal(now);
+
     const product: CreateProductInput = {
       ...this.form,
+      updated_at: now,
       sale_price: this.form.sale_price,
       stock: this.form.stock ?? 0,
       rating: this.form.rating,
       review_count: this.form.review_count ?? 0,
       price: this.form.price ?? 0,
+      is_active: this.form.is_active,
       attributes,
       extra_image_urls: extraImageUrls
     };
 
     this.submitting = true;
+    this.changeDetector.detectChanges();
     try {
       if (this.editingId) {
         await this.productService.updateProduct(this.editingId, product);
@@ -144,9 +158,34 @@ export class ProductCreateComponent implements OnInit {
         formElement.resetForm(this.form);
       }
     } catch (error) {
-      this.errorMessage = error instanceof Error ? error.message : 'Unable to create product.';
+      this.errorMessage = error instanceof Error ? error.message : (this.editingId ? 'Unable to update product.' : 'Unable to create product.');
     } finally {
       this.submitting = false;
+      this.changeDetector.detectChanges();
+    }
+  }
+
+  async uploadImage(event: Event, field: 'main' | 'extra1' | 'extra2'): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    this.successMessage = '';
+    this.errorMessage = '';
+    this.uploadingImage = field;
+    this.changeDetector.detectChanges();
+    try {
+      const image = await this.productService.uploadImage(file);
+      if (field === 'main') this.form.main_image_url = image.url;
+      if (field === 'extra1') this.form.extra_image_url1 = image.url;
+      if (field === 'extra2') this.form.extra_image_url2 = image.url;
+      this.successMessage = 'Image uploaded successfully.';
+    } catch (error) {
+      this.errorMessage = error instanceof Error ? error.message : 'Unable to upload image.';
+    } finally {
+      this.uploadingImage = null;
+      input.value = '';
+      this.changeDetector.detectChanges();
     }
   }
 
@@ -173,7 +212,7 @@ export class ProductCreateComponent implements OnInit {
     return {
       id: crypto.randomUUID(), sku: '', sale_price: null, currency: 'INR', product_type: 'Clothes',
       brand: '', stock: 0, inStock: true, attributes: '{}', rating: null, review_count: 0,
-      is_featured: false, is_new: false, created_at: now, updated_at: now, name: '', price: null,
+      is_featured: false, is_new: false, is_active: true, created_at: now, updated_at: now, name: '', price: null,
       category: 'Women', fabric: '', color: '', description: '', tone: 'default', main_image_url: '',
       extra_image_urls: '[]', extra_image_url1: '', extra_image_url2: ''
     };

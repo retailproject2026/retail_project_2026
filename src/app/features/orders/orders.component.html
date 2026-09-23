@@ -2,20 +2,151 @@
   <header class="orders-heading">
     <span class="orders-kicker">ORDER CARE</span>
     <h1>Track an order</h1>
-    <p>Enter the order number from your payment confirmation.</p>
+    <p>Look up your order status using your Order Number or registered Mobile Number.</p>
   </header>
 
-  <form class="order-search" (ngSubmit)="findOrder()">
-    <label for="order-number">Order number</label>
-    <div class="order-search-row">
-      <input id="order-number" name="orderNumber" [(ngModel)]="orderNumber" required placeholder="ORD-..." autocomplete="off" />
-      <button mat-flat-button color="primary" type="submit" [disabled]="loading">{{ loading ? 'Searching...' : 'Track order' }}</button>
-    </div>
-  </form>
+  <div class="search-mode-tabs" role="tablist" aria-label="Order search options">
+    <button
+      type="button"
+      role="tab"
+      class="mode-tab"
+      [class.is-active]="searchMode === 'orderNumber'"
+      [attr.aria-selected]="searchMode === 'orderNumber'"
+      (click)="switchSearchMode('orderNumber')">
+      <mat-icon aria-hidden="true">receipt_long</mat-icon>
+      <span>Track by Order Number</span>
+    </button>
+    <button
+      type="button"
+      role="tab"
+      class="mode-tab"
+      [class.is-active]="searchMode === 'mobileNumber'"
+      [attr.aria-selected]="searchMode === 'mobileNumber'"
+      (click)="switchSearchMode('mobileNumber')">
+      <mat-icon aria-hidden="true">smartphone</mat-icon>
+      <span>Find by Mobile Number</span>
+    </button>
+  </div>
+
+  @if (searchMode === 'orderNumber') {
+    <form class="order-search" (ngSubmit)="findOrder()">
+      <label for="order-number">Order number</label>
+      <div class="order-search-row">
+        <input
+          id="order-number"
+          name="orderNumber"
+          [(ngModel)]="orderNumber"
+          required
+          placeholder="e.g. ORD-1727..."
+          autocomplete="off" />
+        <button mat-flat-button color="primary" type="submit" [disabled]="loading">
+          {{ loading ? 'Searching...' : 'Track order' }}
+        </button>
+      </div>
+      <p class="search-switch-hint">
+        Don’t have your order number?
+        <button type="button" class="text-link-btn" (click)="switchSearchMode('mobileNumber')">
+          Enter mobile number to view all your order IDs
+        </button>
+      </p>
+    </form>
+  }
+
+  @if (searchMode === 'mobileNumber') {
+    <form class="order-search" (ngSubmit)="findOrdersByMobile()">
+      <label for="mobile-number">Mobile number</label>
+      <div class="order-search-row">
+        <div class="mobile-input-wrapper">
+          <span class="mobile-prefix">+91</span>
+          <input
+            id="mobile-number"
+            name="mobileNumber"
+            type="tel"
+            inputmode="numeric"
+            [(ngModel)]="mobileNumber"
+            required
+            maxlength="10"
+            placeholder="Enter 10-digit number"
+            autocomplete="tel" />
+        </div>
+        <button mat-flat-button color="primary" type="submit" [disabled]="loading">
+          {{ loading ? 'Searching...' : 'Find orders' }}
+        </button>
+      </div>
+      <p class="search-switch-hint">
+        Already have your order number?
+        <button type="button" class="text-link-btn" (click)="switchSearchMode('orderNumber')">
+          Track directly with order number
+        </button>
+      </p>
+    </form>
+  }
 
   @if (errorMessage) { <p class="order-error" role="alert">{{ errorMessage }}</p> }
   @if (successMessage) { <p class="order-success" role="status">{{ successMessage }}</p> }
-  @if (!loading && !order && !errorMessage && orderNumber) { <p class="order-error" role="status">No data found.</p> }
+  @if (!loading && !order && !errorMessage && orderNumber && searchMode === 'orderNumber') {
+    <p class="order-error" role="status">No order found with that order number.</p>
+  }
+
+  @if (ordersList.length > 0) {
+    <section class="orders-list-section" aria-labelledby="all-orders-heading">
+      <div class="orders-list-header">
+        <div>
+          <span class="orders-kicker">YOUR ORDERS</span>
+          <h2 id="all-orders-heading">Orders for {{ mobileNumber }} ({{ ordersList.length }})</h2>
+        </div>
+        <span class="orders-list-tip">Click any order to view tracking details below</span>
+      </div>
+
+      <div class="orders-cards-grid">
+        @for (ord of ordersList; track ord.id) {
+          <article
+            class="order-card"
+            [class.is-selected]="ord.id === selectedOrderId"
+            tabindex="0"
+            role="button"
+            (click)="selectOrder(ord)"
+            (keydown.enter)="selectOrder(ord)"
+            (keydown.space)="selectOrder(ord)">
+            <div class="order-card-top">
+              <div class="order-card-id-block">
+                <span class="order-id-label">ORDER ID</span>
+                <strong class="order-id-val">{{ ord.order_number }}</strong>
+              </div>
+              <span class="status-badge" [attr.data-status]="ord.status">{{ ord.status }}</span>
+            </div>
+
+            <div class="order-card-body">
+              <div class="order-meta-item">
+                <span class="meta-label">Placed on</span>
+                <span class="meta-val">{{ ord.created_at | date:'mediumDate' }}</span>
+              </div>
+              <div class="order-meta-item">
+                <span class="meta-label">Amount</span>
+                <strong class="meta-val price">₹{{ ord.total_amount | number:'1.0-0' }}</strong>
+              </div>
+              <div class="order-meta-item">
+                <span class="meta-label">Items</span>
+                <span class="meta-val">{{ ord.items.length }} item{{ ord.items.length === 1 ? '' : 's' }}</span>
+              </div>
+            </div>
+
+            <div class="order-card-footer">
+              @if (ord.id === selectedOrderId) {
+                <span class="active-indicator">
+                  <mat-icon aria-hidden="true">check_circle</mat-icon> Currently tracking
+                </span>
+              } @else {
+                <button type="button" class="track-this-btn" (click)="selectOrder(ord); $event.stopPropagation()">
+                  View tracking details &rarr;
+                </button>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    </section>
+  }
 
   @if (order; as currentOrder) {
     <section class="order-summary" aria-labelledby="order-title">

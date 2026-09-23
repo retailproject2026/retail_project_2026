@@ -9,6 +9,7 @@ interface ProductCard {
   name: string;
   price: string;
   category: string;
+  productType: string;
   tag?: string;
   tone: string;
   priceValue: number;
@@ -25,8 +26,6 @@ interface ProductCard {
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  readonly clothingCategories = ['Women', 'Men', 'Kids'];
-  readonly otherCategories = ['Accessories', 'Occasionwear'];
   activeSlide = 0;
   loading = true;
   errorMessage = '';
@@ -46,8 +45,27 @@ export class HomeComponent implements OnInit, OnDestroy {
     return [...this.newArrivals, ...this.featured];
   }
 
+  get clothingCategories(): string[] {
+    return this.clothingCategoryOrder;
+  }
+
+  get otherCategories(): string[] {
+    return this.categoryOrder
+      .filter(category => !this.clothingCategoryOrder.includes(category));
+  }
+
+  private get categoryOrder(): string[] {
+    return [...new Set(this.allProducts.map(product => product.category))];
+  }
+
+  private get clothingCategoryOrder(): string[] {
+    return this.categoryOrder.filter(category =>
+      this.allProducts.some(product => product.category === category && product.productType === 'Clothes')
+    );
+  }
+
   productsFor(category: string): ProductCard[] {
-    return this.allProducts.filter(product => product.category === category);
+    return this.allProducts.filter(product => product.category === category).slice(0, 4);
   }
 
   isFavorite(product: ProductCard): boolean {
@@ -69,7 +87,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.productService.getProductList().then(products => {
+    this.productService.getProductList({ activeOnly: true }).then(products => {
       this.allProducts = products.map(product => this.toCard(product));
       this.newArrivals = this.allProducts.filter(product => product.tag === 'NEW').slice(0, 4);
       if (!this.newArrivals.length) this.newArrivals = this.allProducts.slice(0, 4);
@@ -123,6 +141,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     return {
       id: product.id,
       category: product.category,
+      productType: product.productType,
       name: product.name,
       price: `${product.currency === 'INR' ? '₹' : product.currency ?? ''}${(product.salePrice ?? product.price).toLocaleString('en-IN')}`,
       priceValue: product.salePrice ?? product.price,

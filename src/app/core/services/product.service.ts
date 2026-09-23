@@ -32,6 +32,7 @@ export interface Product {
   extraImageUrls: string[];
   extraImageUrl1: string;
   extraImageUrl2: string;
+  isActive?: boolean;
 }
 
 interface DatabaseProduct {
@@ -55,6 +56,7 @@ interface DatabaseProduct {
   review_count?: number;
   is_featured?: boolean;
   is_new?: boolean;
+  is_active?: boolean;
   created_at?: string;
   updated_at?: string;
   tone?: string;
@@ -68,6 +70,24 @@ interface CloudinaryImageResponse {
   success: boolean;
   publicId: string;
   url: string;
+}
+
+export interface CloudinaryUploadImage {
+  publicId: string;
+  url: string;
+  width: number;
+  height: number;
+  format: string;
+}
+
+interface CloudinaryUploadResponse {
+  success?: boolean;
+  image?: CloudinaryUploadImage;
+  publicId?: string;
+  url?: string;
+  width?: number;
+  height?: number;
+  format?: string;
 }
 
 export interface ProductPage {
@@ -102,6 +122,7 @@ export interface CreateProductInput {
   extra_image_urls: string[];
   extra_image_url1: string;
   extra_image_url2: string;
+  is_active?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -113,29 +134,50 @@ export class ProductService {
     private readonly loading: LoadingService
   ) {}
 
-  async getProductList(): Promise<Product[]> {
+  async getProductList(options?: { activeOnly?: boolean }): Promise<Product[]> {
     return this.loading.track((async () => {
-      const { data, error } = await this.supabase
+      let query = this.supabase
         .from('products')
-        .select('id,name,price,sale_price,currency,product_type,category,description,stock,inStock,tone,main_image_url,fabric,is_new,is_featured');
+        .select('id,name,price,sale_price,currency,product_type,category,description,stock,inStock,tone,main_image_url,fabric,is_new,is_featured,is_active');
+      
+      if (options?.activeOnly) {
+        query = query.eq('is_active', true);
+      }
+
+      const { data, error } = await query;
       if (error) throw error;
 
       return Promise.all(((data ?? []) as DatabaseProduct[]).map(product => this.normalizeProduct(product)));
     })());
   }
 
-  async getProductListPage(page: number, pageSize: number): Promise<ProductPage> {
+  async getProductListPage(page: number, pageSize: number, options?: { activeOnly?: boolean }): Promise<ProductPage> {
     return this.loading.track((async () => {
       const from = page * pageSize;
       const to = from + pageSize - 1;
-      const { data, error, count } = await this.supabase
+      let query = this.supabase
         .from('products')
-        .select('id,name,price,sale_price,currency,product_type,category,description,stock,inStock,tone,main_image_url,fabric,is_new,is_featured', { count: 'exact' })
-        .range(from, to);
+        .select('id,name,price,sale_price,currency,product_type,category,description,stock,inStock,tone,main_image_url,fabric,is_new,is_featured,is_active', { count: 'exact' });
+
+      if (options?.activeOnly !== false) {
+        query = query.eq('is_active', true);
+      }
+
+      const { data, error, count } = await query.range(from, to);
       if (error) throw error;
 
       const products = await Promise.all(((data ?? []) as DatabaseProduct[]).map(product => this.normalizeProduct(product)));
       return { products, hasMore: from + products.length < (count ?? 0) };
+    })());
+  }
+
+  async updateActiveStatus(id: string, isActive: boolean): Promise<void> {
+    await this.loading.track((async () => {
+      const { error } = await this.supabase
+        .from('products')
+        .update({ is_active: isActive, updated_at: new Date().toISOString() })
+        .eq('id', id);
+      if (error) throw error;
     })());
   }
 
@@ -167,10 +209,32 @@ export class ProductService {
     })());
   }
 
+  async uploadImage(file: File): Promise<CloudinaryUploadImage> {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const response = await firstValueFrom(
+      this.http.post<CloudinaryUploadResponse>(`${this.apiUrl}/cloudinary/upload`, formData)
+    );
+    const image = response.image ?? response;
+    if (response.success === false || !image.url) {
+      throw new Error('Image upload did not return a valid image URL.');
+    }
+    return image as CloudinaryUploadImage;
+  }
+
   async deleteProduct(id: string): Promise<void> {
     await this.loading.track((async () => {
-      const { error } = await this.supabase.from('products').delete().eq('id', id);
-      if (error) throw error;
+      const { error } = await this.supabase.from('products').delete().eq('id', id).select('id');
+      if (!error) return;
+
+      if (error.code === '42501') {
+        throw new Error('You do not have permission to delete this product.');
+      }
+      if (error.code === '23503') {
+        throw new Error('This product cannot be deleted because it is used by another record.');
+      }
+      throw new Error(error.message || 'Unable to delete product.');
     })());
   }
 
@@ -195,7 +259,8 @@ export class ProductService {
       currency: product.currency ?? 'INR',
       inStock: product.inStock ?? product.in_stock ?? ((product.stock ?? 1) > 0),
       stock: product.stock ?? 0,
-      tone: product.tone ?? 'default'
+      tone: product.tone ?? 'default',
+      isActive: product.is_active ?? true
     };
   }
 

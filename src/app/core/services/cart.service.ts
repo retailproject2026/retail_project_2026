@@ -51,4 +51,8 @@ export class CartService {
     const normalizedId = productIdentity(itemId, '');
     this.items.update(items => items.map(item => item.id === normalizedId ? { ...item, quantity: nextQuantity } : item));
   }
+
+  clear(): void {
+    this.items.set([]);
+  }
 }

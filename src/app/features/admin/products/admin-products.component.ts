@@ -19,6 +19,7 @@ export class AdminProductsComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
   deletingId = '';
+  togglingId = '';
 
   ngOnInit(): void {
     this.loadProducts();
@@ -28,13 +29,31 @@ export class AdminProductsComponent implements OnInit {
     this.loading = true;
     this.errorMessage = '';
     try {
-      this.products = await this.productService.getProductList();
+      this.products = await this.productService.getProductList({ activeOnly: false });
       this.changeDetector.markForCheck();
     } catch (error) {
       this.errorMessage = error instanceof Error ? error.message : 'Unable to load products.';
     } finally {
       this.loading = false;
-      this.changeDetector.markForCheck();
+      this.changeDetector.detectChanges();
+    }
+  }
+
+  async toggleActive(product: Product): Promise<void> {
+    const nextState = product.isActive === false;
+    this.togglingId = product.id;
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.changeDetector.detectChanges();
+    try {
+      await this.productService.updateActiveStatus(product.id, nextState);
+      product.isActive = nextState;
+      this.successMessage = `"${product.name}" is now ${nextState ? 'Active' : 'Inactive'}.`;
+    } catch (error) {
+      this.errorMessage = error instanceof Error ? error.message : 'Unable to update product status.';
+    } finally {
+      this.togglingId = '';
+      this.changeDetector.detectChanges();
     }
   }
 

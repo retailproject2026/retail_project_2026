@@ -1,16 +1,89 @@
 <main class="admin-login-page">
   <section class="admin-login-panel" aria-labelledby="admin-login-title">
-    <span class="admin-login-kicker">PRIVATE AREA</span>
-    <h1 id="admin-login-title">Admin sign in</h1>
-    <p>Enter the admin password to manage products and orders.</p>
+    <span class="admin-login-kicker">SUPABASE AUTH</span>
+    <h1 id="admin-login-title">{{ mode === 'signin' ? 'Admin Sign In' : 'Create Admin' }}</h1>
+    <p>
+      {{ mode === 'signin' 
+        ? 'Sign in with your admin credentials to manage products, orders, and customers.' 
+        : 'Register a new admin user in your Supabase authentication service.' }}
+    </p>
+
+    <div class="auth-tabs" role="tablist">
+      <button
+        type="button"
+        role="tab"
+        class="auth-tab"
+        [class.is-active]="mode === 'signin'"
+        (click)="switchMode('signin')">
+        Sign In
+      </button>
+      <button
+        type="button"
+        role="tab"
+        class="auth-tab"
+        [class.is-active]="mode === 'signup'"
+        (click)="switchMode('signup')">
+        Register Admin
+      </button>
+    </div>
 
     <form (ngSubmit)="submit()" autocomplete="off">
+      <label for="admin-email">Admin Email</label>
+      <input
+        id="admin-email"
+        name="email"
+        type="email"
+        [(ngModel)]="email"
+        placeholder="admin@example.com"
+        autocomplete="email"
+        required
+        autofocus />
+
       <label for="admin-password">Password</label>
-      <input id="admin-password" name="password" type="password" [(ngModel)]="password" autocomplete="new-password" required autofocus />
-      @if (errorMessage) { <p class="admin-login-error" role="alert">{{ errorMessage }}</p> }
-      <button mat-flat-button color="primary" type="submit" [disabled]="submitting || !password">{{ submitting ? 'SIGNING IN...' : 'SIGN IN' }}</button>
+      <input
+        id="admin-password"
+        name="password"
+        type="password"
+        [(ngModel)]="password"
+        placeholder="Enter password"
+        autocomplete="current-password"
+        required />
+
+      @if (errorMessage) {
+        <p class="admin-login-error" role="alert">{{ errorMessage }}</p>
+      }
+
+      @if (successMessage) {
+        <p class="admin-login-success" role="status">{{ successMessage }}</p>
+      }
+
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="submitting || !email.trim() || !password">
+        @if (submitting) {
+          {{ mode === 'signin' ? 'SIGNING IN...' : 'CREATING ACCOUNT...' }}
+        } @else {
+          {{ mode === 'signin' ? 'SIGN IN' : 'CREATE ADMIN ACCOUNT' }}
+        }
+      </button>
     </form>
 
-    <a routerLink="/">Return to store</a>
+    <div class="auth-footer-help">
+      @if (mode === 'signin') {
+        <span>Need to set up an admin user?</span>
+        <button type="button" class="auth-switch-link" (click)="switchMode('signup')">
+          Register admin here
+        </button>
+      } @else {
+        <span>Already registered?</span>
+        <button type="button" class="auth-switch-link" (click)="switchMode('signin')">
+          Sign in here
+        </button>
+      }
+    </div>
+
+    <a routerLink="/" class="back-link">Return to store</a>
   </section>
 </main>

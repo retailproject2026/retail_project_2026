@@ -31,7 +31,7 @@
     </div>
     <div class="product-grid">
       @for (product of newArrivals; track product.id) {
-        <article class="product-card">
+        <article class="product-card" [routerLink]="['/products', product.id]">
           <div class="product-image-wrap">
             <a class="product-image-link" [routerLink]="['/products', product.id]" [attr.aria-label]="'View details for ' + product.name">
               <div class="product-image" [class]="product.tone">
@@ -53,20 +53,21 @@
     </div>
   </section>
 
-  <section class="clothes-section section-shell" aria-labelledby="clothes-title">
-    <div class="section-heading clothes-heading">
-      <h2 id="clothes-title">Clothes</h2>
-    </div>
-    <div class="clothes-subsections">
-      @for (category of clothingCategories; track category) {
-        <section class="product-section">
+  @if (clothingCategories.length) {
+    <section class="clothes-section section-shell" aria-labelledby="clothes-title">
+      <div class="section-heading clothes-heading">
+        <h2 id="clothes-title">Clothes</h2>
+      </div>
+      <div class="clothes-subsections">
+        @for (category of clothingCategories; track category) {
+          <section class="product-section">
       <div class="section-heading">
         <h2>{{ category }}</h2>
         <a class="view-all-link" routerLink="/products" [queryParams]="{ category: category }">VIEW ALL <span aria-hidden="true">&#8594;</span></a>
       </div>
       <div class="product-grid">
         @for (product of productsFor(category); track product.id) {
-          <article class="product-card">
+          <article class="product-card" [routerLink]="['/products', product.id]">
             <div class="product-image-wrap">
               <a class="product-image-link" [routerLink]="['/products', product.id]" [attr.aria-label]="'View details for ' + product.name">
                 <div class="product-image" [class]="product.tone">
@@ -86,10 +87,11 @@
           </article>
         }
       </div>
-        </section>
-      }
-    </div>
-  </section>
+          </section>
+        }
+      </div>
+    </section>
+  }
 
   @for (category of otherCategories; track category) {
     <section class="product-section section-shell">
@@ -99,7 +101,7 @@
       </div>
       <div class="product-grid">
         @for (product of productsFor(category); track product.id) {
-          <article class="product-card">
+          <article class="product-card" [routerLink]="['/products', product.id]">
             <div class="product-image-wrap">
               <a class="product-image-link" [routerLink]="['/products', product.id]" [attr.aria-label]="'View details for ' + product.name">
                 <div class="product-image" [class]="product.tone">
